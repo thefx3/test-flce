@@ -5,10 +5,110 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    password  String?  //hashed with the genPassword function
+    role      Role     @default(USER)
+    createdAt DateTime @default(now())
+    profil    Profile?
+}
+
+// role: ADMIN, password: hash, no test 
+// role: USER, password: null, test 
+
+
+model Profile {
+  id                Int     @id @default(autoincrement())
+
+  user              User    @relation(fields: [userId], references: [id])
+  userId            Int     @unique
+
+  auPairFamilies    AuPairFamily?
+  frenchTest        Test?
+
+  civility          String
+  name              String
+  lastname          String
+  phone             Int
+  birthdate         DateTime
+  birthplace        String
+  nationality       String
+  photoPath         String
+
+  firstregister     Boolean
+  aupair            Boolean
+  address           String
+  arrivaldate       DateTime
+}
+
+model AuPairFamily {
+  id          Int      @id @default(autoincrement())
+
+  profile     Profile  @relation(fields: [profileId], references: [id])
+  profileId   Int      @unique
+
+  familyname1 String
+  familyname2 String?
+  email       String
+  phone       Int
+  address     String
+}
+
+model Test {
+  id          Int       @id @default(autoincrement())
+
+  profile     Profile  @relation(fields: [profileId], references: [id])
+  profileId   Int      @unique
+
+//Part 1 - QCM
+  pa1          Boolean
+  pa2          Boolean
+  pa3          Boolean
+  pa4          Boolean
+  pa5          Boolean
+  pa6          Boolean
+  pa7          Boolean
+  pa8          Boolean
+  pa9          Boolean
+  pa10         Boolean
+  pa11         Boolean
+  pa12         Boolean
+  pa13         Boolean
+  pa14         Boolean
+  pa15         Boolean
+  pa16         Boolean
+  pa17         Boolean
+  pa18         Boolean
+  pa19         Boolean
+  pa20         Boolean
+
+//Part 2 - Video 
+  pb1          Boolean
+  pb2          Boolean
+  pb4          Boolean
+  pb5          Boolean
+  pb6          Boolean
+  pb7          String
+
+//Part 3 - Open questions
+  pc1          String
+  pc2          String
+  pc3          String
+  pc4          String
+  pc5          String
+  pc6          String
+  pc7          String
+}
+
+enum Role {
+  ADMIN //Author with full permissions
+  USER  //Test taker
 }
