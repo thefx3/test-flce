@@ -1,13 +1,11 @@
-const path = require("node:path");
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+import path from "node:path";
+import "dotenv/config";
+
 console.log("Environment loaded:", process.env.DB_HOST, process.env.DB_DATABASE);
 
-const express = require('express');
-const cors = require('cors');
-
-// Import local modules
-const authRoute = require("./routes/authRoute");
-const userRoute = require("./routes/userRoute");
+import express from "express";
+import cors from "cors";
+import prisma from "./prisma/prisma.js";
 
 
 // Initialize express app
@@ -18,7 +16,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.use("/api/auth", authRoute);
+
+app.get("/debug", async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.json(users);
+});
 
 
 

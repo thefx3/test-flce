@@ -20,7 +20,6 @@ model User {
     createdAt DateTime @default(now())
     profil    Profile?
 }
-
 // role: ADMIN, password: hash, no test 
 // role: USER, password: null, test 
 
