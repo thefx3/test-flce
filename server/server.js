@@ -1,12 +1,9 @@
-import path from "node:path";
+//server.js
 import "dotenv/config";
-
-console.log("Environment loaded:", process.env.DB_HOST, process.env.DB_DATABASE);
-
 import express from "express";
 import cors from "cors";
 import prisma from "./prisma/prisma.js";
-
+import authRoutes from "./routes/authRoutes.js";
 
 // Initialize express app
 const app = express();
@@ -14,14 +11,14 @@ const app = express();
 //-------------- MIDDLEWARES --------------------------
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
+app.use("/auth", authRoutes);
 
-
+//Localhost test --
 app.get("/debug", async (req, res) => {
   const users = await prisma.user.findMany();
   res.json(users);
 });
-
 
 
 // -------------- SERVER --------------------------------

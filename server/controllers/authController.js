@@ -1,32 +1,24 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const UserModel = require('../models/userModel');
-
+//authController.js
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import userModel from "../models/userModel.js";
 
 async function register(req, res) {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: 'Username, email, and password are required.' });
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required.' });
   }
 
   try {
-    const [existingEmail, existingUsername] = await Promise.all([
-      UserModel.getUserByEmail(email),
-      UserModel.getUserByUsername(username),
-    ]);
+    const existingEmail = await userModel.getUserByEmail(email);
 
     if (existingEmail) {
       return res.status(409).json({ message: 'User with this email already exists.' });
     }
 
-    if (existingUsername) {
-      return res.status(409).json({ message: 'User with this username already exists.' });
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await UserModel.createUser({
-      username,
+    const newUser = await userModel.createUser({
       email,
       password: hashedPassword,
     });
@@ -47,7 +39,7 @@ async function login(req, res) {
   }
 
   try {
-    const user = await UserModel.getUserByEmail(email);
+    const user = await userModel.getUserByEmail(email);
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password.' });
@@ -57,6 +49,10 @@ async function login(req, res) {
 
     if (!validPassword) {
       return res.status(401).json({ message: 'Invalid email or password.'});
+    }
+
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ message: "JWT secret is not configured." });
     }
 
     const token = jwt.sign(
@@ -74,24 +70,22 @@ async function login(req, res) {
 
 async function loginSuccess(req, res) {
   try {
-    const user = await UserModel.getUserById(req.user.userId);
+    const user = await userModel.getUserById(req.user.userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const { id, username, email, role } = user;
-    return res.json({ id, username, email, role });
+    const { id, email, role } = user;
+    return res.json({ id, email, role });
   } catch (error) {
     console.error("Error fetching user profile:", error);
     return res.status(500).json({ message: "Internal server error." });
   }
 }
 
-//logout = delete the token from the front-end React 
-
-module.exports = {
+export default {
   register,
   login,
-  loginSuccess
-}
+  loginSuccess,
+};
