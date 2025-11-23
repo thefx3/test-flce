@@ -1,0 +1,45 @@
+:root {
+  font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #2f1f1b;
+  background-color: #fdf8f3;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body, #root {
+  min-height: 100%;
+  background-color: #fdf8f3;
+}
+
+body {
+  color: #2f1f1b;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* LOGIN PAGE STYLING */
+.login-page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+  margin: 0;
+}
+
+.login-page .login-container {
+  min-height: auto;
+}
