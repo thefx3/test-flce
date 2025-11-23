@@ -108,6 +108,7 @@ model Test {
 }
 
 enum Role {
-  ADMIN //Author with full permissions
+  SUPERADMIN //Author with full permissions
+  ADMIN
   USER  //Test taker
 }
