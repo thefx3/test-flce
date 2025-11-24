@@ -1,6 +1,4 @@
 //adminController.js
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 import profileModel from "../models/profileModel.js";
 import familyModel from "../models/familyModel.js";
@@ -21,12 +19,8 @@ async function getAdmins(req, res){
 
 async function getSingleAdmin(req, res){
     try {
-        const value = req.params.id; 
-        let admin;
-
-        if (!isNaN(Number(value))) {
-            admin = await userModel.getSingleAdminById(Number(value));
-        }
+        const adminId = Number(req.params.id); 
+        const admin = Number.isNaN(adminId) ? null : await userModel.getSingleAdminById(adminId);
 
         if (!admin) return res.status(404).json({ message: "Admin not found"});
 
@@ -56,7 +50,7 @@ async function updateAdmin(req, res){
   async function deleteAdmin(req, res){
     try {
       const id = Number(req.params.id);
-  
+
       await userModel.deleteUserById(id);
       res.json({ message: "Admin deleted" });
   
@@ -65,7 +59,6 @@ async function updateAdmin(req, res){
     }
   }
   
-
 
 // =============== USER ACCOUNTS ==================
 // Manage all the test user accounts
@@ -83,7 +76,7 @@ async function getAllUsers(req, res){
 async function getUser(req, res){
     try {
         const id = Number(req.params.id);
-        const user = await userModel.getSingleUserById(id); 
+        const user = Number.isNaN(id) ? null : await userModel.getSingleUserById(id); 
 
         if (!user) return res.status(404).json({ message: "User not found" });
         if (user.role !== "USER") return res.status(403).json({ message: "Not a test user" });
@@ -99,7 +92,7 @@ async function updateUser(req , res){
         const id = Number(req.params.id);
         const data = req.body;
     
-        const user = await userModel.getSingleUserById(id);
+        const user = Number.isNaN(id) ? null : await userModel.getSingleUserById(id);
         if (!user) return res.status(404).json({ message: "User not found" });
         if (user.role !== "USER") return res.status(403).json({ message: "Not a test user" });
     
@@ -143,10 +136,9 @@ async function updateProfile(req, res){
   
 async function getFamilies(req, res){
     try {
-      const id = Number(req.params.id);
-
-      const families = await familyModel.listFamilies(id);
-      if (!families) return res.status(404).json({ message: "Families not found"});
+      const userId = Number(req.params.userId);
+      const families = Number.isNaN(userId) ? [] : await familyModel.listFamilies(userId);
+      if (!families.length) return res.status(404).json({ message: "Families not found"});
   
       res.json(families);
     } catch (err){
@@ -156,14 +148,19 @@ async function getFamilies(req, res){
   
 async function updateFamily(req, res){
     try {
-      const familyId = Number(req.params.id);
+      const { familyId, userId } = req.params;
+      const parsedFamilyId = Number(familyId);
+      const parsedUserId = Number(userId);
       const data = req.body;
 
 
-      const family = await familyModel.getFamily(familyId);
+      const family = Number.isNaN(parsedFamilyId) ? null : await familyModel.getFamily(parsedFamilyId);
       if (!family) return res.status(404).json({ message: "Family not found"});
+      if (!Number.isNaN(parsedUserId) && family.userId !== parsedUserId) {
+        return res.status(403).json({ message: "Family does not belong to this user" });
+      }
   
-      const updated = await familyModel.updateFamily(familyId, data);
+      const updated = await familyModel.updateFamily(parsedFamilyId, data);
       res.json(updated);
   
     } catch (err){
@@ -173,12 +170,17 @@ async function updateFamily(req, res){
   
 async function deleteFamily(req, res){
     try {
-      const familyId = Number(req.params.id);
+      const { familyId, userId } = req.params;
+      const parsedFamilyId = Number(familyId);
+      const parsedUserId = Number(userId);
 
-      const family = await familyModel.getFamily(familyId);
+      const family = Number.isNaN(parsedFamilyId) ? null : await familyModel.getFamily(parsedFamilyId);
       if (!family) return res.status(404).json({ message: "Family not found"});
+      if (!Number.isNaN(parsedUserId) && family.userId !== parsedUserId) {
+        return res.status(403).json({ message: "Family does not belong to this user" });
+      }
   
-      await familyModel.deleteFamilyById(familyId);
+      await familyModel.deleteFamilyById(parsedFamilyId);
       res.json({ message: "Family deleted" });
   
     } catch (err){
@@ -186,13 +188,17 @@ async function deleteFamily(req, res){
     }
 }
   
-
 async function getTest(req, res){
     try {
-      const id = Number(req.params.id);
-      const test = await testModel.getTestByUserId(id);
+      const { userId, testId } = req.params;
+      const parsedTestId = Number(testId);
+      const parsedUserId = Number(userId);
+      const test = Number.isNaN(parsedTestId) ? null : await testModel.getTestById(parsedTestId);
 
       if (!test) return res.status(404).json({ message: "Test not found"});
+      if (!Number.isNaN(parsedUserId) && test.userId !== parsedUserId) {
+        return res.status(403).json({ message: "Test does not belong to this user" });
+      }
   
       res.json(test);
     } catch (err){
@@ -200,16 +206,20 @@ async function getTest(req, res){
     }
 }
   
-
 async function gradeTestAuto(req, res){
     try {
-      const testId = Number(req.params.id);
+      const { userId, testId } = req.params;
+      const parsedTestId = Number(testId);
+      const parsedUserId = Number(userId);
       const data = req.body;
 
-      const test = await testModel.getTestById(testId);
+      const test = Number.isNaN(parsedTestId) ? null : await testModel.getTestById(parsedTestId);
       if (!test) return res.status(404).json({ message: "Test not found"});
+      if (!Number.isNaN(parsedUserId) && test.userId !== parsedUserId) {
+        return res.status(403).json({ message: "Test does not belong to this user" });
+      }
   
-      const graded = await testModel.gradeAuto(testId, data); 
+      const graded = await testModel.gradeAuto(parsedTestId, data); 
       res.json(graded);
   
     } catch (err){
@@ -219,13 +229,18 @@ async function gradeTestAuto(req, res){
   
 async function gradeTestManual(req, res){
     try {
-      const testId = Number(req.params.id);
+      const { userId, testId } = req.params;
+      const parsedTestId = Number(testId);
+      const parsedUserId = Number(userId);
       const data = req.body;
 
-      const test = await testModel.getTestById(testId);
+      const test = Number.isNaN(parsedTestId) ? null : await testModel.getTestById(parsedTestId);
       if (!test) return res.status(404).json({ message: "Test not found"});
+      if (!Number.isNaN(parsedUserId) && test.userId !== parsedUserId) {
+        return res.status(403).json({ message: "Test does not belong to this user" });
+      }
   
-      const graded = await testModel.gradeManual(testId, data); 
+      const graded = await testModel.gradeManual(parsedTestId, data); 
       res.json(graded);
   
     } catch (err){
@@ -233,8 +248,6 @@ async function gradeTestManual(req, res){
     }
 }
   
-
-
 export default {
     getAdmins,
     getSingleAdmin,

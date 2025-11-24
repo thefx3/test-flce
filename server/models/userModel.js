@@ -36,7 +36,7 @@ async getAdmins() {
 async getSingleAdminById(id) {
   return prisma.user.findUnique({
     where: { id },
-    select: authUserSelect
+    select: baseUserSelect
   });
 }
 
@@ -66,7 +66,7 @@ async updateAdmin(id, data) {
   return prisma.user.update({
     where: { id },
     data,
-    select: authUserSelect
+    select: baseUserSelect
   });
 }
 
@@ -80,7 +80,7 @@ async createTestUser(data) {
       name: data.name ?? null,
       lastname: data.lastname ?? null,
       role: "USER",
-      aupair: data.aupair
+      aupair: data.aupair ?? false
     },
     select: baseUserSelect
   });

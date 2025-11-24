@@ -34,18 +34,18 @@ router.get("/users/:id/profile", authRequired, adminController.getProfile);
 router.put("/users/:id/profile", authRequired, adminController.updateProfile);
 
 
-router.get("/users/:id/family/:id", authRequired, adminController.getFamilies);
+router.get("/users/:userId/families", authRequired, adminController.getFamilies);
 
-router.put("/users/:id/family/:id", authRequired, adminController.updateFamily);
+router.put("/users/:userId/families/:familyId", authRequired, adminController.updateFamily);
 
-router.delete("/users/:id/family/:id", authRequired, adminController.deleteFamily);
+router.delete("/users/:userId/families/:familyId", authRequired, adminController.deleteFamily);
 
 
-router.get("/users/:id/test/:id", authRequired, adminController.getTest);
+router.get("/users/:userId/test/:testId", authRequired, adminController.getTest);
 
-router.put("/users/:id/test/:id/auto-grade", authRequired, adminController.gradeTestAuto);
+router.put("/users/:userId/test/:testId/auto-grade", authRequired, adminController.gradeTestAuto);
 
-router.put("/users/:id/test/:id/manual-grade", authRequired, adminController.gradeTestManual);
+router.put("/users/:userId/test/:testId/manual-grade", authRequired, adminController.gradeTestManual);
 
 
 export default router;

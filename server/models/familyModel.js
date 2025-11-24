@@ -48,8 +48,7 @@ class FamilyModel {
   async deleteFamiliesByUserId (userId) {
     return await prisma.auPairFamily.deleteMany({
         where: { userId: userId },
-        select: baseFamilySelect
-    })   
+    });
   }
 
   //Need to delete Family from a known userId
@@ -71,4 +70,3 @@ class FamilyModel {
 
 }
 export default new FamilyModel();
-
