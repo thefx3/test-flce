@@ -5,6 +5,7 @@ const baseProfileSelect = {
   id: true,
   userId: true,
   civility: true,
+  phone: true,
   birthdate: true,
   birthplace: true,
   nationality: true,
@@ -23,10 +24,21 @@ class ProfileModel {
 
   async createProfile(userId, data) {
     return await prisma.profile.create({
-      where: { userId: userId },
-      data, 
+      data: {
+        userId: userId,
+        civility: data.civility,
+        phone: data.phone,
+        birthdate: data.birthdate,
+        birthplace: data.birthplace,
+        nationality: data.nationality,
+        photoPath: data.photoPath,
+        firstregister: data.firstregister,
+        aupair: data.aupair,
+        address: data.address,
+        arrivaldate: data.arrivaldate
+      },
       select: baseProfileSelect
-    })
+    });
   }
 
   // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
@@ -45,7 +57,7 @@ class ProfileModel {
       select: baseProfileSelect
     })
   }
-  
+
 }
 export default new ProfileModel();
 
