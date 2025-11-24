@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import prisma from "./prisma/prisma.js";
 import authRoutes from "./routes/authRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js"
 
 // Initialize express app
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
 
 
 //Localhost test --

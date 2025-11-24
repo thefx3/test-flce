@@ -6,7 +6,7 @@ import authRequired from "../auth/authRequired.js";
 const router = Router();
 
 // Can register only if you are registered - from an ADMIN account with a code
-router.post('/register', authController.register);
+router.post('/register', authRequired, authController.register);
 
 // Login route
 router.post('/login', authController.login);

@@ -1,40 +1,47 @@
-//adminRoute.js
+//adminRoutes.js
 import { Router } from "express";
-import authController from "../controllers/adminController.js";
-import authRequired from "../auth/adminRequired.js";
+import adminController from "../controllers/adminController.js";
+import authRequired from "../auth/authRequired.js";
 
 const router = Router();
 
-//ACCOUNTS CONTROLLER
-//Manage all the "admin" accounts 
-// getAdmin
+// =============== ADMIN ACCOUNTS ==================
+// Manage all the admin accounts
 
-// Add a new user - only SUPER ADMIN already in authController
+// Authrequired
 
+router.get("/admins", authRequired, adminController.getAdmins);
 
-// Update an user - only SUPER ADMIN (name, lastname, password, etc...)
+router.get("/admins/:id", authRequired, adminController.getSingleAdmin);
 
+router.put("/admins/:id", authRequired, adminController.updateAdmin);
 
-// Get all the information about the user 
-
-
-// Delete an user - only SUPER ADMIN
+router.delete("/admins/:id", authRequired, adminController.deleteAdmin);
 
 
-// ---------------------------------------------------------------
+// =============== USER ACCOUNTS ==================
+// Manage all the test user accounts
 
-//USERS CONTROLLER 
-//Manage all the "user" accounts - who take the test
-// getUser
+router.get("/users", authRequired, adminController.getAllUsers);
 
-//Create an user 
-
-//Update an user 
+router.get("/users/:id", authRequired, adminController.getUser);
 
 
-// Get all the information the user
+router.get("/users/:id/profile", authRequired, adminController.getProfile);
+
+router.put("/users/:id/profile", authRequired, adminController.updateProfile);
 
 
-// Delete an user 
+router.get("/users/:id/family", authRequired, adminController.getFamily);
+
+router.put("/users/:id/family", authRequired, adminController.updateFamily);
+
+router.delete("/users/:id/family", authRequired, adminController.deleteFamily);
+
+
+router.get("/users/:id/test", authRequired, adminController.getTest);
+
+router.put("/users/:id/test", authRequired, adminController.gradeTest);
+
 
 export default router;
