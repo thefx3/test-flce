@@ -1,13 +1,18 @@
 import prisma from "../prisma/prisma.js";
 
+//Choose what we want to return - not the password
 const baseUserSelect = {
-  id: true,
+  id: true, //generated automatically
   email: true,
   name: true,
   lastname: true,
   role: true,
-  createdAt: true
+  createdAt: true //generated automatically
 };
+
+//data: is what we have to put in the entry parameters
+
+
 
 class UserModel {
 
@@ -62,7 +67,8 @@ async deleteAdminById(id) {
 }
 
 
-// CREATE TEST-USER
+// ================= USER ACCOUNTS ===================
+// NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
 
 async createTestUser(data) {
   return prisma.user.create({
