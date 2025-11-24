@@ -65,13 +65,19 @@ class TestModel {
   //---------------------------------------------------------
   // 2. Retrieve ALL tests of a user (a user can have many tests)
   //---------------------------------------------------------
-  async getTestsByUserId(userId) {
+  async getTestByUserId(userId) {
     return prisma.test.findMany({
       where: { userId },
       select: fullTestSelect
     });
   }
 
+  async getTestById(id) {
+    return prisma.test.findUnique({
+        where: { id },
+        select: fullTestSelect
+    });
+  }
 
   //---------------------------------------------------------
   // 3. Update answers (user updates the QCM / video / open questions)

@@ -86,8 +86,19 @@ async createTestUser(data) {
   });
 }
 
-// ================= ALL ACCOUNTS ===================
-//FOR USERS AND ADMINS
+async getAllUsers() {
+  return prisma.user.findMany({
+    where: { role : "USER" },
+    select: baseUserSelect
+  });
+}
+
+async getSingleUserById(id) {
+  return prisma.user.findUnique({
+    where: { id },
+    select: baseUserSelect
+  });
+}
 
 async updateUser(id, data) {
   return prisma.user.update({
@@ -97,18 +108,11 @@ async updateUser(id, data) {
   });
 }
 
-async deleteUserByEmail(email) {
-  return prisma.user.delete({ where: { email } });
-}
+// ================= ALL ACCOUNTS ===================
+//FOR USERS AND ADMINS
 
 async deleteUserById(id) {
   return prisma.user.delete({ where: { id } });
-}
-
-async getAllUsers() {
-  return prisma.user.findMany({
-    select: baseUserSelect
-  });
 }
 
 }

@@ -38,6 +38,13 @@ class FamilyModel {
     })
   }
 
+  async getFamily(id){
+    return await prisma.auPairFamily.findUnique({
+        where: { id: id },
+        select: baseFamilySelect
+    })
+  }
+
   async deleteFamiliesByUserId (userId) {
     return await prisma.auPairFamily.deleteMany({
         where: { userId: userId },
