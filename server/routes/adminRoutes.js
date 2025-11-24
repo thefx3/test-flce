@@ -8,8 +8,6 @@ const router = Router();
 // =============== ADMIN ACCOUNTS ==================
 // Manage all the admin accounts
 
-// Authrequired
-
 router.get("/admins", authRequired, adminController.getAdmins);
 
 router.get("/admins/:id", authRequired, adminController.getSingleAdmin);

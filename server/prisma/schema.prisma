@@ -65,7 +65,8 @@ model Test {
   id          Int       @id @default(autoincrement())
 
   user        User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int   
+  userId      Int  
+  testresponse TestResponse[]
 
 //Part 1 - QCM
   pa1          Boolean
@@ -148,6 +149,39 @@ model Test {
   notec6          Int
   notec7          Int
 }
+
+model Question {
+  id          Int      @id @default(autoincrement())
+  type        QuestionType
+  text        String
+  mediaUrl    String?   // vidéo ou image (optionnel)
+  correctBool Boolean?  // pour QCM et Video
+  correctText String?   // pour les questions ouvertes
+  points      Int      @default(1)
+  order       Int
+
+  responses   TestResponse[]
+}
+
+model TestResponse {
+  id         Int      @id @default(autoincrement())
+       
+  questionId Int
+  answerBool Boolean?    // case QCM / Vidéo
+  answerText String?     // questions ouvertes
+  score      Int?        // note auto OU note admin
+
+  question   Question @relation(fields: [questionId], references: [id])
+  test       Test     @relation(fields: [testId], references: [id])
+  testId     Int 
+}
+
+enum QuestionType {
+  QCM
+  VIDEO
+  OPEN
+}
+
 
 enum Role {
   SUPERADMIN //Author with full permissions

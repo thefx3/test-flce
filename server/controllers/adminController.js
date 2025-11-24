@@ -16,7 +16,6 @@ async function getAdmins(req, res){
     }
   }
   
-
 async function getSingleAdmin(req, res){
     try {
         const adminId = Number(req.params.id); 

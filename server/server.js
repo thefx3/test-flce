@@ -5,6 +5,7 @@ import cors from "cors";
 import prisma from "./prisma/prisma.js";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js"
+import authRequired from "./auth/authRequired.js";
 
 // Initialize express app
 const app = express();
@@ -15,10 +16,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRoutes);
-app.use("/admin", adminRoutes);
+app.use("/admin", authRequired, adminRoutes);
 
 
-//Localhost test --
+
 app.get("/debug", async (req, res) => {
   const users = await prisma.user.findMany();
   res.json(users);
