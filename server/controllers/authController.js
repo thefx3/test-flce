@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 
+//Register a new admin user 
 async function register(req, res) {
   const { email, password } = req.body;
 
@@ -11,14 +12,14 @@ async function register(req, res) {
   }
 
   try {
-    const existingEmail = await userModel.getUserByEmail(email);
+    const existingEmail = await userModel.getSingleAdminByEmail(email);
 
     if (existingEmail) {
       return res.status(409).json({ message: 'User with this email already exists.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await userModel.createUser({
+    const newUser = await userModel.createAdmin({
       email,
       password: hashedPassword,
     });
@@ -39,7 +40,7 @@ async function login(req, res) {
   }
 
   try {
-    const user = await userModel.getUserByEmail(email);
+    const user = await userModel.getSingleAdminByEmail(email);
 
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password.' });
@@ -70,7 +71,7 @@ async function login(req, res) {
 
 async function loginSuccess(req, res) {
   try {
-    const user = await userModel.getUserById(req.user.userId);
+    const user = await userModel.getSingleAdminById(req.user.userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

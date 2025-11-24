@@ -13,7 +13,10 @@ const baseUserSelect = {
 
 //data: is what we have to put in the entry parameters
 
-
+const authUserSelect = {
+  ...baseUserSelect,
+  password: true,
+};
 
 class UserModel {
 
@@ -30,10 +33,17 @@ async getAdmins() {
   });
 }
 
-async getSingleAdmin(id) {
+async getSingleAdminById(id) {
   return prisma.user.findUnique({
     where: { id },
-    select: baseUserSelect
+    select: authUserSelect
+  });
+}
+
+async getSingleAdminByEmail(email) {
+  return prisma.user.findUnique({
+    where: { email },
+    select: authUserSelect
   });
 }
 
@@ -45,7 +55,8 @@ async createAdmin(data) {
       name: data.name ?? null,
       lastname: data.lastname ?? null,
       password: data.password, // already hashed
-      role: data.role ?? "ADMIN"
+      role: data.role ?? "ADMIN",
+      aupair: data.aupair ?? false,
     },
     select: baseUserSelect
   });
@@ -55,7 +66,7 @@ async updateAdmin(id, data) {
   return prisma.user.update({
     where: { id },
     data,
-    select: baseUserSelect
+    select: authUserSelect
   });
 }
 
