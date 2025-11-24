@@ -4,7 +4,10 @@ import express from "express";
 import cors from "cors";
 import prisma from "./prisma/prisma.js";
 import authRoutes from "./routes/authRoutes.js";
-import adminRoutes from "./routes/adminRoutes.js"
+import adminRoutes from "./routes/adminRoutes.js";
+import profilRoutes from "./routes/profilRoutes.js";
+import testRoutes from "./routes/testRoutes.js";
+import questionRoutes from "./routes/questionRoutes.js"
 import authRequired from "./auth/authRequired.js";
 
 // Initialize express app
@@ -16,8 +19,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRoutes);
+
+
 app.use("/admin", authRequired, adminRoutes);
 
+app.use("/profile", authRequired, profilRoutes);
+
+app.use("/tests", authRequired, testRoutes);
+
+app.use("/questions", authRequired, questionRoutes);
 
 
 app.get("/debug", async (req, res) => {

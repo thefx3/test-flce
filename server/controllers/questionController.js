@@ -13,7 +13,7 @@ async function getQuestions(req, res) {
 
 async function getQuestion(req, res) {
   try {
-    const id = Number(req.params.id);
+    const id = Number(req.params.questionId);
     if (Number.isNaN(id)) return res.status(400).json({ message: "Invalid id" });
 
     const q = await questionModel.getById(id);
@@ -38,7 +38,7 @@ async function createQuestion(req, res) {
 
 async function updateQuestion(req, res) {
   try {
-    const id = Number(req.params.id);
+    const id = Number(req.params.questionId);
     if (Number.isNaN(id)) return res.status(400).json({ message: "Invalid id" });
     const data = req.body;
 
@@ -52,7 +52,7 @@ async function updateQuestion(req, res) {
 
 async function deleteQuestion(req, res) {
   try {
-    const id = Number(req.params.id);
+    const id = Number(req.params.questionId);
     if (Number.isNaN(id)) return res.status(400).json({ message: "Invalid id" });
 
     await questionModel.delete(id);

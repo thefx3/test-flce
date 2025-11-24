@@ -5,11 +5,11 @@ import authRequired from "../auth/authRequired.js";
 
 const router = Router();
 
-router.get("/", authRequired, adminQuestionController.getQuestions);
-router.get("/:id", authRequired, adminQuestionController.getQuestion);
+router.get("/all", authRequired, adminQuestionController.getQuestions);
+router.get("/:questionId/get", authRequired, adminQuestionController.getQuestion);
 
 router.post("/", authRequired, adminQuestionController.createQuestion);
-router.put("/:id", authRequired, adminQuestionController.updateQuestion);
-router.delete("/:id", authRequired, adminQuestionController.deleteQuestion);
+router.put("/:questionId/update", authRequired, adminQuestionController.updateQuestion);
+router.delete("/:questionId/delete", authRequired, adminQuestionController.deleteQuestion);
 
 export default router;
