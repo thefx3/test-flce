@@ -41,6 +41,10 @@ async function getUser(req, res){
 
 }
 
+async function updateUser(req , res){
+
+}
+
 async function getProfile(req, res){
 
 }
@@ -77,6 +81,7 @@ export default {
     deleteAdmin,
     getAllUsers,
     getUser,
+    updateUser,
     getProfile,
     updateProfile,
     getFamily,

@@ -70,15 +70,6 @@ async updateAdmin(id, data) {
   });
 }
 
-async deleteAdminByEmail(email) {
-  return prisma.user.delete({ where: { email } });
-}
-
-async deleteAdminById(id) {
-  return prisma.user.delete({ where: { id } });
-}
-
-
 // ================= USER ACCOUNTS ===================
 // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
 
@@ -95,12 +86,23 @@ async createTestUser(data) {
   });
 }
 
-async deleteTestUserByEmail(email) {
-  return prisma.user.delete({ where: { email: email } })
+// ================= ALL ACCOUNTS ===================
+//FOR USERS AND ADMINS
+
+async updateUser(id, data) {
+  return prisma.user.update({
+    where: { id },
+    data,
+    select: baseUserSelect
+  });
 }
 
-async deleteTestUserById(id) {
-  return prisma.user.delete({ where: { id }  });
+async deleteUserByEmail(email) {
+  return prisma.user.delete({ where: { email } });
+}
+
+async deleteUserById(id) {
+  return prisma.user.delete({ where: { id } });
 }
 
 async getAllUsers() {

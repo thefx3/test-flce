@@ -26,6 +26,8 @@ router.get("/users", authRequired, adminController.getAllUsers);
 
 router.get("/users/:id", authRequired, adminController.getUser);
 
+router.put("/users/:id", authRequired, adminController.updateUser);
+
 
 router.get("/users/:id/profile", authRequired, adminController.getProfile);
 
