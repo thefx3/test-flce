@@ -1,65 +1,95 @@
-//userModel.js
 import prisma from "../prisma/prisma.js";
 
+const baseUserSelect = {
+  id: true,
+  email: true,
+  name: true,
+  lastname: true,
+  role: true,
+  createdAt: true
+};
+
 class UserModel {
-    async createUser(data) {
-        return await prisma.user.create({
-            data: {
-              email: data.email,
-              password: data.password, // hash bcrypt
-              role: data.role ?? "USER",
-              createdAt: new Date()
-            },
-          });
-    }
 
-    async updateUser(id, data) {
-        return await prisma.user.update({
-            where: { id },
-            data: {
-              ...(data.email && { email: data.email }),
-              ...(data.password && { password: data.password }), // hash bcrypt
-              ...(data.role && { role: data.role }),
-            },
-          });
-    }
+// ================= ADMIN ACCOUNTS ===================
+// NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
 
-    async updateUserRole(id, newrole) {
-        return await prisma.user.update({
-            where: { id: id },
-            data: { role: newrole },
-          })
-    }
+// Return all admins and superadmins
+async getAdmins() {
+  return prisma.user.findMany({
+    where: {
+      OR: [{ role: "ADMIN" }, { role: "SUPERADMIN" }]
+    },
+    select: baseUserSelect
+  });
+}
 
-    async deleteUser(id) {
-      return await prisma.user.delete({
-        where: { id: id },
-      })
-    }
+async getSingleAdmin(id) {
+  return prisma.user.findUnique({
+    where: { id },
+    select: baseUserSelect
+  });
+}
 
-    async getAllUsers() {
-      return await prisma.user.findMany({
-        select: {
-          id: true,
-          email: true,
-          role: true,
-          createdAt: true,
-        }
-      })
-    }
+// Create an admin or superadmin
+async createAdmin(data) {
+  return prisma.user.create({
+    data: {
+      email: data.email,
+      name: data.name ?? null,
+      lastname: data.lastname ?? null,
+      password: data.password, // already hashed
+      role: data.role ?? "ADMIN"
+    },
+    select: baseUserSelect
+  });
+}
 
-    async getUserByEmail(email) {
-      return await prisma.user.findUnique({
-        where: { email: email },
-      })
-    }
+async updateAdmin(id, data) {
+  return prisma.user.update({
+    where: { id },
+    data,
+    select: baseUserSelect
+  });
+}
 
-    async getUserById(id) {
-        return await prisma.user.findUnique({
-            where: { id: id },
-          })
-    }
+async deleteAdminByEmail(email) {
+  return prisma.user.delete({ where: { email } });
+}
+
+async deleteAdminById(id) {
+  return prisma.user.delete({ where: { id } });
+}
+
+
+// CREATE TEST-USER
+
+async createTestUser(data) {
+  return prisma.user.create({
+    data: {
+      email: data.email,
+      name: data.name ?? null,
+      lastname: data.lastname ?? null,
+      role: "USER"
+    },
+    select: baseUserSelect
+  });
+}
+
+async deleteTestUserByEmail(email) {
+  return prisma.user.delete({ where: { email: email } })
+}
+
+async deleteTestUserById(id) {
+  return prisma.user.delete({ where: { id }  });
+}
+
+async getAllUsers() {
+  return prisma.user.findMany({
+    select: baseUserSelect
+  });
+}
+
 }
 
 export default new UserModel();
-
