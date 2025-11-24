@@ -30,6 +30,8 @@ app.use("/tests", authRequired, testRoutes);
 app.use("/questions", authRequired, questionRoutes);
 
 
+
+
 app.get("/debug", async (req, res) => {
   const users = await prisma.user.findMany();
   res.json(users);

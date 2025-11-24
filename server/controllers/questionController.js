@@ -1,6 +1,8 @@
 // adminQuestionController.js
 import questionModel from "../models/questionModel.js";
 
+
+//All the question for the test - all user can access it
 async function getQuestions(req, res) {
   try {
     const q = await questionModel.getAll();
@@ -11,6 +13,7 @@ async function getQuestions(req, res) {
   }
 }
 
+// All user can access it
 async function getQuestion(req, res) {
   try {
     const id = Number(req.params.questionId);
@@ -25,6 +28,7 @@ async function getQuestion(req, res) {
   }
 }
 
+//Only admin
 async function createQuestion(req, res) {
   try {
     const data = req.body;
@@ -36,6 +40,8 @@ async function createQuestion(req, res) {
   }
 }
 
+
+//Only admin
 async function updateQuestion(req, res) {
   try {
     const id = Number(req.params.questionId);
@@ -50,6 +56,8 @@ async function updateQuestion(req, res) {
   }
 }
 
+
+//Only admin
 async function deleteQuestion(req, res) {
   try {
     const id = Number(req.params.questionId);

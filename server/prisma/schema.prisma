@@ -17,18 +17,18 @@ model User {
     email         String   @unique
     name          String?
     lastname      String?
-    password      String?  //hashed with the genPassword function
+    password      String?  //null for test users
     role          Role     @default(USER)
     createdAt     DateTime @default(now())
 
     aupair        Boolean
+
     profile       Profile?
     aupairfamily  AuPairFamily[]
     frenchtest    Test[]
 }
-// role: ADMIN, password: hash, no test 
-// role: USER, password: null, test 
 
+// -------------------- PROFILE -----------------------
 
 model Profile {
   id                Int     @id @default(autoincrement())
@@ -48,6 +48,8 @@ model Profile {
   arrivaldate       DateTime
 }
 
+// -------------------- AU-PAIR FAMILY -----------------
+
 model AuPairFamily {
   id          Int      @id @default(autoincrement())
 
@@ -61,119 +63,46 @@ model AuPairFamily {
   address     String
 }
 
+// -------------------- TEST ----------------------------
+
 model Test {
   id          Int       @id @default(autoincrement())
 
   user        User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int  
+  userId      Int 
+
   testresponse TestResponse[]
-
-//Part 1 - QCM
-  pa1          Boolean
-  pa2          Boolean
-  pa3          Boolean
-  pa4          Boolean
-  pa5          Boolean
-  pa6          Boolean
-  pa7          Boolean
-  pa8          Boolean
-  pa9          Boolean
-  pa10         Boolean
-  pa11         Boolean
-  pa12         Boolean
-  pa13         Boolean
-  pa14         Boolean
-  pa15         Boolean
-  pa16         Boolean
-  pa17         Boolean
-  pa18         Boolean
-  pa19         Boolean
-  pa20         Boolean
-
-//Part 2 - Video 
-  pb1          Boolean
-  pb2          Boolean
-  pb4          Boolean
-  pb5          Boolean
-  pb6          Boolean
-  pb7          String
-
-//Part 3 - Open questions
-  pc1          String
-  pc2          String
-  pc3          String
-  pc4          String
-  pc5          String
-  pc6          String
-  pc7          String
-
-
-// Grade automatically depending on the answers
-//Results - QCM
-  notea1          Int
-  notea2          Int
-  notea3          Int
-  notea4          Int
-  notea5          Int
-  notea6          Int
-  notea7          Int
-  notea8          Int
-  notea9          Int
-  notea10         Int
-  notea11         Int
-  notea12         Int
-  notea13         Int
-  notea14         Int
-  notea15         Int
-  notea16         Int
-  notea17         Int
-  notea18         Int
-  notea19         Int
-  notea20         Int
-
-//Results 2 - Video 
-  noteb1          Int
-  noteb2          Int
-  noteb4          Int
-  noteb5          Int
-  noteb6          Int
-  noteb7          Int
-
-//Grade by an admin
-//Results 3 - Onpen questions
-  notec1          Int
-  notec2          Int
-  notec3          Int
-  notec4          Int
-  notec5          Int
-  notec6          Int
-  notec7          Int
 }
+
+// -------------------- QUESTION BANK -------------------
 
 model Question {
   id          Int      @id @default(autoincrement())
   type        QuestionType
   text        String
-  mediaUrl    String?   // vidéo ou image (optionnel)
-  correctBool Boolean?  // pour QCM et Video
-  correctText String?   // pour les questions ouvertes
+  mediaUrl    String?   // video/audio/image
+  correctBool Boolean?  // for QCM and VIDEOS
+  correctText String?   // for open questions
   points      Int      @default(1)
   order       Int
 
   responses   TestResponse[]
 }
 
+// -------------------- RESPONSES -----------------------
+
 model TestResponse {
   id         Int      @id @default(autoincrement())
-       
-  questionId Int
-  answerBool Boolean?    // case QCM / Vidéo
-  answerText String?     // questions ouvertes
-  score      Int?        // note auto OU note admin
 
-  question   Question @relation(fields: [questionId], references: [id])
-  test       Test     @relation(fields: [testId], references: [id])
-  testId     Int 
+  test       Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+  testId     Int
+
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId Int
+
+  answerBool Boolean?
+  answerText String?
+  score      Int?     // auto or manual
 }
 
 enum QuestionType {
