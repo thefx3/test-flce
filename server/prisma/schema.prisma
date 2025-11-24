@@ -21,6 +21,7 @@ model User {
     role          Role     @default(USER)
     createdAt     DateTime @default(now())
 
+    aupair        Boolean
     profile       Profile?
     aupairfamily  AuPairFamily[]
     frenchtest    Test[]
@@ -43,7 +44,6 @@ model Profile {
   photoPath         String
 
   firstregister     Boolean
-  aupair            Boolean
   address           String
   arrivaldate       DateTime
 }

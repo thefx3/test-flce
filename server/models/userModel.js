@@ -7,6 +7,7 @@ const baseUserSelect = {
   name: true,
   lastname: true,
   role: true,
+  aupair: true,
   createdAt: true //generated automatically
 };
 
@@ -76,7 +77,8 @@ async createTestUser(data) {
       email: data.email,
       name: data.name ?? null,
       lastname: data.lastname ?? null,
-      role: "USER"
+      role: "USER",
+      aupair: data.aupair
     },
     select: baseUserSelect
   });

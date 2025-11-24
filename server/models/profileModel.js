@@ -11,7 +11,6 @@ const baseProfileSelect = {
   nationality: true,
   photoPath: true,
   firstregister: true,
-  aupair: true,
   address: true,
   arrivaldate: true
 };
@@ -21,6 +20,7 @@ class ProfileModel {
 
   // =============== TEST USER ACCOUNTS ==================
   // All people who are taking the test
+
 
   async createProfile(userId, data) {
     return await prisma.profile.create({
@@ -33,7 +33,6 @@ class ProfileModel {
         nationality: data.nationality,
         photoPath: data.photoPath,
         firstregister: data.firstregister,
-        aupair: data.aupair,
         address: data.address,
         arrivaldate: data.arrivaldate
       },
