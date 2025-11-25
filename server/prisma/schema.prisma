@@ -46,6 +46,8 @@ model Profile {
   firstregister     Boolean
   address           String
   arrivaldate       DateTime
+
+  level             String
 }
 
 // -------------------- AU-PAIR FAMILY -----------------

@@ -94,7 +94,7 @@ async function submitResponses(req, res) {
         .json({ message: "Responses must be an array" });
     }
 
-    const test = await testModel.getTestAdmin(testId);
+    const test = await testModel.getTestById(testId);
     if (!test) return res.status(404).json({ message: "Test not found" });
 
     const responseIdsAllowed = new Set(

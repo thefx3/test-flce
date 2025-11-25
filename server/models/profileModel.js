@@ -12,7 +12,8 @@ const baseProfileSelect = {
   photoPath: true,
   firstregister: true,
   address: true,
-  arrivaldate: true
+  arrivaldate: true,
+  level: true
 };
 
 
@@ -35,6 +36,7 @@ class ProfileModel {
         firstregister: data.firstregister ?? null,
         address: data.address ?? null,
         arrivaldate: data.arrivaldate ?? null,
+        level: data.level ?? null,
       },
       select: baseProfileSelect
     });
@@ -49,6 +51,14 @@ class ProfileModel {
     })
   }
 
+  async updateProfileLevel(userId, level) {
+    return await prisma.profile.update({
+      where: { userId },
+      data: { level },
+      select: baseProfileSelect,
+    });
+  }
+
   // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
   async getProfileByUserId(userId) {
     return await prisma.profile.findUnique({
@@ -59,4 +69,3 @@ class ProfileModel {
 
 }
 export default new ProfileModel();
-

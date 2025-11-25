@@ -145,6 +145,27 @@ async function updateProfile(req, res) {
   }
 }
 
+async function updateProfileLevel(req, res) {
+  try {
+    const id = Number(req.params.id);
+    const { level } = req.body;
+
+    if (level === undefined || level === null) {
+      return res.status(400).json({ message: "level is required" });
+    }
+
+    const profile = await profileModel.getProfileByUserId(id);
+    if (!profile)
+      return res.status(404).json({ message: "Profile not found" });
+
+    const updated = await profileModel.updateProfileLevel(id, level);
+    res.json(updated);
+  } catch (err) {
+    console.error("Error updating profile level:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
 // =============== FAMILIES ==================
 
 async function getFamilies(req, res) {
@@ -314,6 +335,7 @@ export default {
   updateUser,
   getProfile,
   updateProfile,
+  updateProfileLevel,
   getFamilies,
   updateFamily,
   deleteFamily,

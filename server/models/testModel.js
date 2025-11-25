@@ -81,6 +81,13 @@ class TestModel {
       }
     });
   }
+
+  async getTestById(id) {
+    return prisma.test.findUnique({
+      where: { id },
+      select: testSelect
+    })
+  }
   
   async getTestsByUserId(userId) {
     return prisma.test.findMany({

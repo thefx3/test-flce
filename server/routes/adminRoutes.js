@@ -32,6 +32,8 @@ router.get("/users/:id/profile", authRequired, adminRequired, adminController.ge
 
 router.put("/users/:id/profile", authRequired, adminRequired, adminController.updateProfile);
 
+router.put("/users/:id/profile/level", authRequired, adminRequired, adminController.updateProfileLevel);
+
 
 router.get("/users/:userId/families", authRequired, adminRequired, adminController.getFamilies);
 
