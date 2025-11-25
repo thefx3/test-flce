@@ -68,10 +68,11 @@ model AuPairFamily {
 // -------------------- TEST ----------------------------
 
 model Test {
-  id          Int       @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
 
-  user        User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int 
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  status      TestStatus    @default(IN_PROGRESS)
 
   testresponse TestResponse[]
 }
@@ -113,9 +114,15 @@ enum QuestionType {
   OPEN
 }
 
-
 enum Role {
   SUPERADMIN //Author with full permissions
   ADMIN
   USER  //Test taker
+}
+
+enum TestStatus {
+  IN_PROGRESS
+  SUBMITTED
+  AUTO_GRADED
+  MANUAL_GRADED
 }

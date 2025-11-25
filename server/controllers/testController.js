@@ -114,6 +114,12 @@ async function submitResponses(req, res) {
     }
 
     await testModel.submitAnswers(responses);
+
+    await prisma.test.update({
+      where: { id: testId },
+      data: { status: "AUTO_GRADED" }
+    });
+
     const updated = await testModel.getTestAdmin(testId);
     res.json(updated);
   } catch (err) {
@@ -138,6 +144,12 @@ async function gradeAuto(req, res) {
     if (!test) return res.status(404).json({ message: "Test not found" });
 
     await testModel.gradeAuto(testId);
+
+    await prisma.test.update({
+      where: { id: testId },
+      data: { status: "AUTO_GRADED" }
+    });
+    
     const updated = await testModel.getTestAdmin(testId);
     res.json(updated);
   } catch (err) {
@@ -170,6 +182,13 @@ async function gradeManual(req, res) {
     if (!test) return res.status(404).json({ message: "Test not found" });
 
     await testModel.gradeManual(grades);
+
+    await prisma.test.update({
+      where: { id: testId },
+      data: { status: "CORRECTED" }
+    });
+
+    
     const updated = await testModel.getTestAdmin(testId);
     res.json(updated);
   } catch (err) {

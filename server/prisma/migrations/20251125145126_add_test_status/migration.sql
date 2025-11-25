@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "TestStatus" AS ENUM ('IN_PROGRESS', 'SUBMITTED', 'AUTO_GRADED', 'MANUAL_GRADED');
+
+-- AlterTable
+ALTER TABLE "Test" ADD COLUMN     "status" "TestStatus" NOT NULL DEFAULT 'IN_PROGRESS';

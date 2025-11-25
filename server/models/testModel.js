@@ -30,7 +30,9 @@ class TestModel {
   async createTest(userId) {
     // Create test row
     const test = await prisma.test.create({
-      data: { userId },
+      data: { userId,
+        status: "IN_PROGRESS"
+       },
     });
 
     // Load all questions

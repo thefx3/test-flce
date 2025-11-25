@@ -138,6 +138,11 @@ async function submitResponses(req, res) {
     // Save in DB
     await testModel.submitAnswers(converted);
 
+    await prisma.test.update({
+      where: { id: testId },
+      data: { status: "SUBMITTED" }
+    });
+
     return res.json({
       message: "Responses saved (via questionId)",
     });
