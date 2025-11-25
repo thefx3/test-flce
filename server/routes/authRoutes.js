@@ -12,6 +12,8 @@ router.post('/register', authRequired, adminRequired, authController.register);
 // Login
 router.post('/login', authController.login);
 
+router.post('/login-user', authController.loginUser);
+
 // Me
 router.get('/me', authRequired, authController.loginSuccess);
 

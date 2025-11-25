@@ -106,6 +106,14 @@ async getSingleUserById(id) {
   });
 }
 
+async getSingleUserByEmail(email) {
+  return prisma.user.findUnique({
+    where: { email },
+    select: baseUserSelect,
+  });
+}
+
+
 async updateUser(id, data) {
   const allowedUserFields = ["email", "name", "lastname", "aupair"];
 

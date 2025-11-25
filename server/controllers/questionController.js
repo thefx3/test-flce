@@ -1,8 +1,7 @@
-// adminQuestionController.js
+// controllers/questionController.js
 import questionModel from "../models/questionModel.js";
 
-
-//All the question for the test - all user can access it
+// All questions for the test - ADMIN ONLY (via routes middlewares)
 async function getQuestionsAdmin(req, res) {
   try {
     const q = await questionModel.getAllAdmin();
@@ -13,11 +12,13 @@ async function getQuestionsAdmin(req, res) {
   }
 }
 
-// All user can access it
+// Single question - ADMIN ONLY
 async function getQuestionAdmin(req, res) {
   try {
     const id = Number(req.params.questionId);
-    if (Number.isNaN(id)) return res.status(400).json({ message: "Invalid id" });
+    if (Number.isNaN(id)) {
+      return res.status(400).json({ message: "Invalid id" });
+    }
 
     const q = await questionModel.getByIdAdmin(id);
     if (!q) return res.status(404).json({ message: "Not found" });
@@ -28,7 +29,7 @@ async function getQuestionAdmin(req, res) {
   }
 }
 
-//Only admin
+// Create question - ADMIN ONLY
 async function createQuestion(req, res) {
   try {
     const data = req.body;
@@ -40,12 +41,13 @@ async function createQuestion(req, res) {
   }
 }
 
-
-//Only admin
+// Update question - ADMIN ONLY
 async function updateQuestion(req, res) {
   try {
     const id = Number(req.params.questionId);
-    if (Number.isNaN(id)) return res.status(400).json({ message: "Invalid id" });
+    if (Number.isNaN(id)) {
+      return res.status(400).json({ message: "Invalid id" });
+    }
     const data = req.body;
 
     const q = await questionModel.update(id, data);
@@ -56,12 +58,13 @@ async function updateQuestion(req, res) {
   }
 }
 
-
-//Only admin
+// Delete question - ADMIN ONLY
 async function deleteQuestion(req, res) {
   try {
     const id = Number(req.params.questionId);
-    if (Number.isNaN(id)) return res.status(400).json({ message: "Invalid id" });
+    if (Number.isNaN(id)) {
+      return res.status(400).json({ message: "Invalid id" });
+    }
 
     await questionModel.delete(id);
     res.json({ message: "Deleted" });
@@ -76,5 +79,5 @@ export default {
   getQuestionAdmin,
   createQuestion,
   updateQuestion,
-  deleteQuestion
+  deleteQuestion,
 };
