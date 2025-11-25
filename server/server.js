@@ -2,6 +2,9 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
 import prisma from "./prisma/prisma.js";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
@@ -14,10 +17,19 @@ import authRequired from "./auth/authRequired.js";
 // Initialize express app
 const app = express();
 
-//-------------- MIDDLEWARES --------------------------
-app.use(cors());
-app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+// ---------------- SECURITY GLOBAL MIDDLEWARES -----------------
+app.use(helmet());           // Secure HTTP headers
+app.use(cookieParser());     // Parse cookies
+app.use(cors());             // CORS
+app.use(express.json());     // JSON body
+
+
+// ---------------- RATE LIMITER -----------------
+const publicLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,  // 1 minute
+  max: 20,
+  message: { message: "Too many requests, slow down." }
+});
 
 app.use("/auth", authRoutes);
 
