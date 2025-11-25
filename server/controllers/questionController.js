@@ -33,13 +33,39 @@ async function getQuestionAdmin(req, res) {
 async function createQuestion(req, res) {
   try {
     const data = req.body;
+
+    // 1. Vérifier si un order est fourni
+    if (data.order == null) {
+      // 2. Si pas d'ordre → prendre le prochain disponible
+      const last = await prisma.question.findFirst({
+        orderBy: { order: "desc" },
+        select: { order: true }
+      });
+
+      data.order = last ? last.order + 1 : 1;
+    } else {
+      // 3. Si un ordre est fourni → vérifier qu'il n'existe pas déjà
+      const exists = await prisma.question.findUnique({
+        where: { order: data.order }
+      });
+
+      if (exists) {
+        return res
+          .status(400)
+          .json({ message: `Order ${data.order} already exists` });
+      }
+    }
+
+    // 4. Créer la question
     const q = await questionModel.createQuestion(data);
     res.status(201).json(q);
+
   } catch (err) {
     console.error("Error creating question:", err);
     res.status(500).json({ message: "Internal error" });
   }
 }
+
 
 // Update question - ADMIN ONLY
 async function updateQuestion(req, res) {
