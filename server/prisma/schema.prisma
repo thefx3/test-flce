@@ -36,18 +36,18 @@ model Profile {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            Int     @unique
 
-  civility          String
-  phone             Int
-  birthdate         DateTime
-  birthplace        String
-  nationality       String
-  photoPath         String
+  civility          String?
+  phone             Int?
+  birthdate         DateTime?
+  birthplace        String?
+  nationality       String?
+  photoPath         String?
 
-  firstregister     Boolean
-  address           String
-  arrivaldate       DateTime
+  firstregister     Boolean?
+  address           String?
+  arrivaldate       DateTime?
 
-  level             String
+  level             String?
 }
 
 // -------------------- AU-PAIR FAMILY -----------------

@@ -12,6 +12,8 @@ router.post("/create/:userId", authRequired, adminRequired, testController.creat
 // USER sees his own tests
 router.get("/user/:userId", authRequired, testController.getTests);
 
+// ADMIN sees all tests
+router.get("/", authRequired, adminRequired, testController.getAllTests);
 
 // ADMIN views test (with corrections)
 router.get("/:testId", authRequired, adminRequired, testController.getTest);

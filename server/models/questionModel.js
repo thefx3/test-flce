@@ -54,14 +54,14 @@ class QuestionModel {
 
 
   //Admin
-  async create(data) {
+  async createQuestion(data) {
     return prisma.question.create({
       data,
       select: baseQuestionSelect
     });
   }
 
-  async update(id, data) {
+  async updateQuestion(id, data) {
     return prisma.question.update({
       where: { id },
       data,
@@ -69,7 +69,7 @@ class QuestionModel {
     });
   }
 
-  async delete(id) {
+  async deleteQuestion(id) {
     return prisma.question.delete({
       where: { id },
       select: baseQuestionSelect

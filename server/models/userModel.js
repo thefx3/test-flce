@@ -1,3 +1,4 @@
+//userModels.js
 import prisma from "../prisma/prisma.js";
 
 //Choose what we want to return - not the password

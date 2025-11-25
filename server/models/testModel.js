@@ -9,12 +9,18 @@ const responseSelect = {
   score: true,
 };
 
-const testSelect = {
+const baseTestSelect = {
   id: true,
   userId: true,
-  responses: {
+  testresponse: {
     select: responseSelect,
   },
+};
+
+const mapTest = (test) => {
+  if (!test) return null;
+  const { testresponse, ...rest } = test;
+  return { ...rest, responses: testresponse ?? [] };
 };
 
 class TestModel {
@@ -53,12 +59,12 @@ class TestModel {
   // ----------------------------------------------------
   //Get all informations about the test - for admin
   async getTestAdmin(id) {
-    return prisma.test.findUnique({
+    const test = await prisma.test.findUnique({
       where: { id },
       select: {
         id: true,
         userId: true,
-        responses: {
+        testresponse: {
           select: {
             id: true,
             questionId: true,
@@ -80,20 +86,54 @@ class TestModel {
         }
       }
     });
+    return mapTest(test);
   }
 
   async getTestById(id) {
-    return prisma.test.findUnique({
+    const test = await prisma.test.findUnique({
       where: { id },
-      select: testSelect
-    })
+      select: baseTestSelect
+    });
+    return mapTest(test);
   }
   
   async getTestsByUserId(userId) {
-    return prisma.test.findMany({
+    const tests = await prisma.test.findMany({
       where: { userId },
-      select: testSelect,
+      select: baseTestSelect,
     });
+    return tests.map(mapTest);
+  }
+
+  async getAllTests() {
+    const tests = await prisma.test.findMany({
+      orderBy: { id: "asc" },
+      select: {
+        id: true,
+        userId: true,
+        testresponse: {
+          select: {
+            id: true,
+            questionId: true,
+            answerBool: true,
+            answerText: true,
+            score: true,
+            question: {
+              select: {
+                type: true,
+                text: true,
+                mediaUrl: true,
+                correctBool:true,
+                correctText: true,
+                points: true,
+                order: true
+              }
+            }
+          }
+        }
+      }
+    });
+    return tests.map(mapTest);
   }
 
   // ----------------------------------------------------
@@ -147,7 +187,7 @@ class TestModel {
         await prisma.$transaction(updates);
       }
 
-    return this.getTestByIdAdmin(testId);
+    return this.getTestAdmin(testId);
   }
 
   // ----------------------------------------------------

@@ -10,16 +10,29 @@ async function startTest(req, res) {
   try {
     const data = req.body;
 
-    // 1. Create user (test user)
-    const user = await userModel.createTestUser({
-      email: data.email ?? null,
-      name: data.name ?? null,
-      lastname: data.lastname ?? null,
-      aupair: data.aupair ?? false,
-    });
+        // 1. Check if user exists
+    let user = await userModel.getSingleUserByEmail(data.email);
 
-    // 2. Create profile
-    await profileModel.createProfile(user.id, data);
+    if (!user) {
+      // Create user
+      user = await userModel.createTestUser({
+        email: data.email,
+        name: data.name ?? null,
+        lastname: data.lastname ?? null,
+        aupair: data.aupair ?? false,
+      });
+
+      // Create profile only on first time
+      await profileModel.createProfile(user.id, data);
+
+      
+    } else {
+      // Check if profile exists
+      const existingProfile = await profileModel.getProfileByUserId(user.id);
+      if (!existingProfile) {
+        await profileModel.createProfile(user.id, data);
+      }
+    }
 
     // 3. Create test
     const test = await testModel.createTest(user.id);
@@ -86,37 +99,54 @@ async function submitResponses(req, res) {
       return res.status(400).json({ message: "Invalid id" });
     }
 
-    const responses =
+    // Support both formats: [{...}] or { responses: [...] }
+    const incoming =
       Array.isArray(req.body) ? req.body : req.body.responses;
-    if (!Array.isArray(responses)) {
+
+    if (!Array.isArray(incoming)) {
       return res
         .status(400)
         .json({ message: "Responses must be an array" });
     }
 
+    // Load the test WITH all TestResponse rows
     const test = await testModel.getTestById(testId);
     if (!test) return res.status(404).json({ message: "Test not found" });
 
-    const responseIdsAllowed = new Set(
-      test.responses.map((r) => r.id)
+    // Build a map: questionId → responseId
+    const mapQtoR = new Map(
+      test.responses.map(r => [r.questionId, r.id])
     );
-    const invalid = responses.find(
-      (r) => !responseIdsAllowed.has(r.responseId)
-    );
-    if (invalid) {
-      return res
-        .status(403)
-        .json({ message: "One or more responses do not belong to this test" });
+
+    // Convert questionId → responseId
+    const converted = [];
+
+    for (const r of incoming) {
+      if (!mapQtoR.has(r.questionId)) {
+        return res.status(403).json({
+          message: `Question ${r.questionId} does not belong to test ${testId}`,
+        });
+      }
+
+      converted.push({
+        responseId: mapQtoR.get(r.questionId),
+        answerBool: r.answerBool ?? null,
+        answerText: r.answerText ?? "",
+      });
     }
 
-    await testModel.submitAnswers(responses);
+    // Save in DB
+    await testModel.submitAnswers(converted);
 
-    return res.json({ message: "Responses saved" });
+    return res.json({
+      message: "Responses saved (via questionId)",
+    });
   } catch (err) {
     console.error("Error submitting public responses:", err);
     res.status(500).json({ message: "Internal error" });
   }
 }
+
 
 export default {
   startTest,

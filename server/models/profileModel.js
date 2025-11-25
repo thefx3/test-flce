@@ -24,19 +24,21 @@ class ProfileModel {
 
 
   async createProfile(userId, data) {
+    const now = new Date();    
     return await prisma.profile.create({
       data: {
-        userId,
-        civility: data.civility ?? null,
-        phone: data.phone ?? null,
-        birthdate: data.birthdate ?? null,
-        birthplace: data.birthplace ?? null,
-        nationality: data.nationality ?? null,
-        photoPath: data.photoPath ?? null,
-        firstregister: data.firstregister ?? null,
-        address: data.address ?? null,
-        arrivaldate: data.arrivaldate ?? null,
-        level: data.level ?? null,
+        user: { connect: { id: userId } },
+        // Prisma schema uses non-null fields; provide safe defaults
+        civility: data.civility ?? "",
+        phone: data.phone ?? 0,
+        birthdate: data.birthdate ?? now,
+        birthplace: data.birthplace ?? "",
+        nationality: data.nationality ?? "",
+        photoPath: data.photoPath ?? "",
+        firstregister: data.firstregister ?? false,
+        address: data.address ?? "",
+        arrivaldate: data.arrivaldate ?? now,
+        level: data.level ?? "",
       },
       select: baseProfileSelect
     });

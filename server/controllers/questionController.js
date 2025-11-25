@@ -33,7 +33,7 @@ async function getQuestionAdmin(req, res) {
 async function createQuestion(req, res) {
   try {
     const data = req.body;
-    const q = await questionModel.create(data);
+    const q = await questionModel.createQuestion(data);
     res.status(201).json(q);
   } catch (err) {
     console.error("Error creating question:", err);
@@ -50,7 +50,7 @@ async function updateQuestion(req, res) {
     }
     const data = req.body;
 
-    const q = await questionModel.update(id, data);
+    const q = await questionModel.updateQuestion(id, data);
     res.json(q);
   } catch (err) {
     console.error("Error updating question:", err);
@@ -66,7 +66,7 @@ async function deleteQuestion(req, res) {
       return res.status(400).json({ message: "Invalid id" });
     }
 
-    await questionModel.delete(id);
+    await questionModel.deleteQuestion(id);
     res.json({ message: "Deleted" });
   } catch (err) {
     console.error("Error deleting question:", err);

@@ -65,6 +65,21 @@ async function getTest(req, res) {
   }
 }
 
+// GET /tests  (admin)
+async function getAllTests(req, res) {
+  try {
+    if (!isAdmin(req.user?.role)) {
+      return res.status(403).json({ message: "Admin only" });
+    }
+
+    const tests = await testModel.getAllTests();
+    res.json(tests);
+  } catch (err) {
+    console.error("Error fetching all tests:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
 // POST /tests/:testId/responses  (admin-only, pour l’instant)
 async function submitResponses(req, res) {
   try {
@@ -170,4 +185,5 @@ export default {
   submitResponses,
   gradeAuto,
   gradeManual,
+  getAllTests,
 };
