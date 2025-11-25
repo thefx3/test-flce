@@ -213,22 +213,45 @@ class TestModel {
     return { message: "Manual grading updated" };
   }
 
-    // ----------------------------------------------------
-  // 6. Optional: compute total score of a test
-  // ----------------------------------------------------
-  async getTestTotalScore(testId) {
-    const responses = await prisma.testResponse.findMany({
-      where: { testId },
-      select: { score: true },
-    });
+  // ---------------------------
+// SCORE D’UNE QUESTION
+// ---------------------------
+async scoreQuestion(responseId) {
+  const r = await prisma.testResponse.findUnique({
+    where: { id: responseId },
+    select: { score: true }
+  });
 
-    const total = responses.reduce(
-      (sum, r) => sum + (r.score ?? 0),
-      0
-    );
+  return r ? r.score || 0 : 0;
+}
 
-    return { testId, totalScore: total };
-  }
+// -------------------------------
+// Score d’une seule question d’un test
+// -------------------------------
+async getScoreOfQuestion(testId, questionId) {
+  const response = await prisma.testResponse.findFirst({
+    where: {
+      testId,
+      questionId
+    },
+    select: { score: true }
+  });
+
+  return response?.score ?? 0;
+}
+
+// ---------------------------
+// SCORE TOTAL D’UN TEST
+// ---------------------------
+async getScoreOfTest(testId) {
+  const responses = await prisma.testResponse.findMany({
+    where: { testId },
+    select: { score: true }
+  });
+
+  return responses.reduce((sum, r) => sum + (r.score || 0), 0);
+}
+    
   
 }
 

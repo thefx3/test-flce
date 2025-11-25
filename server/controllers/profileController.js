@@ -58,10 +58,34 @@ function ensureOwnProfile(req, res, next) {
   next();
 }
 
+async function setLevel(req, res) {
+  try {
+    const userId = Number(req.params.userId);
+    const { level } = req.body;
+
+    const validLevels = ["A0", "A1", "A2", "B1", "B2", "C1", "C2"];
+    if (!validLevels.includes(level)) {
+      return res.status(400).json({ message: "Invalid level" });
+    }
+
+    const updated = await prisma.profile.update({
+      where: { userId },
+      data: { level }
+    });
+
+    return res.json(updated);
+
+  } catch (err) {
+    console.error("Error setting level:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
 
 export default {
   getProfile,
   createProfile,
   updateProfile,
-  ensureOwnProfile
+  ensureOwnProfile,
+  setLevel
 };

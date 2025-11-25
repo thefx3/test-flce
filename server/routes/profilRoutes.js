@@ -26,4 +26,10 @@ router.put(
   profileController.updateProfile
 );
 
+router.patch("/:userId/level",
+  authRequired, 
+  adminRequired, 
+  profileController.setLevel);
+
+
 export default router;

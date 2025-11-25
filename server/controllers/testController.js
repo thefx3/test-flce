@@ -197,12 +197,59 @@ async function gradeManual(req, res) {
   }
 }
 
+// -------------------------------
+// Get score of ONE question
+// -------------------------------
+async function getScoreOfQuestion(req, res) {
+  try {
+    const testId = Number(req.params.testId);
+    const questionId = Number(req.params.questionId);
+
+    if (isNaN(testId) || isNaN(questionId)) {
+      return res.status(400).json({ message: "Invalid ids" });
+    }
+
+    const score = await testModel.getScoreOfQuestion(testId, questionId);
+
+    return res.json({ testId, questionId, score });
+
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+
+// -------------------------------
+// Get total score of a test
+// -------------------------------
+async function getScoreOfTest(req, res) {
+  try {
+    const testId = Number(req.params.testId);
+
+    if (isNaN(testId)) {
+      return res.status(400).json({ message: "Invalid testId" });
+    }
+
+    const total = await testModel.getScoreOfTest(testId);
+
+    return res.json({ testId, totalScore: total });
+
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+
 export default {
   createTest,
   getTests,
   getTest,
   submitResponses,
+  getAllTests,
   gradeAuto,
   gradeManual,
-  getAllTests,
+  getScoreOfQuestion,
+  getScoreOfTest
 };

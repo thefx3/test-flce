@@ -26,4 +26,21 @@ router.post("/:testId/responses", authRequired, testController.submitResponses);
 router.post("/:testId/grade-auto", authRequired, adminRequired, testController.gradeAuto);
 router.post("/:testId/grade-manual", authRequired, adminRequired, testController.gradeManual);
 
+
+// Score one question
+router.get(
+    "/:testId/question/:questionId/score",
+    authRequired,
+    adminRequired,
+    testController.getScoreOfQuestion
+  );
+  
+  // Score total test
+  router.get(
+    "/:testId/score",
+    authRequired,
+    adminRequired,
+    testController.getScoreOfTest
+  );
+  
 export default router;
