@@ -41,7 +41,9 @@ class TestModel {
       score: 0,
     }));
 
-    await prisma.testResponse.createMany({ data: responsesData });
+    if (responsesData.length > 0) {
+      await prisma.testResponse.createMany({ data: responsesData });
+    }
 
     return this.getTestById(test.id);
   }
@@ -49,14 +51,38 @@ class TestModel {
   // ----------------------------------------------------
   // 2. Get a test (single or all)
   // ----------------------------------------------------
-  async getTestById(id) {
+  //Get all informations about the test - for admin
+  async getTestAdmin(id) {
     return prisma.test.findUnique({
       where: { id },
-      select: testSelect,
+      select: {
+        id: true,
+        userId: true,
+        responses: {
+          select: {
+            id: true,
+            questionId: true,
+            answerBool: true,
+            answerText: true,
+            score: true,
+            question: {
+              select: {
+                type: true,
+                text: true,
+                mediaUrl: true,
+                correctBool:true,
+                correctText: true,
+                points: true,
+                order: true
+              }
+            }
+          }
+        }
+      }
     });
   }
-
-  async getTestsByUser(userId) {
+  
+  async getTestsByUserId(userId) {
     return prisma.test.findMany({
       where: { userId },
       select: testSelect,
@@ -68,12 +94,18 @@ class TestModel {
   // ----------------------------------------------------
   async submitAnswers(answers) {
     // answers = [{ responseId, answerBool?, answerText? }]
+    if (!Array.isArray(answers) || answers.length === 0) {
+      return { message: "No answers to update" };
+    }
+
     const updates = answers.map(a =>
       prisma.testResponse.update({
         where: { id: a.responseId },
         data: {
-          answerBool: a.answerBool ?? null,
-          answerText: a.answerText ?? "",
+          answerBool:
+            a.answerBool === undefined ? null : a.answerBool,
+          answerText:
+            a.answerText === undefined ? "" : a.answerText,
         },
       })
     );
@@ -104,8 +136,11 @@ class TestModel {
         });
       });
 
-    await prisma.$transaction(updates);
-    return this.getTestById(testId);
+      if (updates.length > 0) {
+        await prisma.$transaction(updates);
+      }
+
+    return this.getTestByIdAdmin(testId);
   }
 
   // ----------------------------------------------------
@@ -113,6 +148,11 @@ class TestModel {
   // ----------------------------------------------------
   async gradeManual(grades) {
     // grades = [{ responseId, score }]
+
+    if (!Array.isArray(grades) || grades.length === 0) {
+      return { message: "No grades to update" };
+    }
+
     const updates = grades.map(g =>
       prisma.testResponse.update({
         where: { id: g.responseId },
@@ -123,6 +163,24 @@ class TestModel {
     await prisma.$transaction(updates);
     return { message: "Manual grading updated" };
   }
+
+    // ----------------------------------------------------
+  // 6. Optional: compute total score of a test
+  // ----------------------------------------------------
+  async getTestTotalScore(testId) {
+    const responses = await prisma.testResponse.findMany({
+      where: { testId },
+      select: { score: true },
+    });
+
+    const total = responses.reduce(
+      (sum, r) => sum + (r.score ?? 0),
+      0
+    );
+
+    return { testId, totalScore: total };
+  }
+  
 }
 
 export default new TestModel();

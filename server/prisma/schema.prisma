@@ -84,7 +84,7 @@ model Question {
   correctBool Boolean?  // for QCM and VIDEOS
   correctText String?   // for open questions
   points      Int      @default(1)
-  order       Int
+  order       Int      @unique
 
   responses   TestResponse[]
 }

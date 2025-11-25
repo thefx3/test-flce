@@ -20,12 +20,12 @@ class FamilyModel {
   async addFamily(userId, data) {
     return await prisma.auPairFamily.create({
         data: {
-            userId: userId,
+            userId,
             familyname1: data.familyname1,
-            familyname2: data.familyname2,
-            email: data.email,
-            phone: data.phone,
-            address: data.address
+            familyname2: data.familyname2 ?? null,
+            email: data.email ?? null,
+            phone: data.phone ?? null,
+            address: data.address ?? null
         },
         select: baseFamilySelect
     });

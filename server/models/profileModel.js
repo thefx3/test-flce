@@ -25,16 +25,16 @@ class ProfileModel {
   async createProfile(userId, data) {
     return await prisma.profile.create({
       data: {
-        userId: userId,
-        civility: data.civility,
-        phone: data.phone,
-        birthdate: data.birthdate,
-        birthplace: data.birthplace,
-        nationality: data.nationality,
-        photoPath: data.photoPath,
-        firstregister: data.firstregister,
-        address: data.address,
-        arrivaldate: data.arrivaldate
+        userId,
+        civility: data.civility ?? null,
+        phone: data.phone ?? null,
+        birthdate: data.birthdate ?? null,
+        birthplace: data.birthplace ?? null,
+        nationality: data.nationality ?? null,
+        photoPath: data.photoPath ?? null,
+        firstregister: data.firstregister ?? null,
+        address: data.address ?? null,
+        arrivaldate: data.arrivaldate ?? null,
       },
       select: baseProfileSelect
     });

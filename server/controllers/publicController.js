@@ -31,4 +31,34 @@ async function startTest(req, res) {
   }
 }
 
-export default { startTest };
+//All the question for the test - all user can access it
+async function getQuestionsPublic(req, res) {
+  try {
+    const q = await questionModel.getAllPublic();
+    res.json(q);
+  } catch (err) {
+    console.error("Error fetching questions:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+// All user can access it
+async function getQuestionPublic(req, res) {
+  try {
+    const id = Number(req.params.questionId);
+    if (Number.isNaN(id)) return res.status(400).json({ message: "Invalid id" });
+
+    const q = await questionModel.getByIdPublic(id);
+    if (!q) return res.status(404).json({ message: "Not found" });
+    res.json(q);
+  } catch (err) {
+    console.error("Error fetching question:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+export default { 
+  getQuestionsPublic,
+  getQuestionPublic,
+  startTest 
+};

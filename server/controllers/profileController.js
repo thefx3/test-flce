@@ -48,8 +48,20 @@ async function updateProfile(req, res) {
   }
 }
 
+function ensureOwnProfile(req, res, next) {
+  if (req.user.role === "ADMIN" || req.user.role === "SUPERADMIN") {
+    return next();
+  }
+  if (Number(req.user.id) !== Number(req.params.userId)) {
+    return res.status(403).json({ message: "Not allowed" });
+  }
+  next();
+}
+
+
 export default {
   getProfile,
   createProfile,
   updateProfile,
+  ensureOwnProfile
 };

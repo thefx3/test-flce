@@ -12,22 +12,48 @@ const baseQuestionSelect = {
   order: true
 };
 
+const publicQuestionSelect = {
+  id: true,
+  type: true,
+  text: true,
+  mediaUrl: true,
+  order: true
+};
+
 class QuestionModel {
 
-  async getAll() {
+  //Public
+  async getAllPublic() {
+    return prisma.question.findMany({
+      orderBy: { order: "asc" },
+      select: publicQuestionSelect
+    });
+  }
+
+  async getByIdPublic(id) {
+    return prisma.question.findUnique({
+      where: { id },
+      select: publicQuestionSelect
+    });
+  }
+
+  //Admin
+  async getAllAdmin() {
     return prisma.question.findMany({
       orderBy: { order: "asc" },
       select: baseQuestionSelect
     });
   }
 
-  async getById(id) {
+  async getByIdAdmin(id) {
     return prisma.question.findUnique({
       where: { id },
       select: baseQuestionSelect
     });
   }
 
+
+  //Admin
   async create(data) {
     return prisma.question.create({
       data,

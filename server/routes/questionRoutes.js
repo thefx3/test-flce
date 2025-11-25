@@ -1,23 +1,49 @@
 // routes/questionRoutes.js
 import { Router } from "express";
-import adminQuestionController from "../controllers/adminQuestionController.js";
+import questionController from "../controllers/questionController.js";
 import authRequired from "../auth/authRequired.js";
+import adminRequired from "../auth/adminRequired.js";
 
 const router = Router();
 
-// Admin only: list questions
-router.get("/get", adminQuestionController.getQuestions);
+// List all questions (with corrections) - ADMIN ONLY
+router.get(
+  "/",
+  authRequired,
+  adminRequired,
+  questionController.getQuestionsAdmin
+);
 
-// Admin only: get question
-router.get("/:questionId/get", adminQuestionController.getQuestion);
+// Get a single question (with corrections) - ADMIN ONLY
+router.get(
+  "/:questionId",
+  authRequired,
+  adminRequired,
+  questionController.getQuestionAdmin
+);
 
-// Create new question
-router.post("/create", authRequired, adminQuestionController.createQuestion);
+// Create new question - ADMIN ONLY
+router.post(
+  "/",
+  authRequired,
+  adminRequired,
+  questionController.createQuestion
+);
 
-// Update question
-router.put("/:questionId/update", authRequired, adminQuestionController.updateQuestion);
+// Update question - ADMIN ONLY
+router.put(
+  "/:questionId",
+  authRequired,
+  adminRequired,
+  questionController.updateQuestion
+);
 
-// Delete question
-router.delete("/:questionId/delete", authRequired, adminQuestionController.deleteQuestion);
+// Delete question - ADMIN ONLY
+router.delete(
+  "/:questionId",
+  authRequired,
+  adminRequired,
+  questionController.deleteQuestion
+);
 
 export default router;

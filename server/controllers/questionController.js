@@ -3,9 +3,9 @@ import questionModel from "../models/questionModel.js";
 
 
 //All the question for the test - all user can access it
-async function getQuestions(req, res) {
+async function getQuestionsAdmin(req, res) {
   try {
-    const q = await questionModel.getAll();
+    const q = await questionModel.getAllAdmin();
     res.json(q);
   } catch (err) {
     console.error("Error fetching questions:", err);
@@ -14,12 +14,12 @@ async function getQuestions(req, res) {
 }
 
 // All user can access it
-async function getQuestion(req, res) {
+async function getQuestionAdmin(req, res) {
   try {
     const id = Number(req.params.questionId);
     if (Number.isNaN(id)) return res.status(400).json({ message: "Invalid id" });
 
-    const q = await questionModel.getById(id);
+    const q = await questionModel.getByIdAdmin(id);
     if (!q) return res.status(404).json({ message: "Not found" });
     res.json(q);
   } catch (err) {
@@ -72,8 +72,8 @@ async function deleteQuestion(req, res) {
 }
 
 export default {
-  getQuestions,
-  getQuestion,
+  getQuestionsAdmin,
+  getQuestionAdmin,
   createQuestion,
   updateQuestion,
   deleteQuestion

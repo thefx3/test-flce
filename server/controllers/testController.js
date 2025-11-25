@@ -27,7 +27,7 @@ async function getTests(req, res) {
     const userId = req.user?.userId;
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-    const tests = await testModel.getTestByUserId(userId);
+    const tests = await testModel.getTestsByUserId(userId);
     res.json(tests.map(formatTest));
   } catch (err) {
     console.error("Error fetching tests:", err);
@@ -40,7 +40,7 @@ async function getTest(req, res) {
     const testId = Number(req.params.testId);
     if (Number.isNaN(testId)) return res.status(400).json({ message: "Invalid id" });
 
-    const test = await testModel.getTestById(testId);
+    const test = await testModel.getTestAdmin(testId);
     if (!test) return res.status(404).json({ message: "Test not found" });
     if (test.userId !== req.user?.userId && !isAdmin(req.user?.role)) {
       return res.status(403).json({ message: "Forbidden" });

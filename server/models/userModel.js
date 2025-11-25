@@ -18,6 +18,7 @@ const authUserSelect = {
   password: true,
 };
 
+
 class UserModel {
 
 // ================= ADMIN ACCOUNTS ===================
@@ -54,7 +55,7 @@ async createAdmin(data) {
       email: data.email,
       name: data.name ?? null,
       lastname: data.lastname ?? null,
-      password: data.password, // already hashed
+      password: data.password,
       role: data.role ?? "ADMIN",
       aupair: data.aupair ?? false,
     },
@@ -63,12 +64,17 @@ async createAdmin(data) {
 }
 
 async updateAdmin(id, data) {
+  const allowedAdminFields = ["email", "name", "lastname", "password", "aupair", "role"];
+
+  const safeData = pickAllowedFields(data, allowedAdminFields);
+
   return prisma.user.update({
     where: { id },
-    data,
+    data: safeData,
     select: baseUserSelect
   });
 }
+
 
 // ================= USER ACCOUNTS ===================
 // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
@@ -101,12 +107,17 @@ async getSingleUserById(id) {
 }
 
 async updateUser(id, data) {
+  const allowedUserFields = ["email", "name", "lastname", "aupair"];
+
+  const safeData = pickAllowedFields(data, allowedUserFields);
+
   return prisma.user.update({
     where: { id },
-    data,
+    data: safeData,
     select: baseUserSelect
   });
 }
+
 
 // ================= ALL ACCOUNTS ===================
 //FOR USERS AND ADMINS
