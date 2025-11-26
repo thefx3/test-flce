@@ -23,26 +23,6 @@ async function createTest(req, res) {
   }
 }
 
-// GET /tests/user/:userId  (admin)
-async function getTests(req, res) {
-  try {
-    if (!isAdmin(req.user?.role)) {
-      return res.status(403).json({ message: "Admin only" });
-    }
-
-    const userId = Number(req.params.userId);
-    if (Number.isNaN(userId)) {
-      return res.status(400).json({ message: "Invalid user id" });
-    }
-
-    const tests = await testModel.getTestsByUserId(userId);
-    res.json(tests);
-  } catch (err) {
-    console.error("Error fetching tests:", err);
-    res.status(500).json({ message: "Internal error" });
-  }
-}
-
 // GET /tests/:testId  (admin)
 async function getTest(req, res) {
   try {
@@ -78,6 +58,21 @@ async function getAllTests(req, res) {
     console.error("Error fetching all tests:", err);
     res.status(500).json({ message: "Internal error" });
   }
+}
+
+async function deleteTest(req, res) {
+    try {
+      const testId = Number(req.params.testId);
+      if (Number.isNaN(testId)) {
+        return res.status(400).json({ message: "Invalid testId" });
+      }
+  
+      await questionModel.deleteTest(testId);
+      res.json({ message: "Deleted" });
+    } catch (err) {
+      console.error("Error deleting question:", err);
+      res.status(500).json({ message: "Internal error" });
+    }
 }
 
 // POST /tests/:testId/responses  (admin-only, pour l’instant)
@@ -244,10 +239,10 @@ async function getScoreOfTest(req, res) {
 
 export default {
   createTest,
-  getTests,
   getTest,
   submitResponses,
   getAllTests,
+  deleteTest,
   gradeAuto,
   gradeManual,
   getScoreOfQuestion,

@@ -107,6 +107,7 @@ class TestModel {
     return tests.map(mapTest);
   }
 
+  //FROM ADMIN
   async getAllTests() {
     const tests = await prisma.test.findMany({
       orderBy: { id: "asc" },
@@ -136,6 +137,14 @@ class TestModel {
       }
     });
     return tests.map(mapTest);
+  }
+
+  async deleteTest(id){
+    return prisma.test.delete({ where: { id } });
+  }
+
+  async deleteTests(userId){
+    return prisma.test.delete({ where : userId })
   }
 
   // ----------------------------------------------------

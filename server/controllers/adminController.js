@@ -74,10 +74,10 @@ async function getAllUsers(req, res) {
 
 async function getUser(req, res) {
   try {
-    const id = Number(req.params.id);
-    const user = Number.isNaN(id)
+    const userId = Number(req.params.userId);
+    const user = Number.isNaN(userId)
       ? null
-      : await userModel.getSingleUserById(id);
+      : await userModel.getSingleUserById(userId);
 
     if (!user) return res.status(404).json({ message: "User not found" });
     if (user.role !== "USER") {
@@ -116,8 +116,8 @@ async function updateUser(req, res) {
 
 async function getProfile(req, res) {
   try {
-    const id = Number(req.params.id);
-    const profile = await profileModel.getProfileByUserId(id);
+    const userId = Number(req.params.userId);
+    const profile = await profileModel.getProfileByUserId(userId);
     if (!profile)
       return res.status(404).json({ message: "Profile not found" });
 
@@ -130,14 +130,14 @@ async function getProfile(req, res) {
 
 async function updateProfile(req, res) {
   try {
-    const id = Number(req.params.id);
+    const userId = Number(req.params.userId);
     const data = req.body;
 
-    const profile = await profileModel.getProfileByUserId(id);
+    const profile = await profileModel.getProfileByUserId(userId);
     if (!profile)
       return res.status(404).json({ message: "Profile not found" });
 
-    const updated = await profileModel.updateProfile(id, data);
+    const updated = await profileModel.updateProfile(userId, data);
     res.json(updated);
   } catch (err) {
     console.error("Error updating profile:", err);
@@ -147,18 +147,18 @@ async function updateProfile(req, res) {
 
 async function updateProfileLevel(req, res) {
   try {
-    const id = Number(req.params.id);
+    const userId = Number(req.params.userId);
     const { level } = req.body;
 
     if (level === undefined || level === null) {
       return res.status(400).json({ message: "level is required" });
     }
 
-    const profile = await profileModel.getProfileByUserId(id);
+    const profile = await profileModel.getProfileByUserId(userId);
     if (!profile)
       return res.status(404).json({ message: "Profile not found" });
 
-    const updated = await profileModel.updateProfileLevel(id, level);
+    const updated = await profileModel.updateProfileLevel(userId, level);
     res.json(updated);
   } catch (err) {
     console.error("Error updating profile level:", err);
@@ -241,7 +241,8 @@ async function deleteFamily(req, res) {
 
 // =============== TESTS ==================
 
-async function getTest(req, res) {
+// GET for userId USER, the testId TEST. 
+async function getSingleTest(req, res) {
   try {
     const { userId, testId } = req.params;
     const parsedTestId = Number(testId);
@@ -262,6 +263,48 @@ async function getTest(req, res) {
     res.json(test);
   } catch (err) {
     console.error("Error fetching test:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+// GET for userId USER, the testId TEST. 
+async function deleteSingleTest(req, res) {
+  try {
+    const { userId, testId } = req.params;
+    const parsedTestId = Number(testId);
+    const parsedUserId = Number(userId);
+
+    const test = Number.isNaN(parsedTestId)
+      ? null
+      : await testModel.deleteTest(parsedTestId);
+
+    if (!test) return res.status(404).json({ message: "Test not found" });
+
+    if (!Number.isNaN(parsedUserId) && test.userId !== parsedUserId) {
+      return res
+        .status(403)
+        .json({ message: "Test does not belong to this user" });
+    }
+
+    res.json(test);
+  } catch (err) {
+    console.error("Error fetching test:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+// GET for userId USER, all his tests
+async function getAllTests(req, res) {
+  try {
+    const userId = Number(req.params.userId);
+    if (Number.isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid user id" });
+    }
+
+    const tests = await testModel.getTestsByUserId(userId);
+    res.json(tests);
+  } catch (err) {
+    console.error("Error fetching tests:", err);
     res.status(500).json({ message: "Internal error" });
   }
 }
@@ -339,7 +382,9 @@ export default {
   getFamilies,
   updateFamily,
   deleteFamily,
-  getTest,
+  getSingleTest,
+  deleteSingleTest,
+  getAllTests,
   gradeTestAuto,
   gradeTestManual,
 };
