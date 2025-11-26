@@ -93,7 +93,7 @@ async function getUser(req, res) {
 
 async function updateUser(req, res) {
   try {
-    const id = Number(req.params.id);
+    const id = Number(req.params.userId);
     const data = req.body;
 
     const user = Number.isNaN(id)

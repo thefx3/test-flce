@@ -29,7 +29,7 @@ async function register(req, res) {
 
     return res.status(201).json({
       message: "User registered successfully.",
-      userId: newUser.id,
+      userId: newUser.userId,
     });
   } catch (error) {
     console.error("Error registering user:", error);
@@ -58,7 +58,7 @@ async function login(req, res) {
     }
 
     const token = jwt.sign(
-      { userId: user.id, role: user.role },
+      { userId: user.userId, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "3h" }
     );
@@ -79,8 +79,8 @@ async function loginSuccess(req, res) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const { id, email, role, name, lastname } = user;
-    return res.json({ id, email, role, name, lastname });
+    const { userId, email, role, name, lastname } = user;
+    return res.json({ userId, email, role, name, lastname });
   } catch (error) {
     console.error("Error fetching user profile:", error);
     return res.status(500).json({ message: "Internal server error." });
@@ -105,7 +105,7 @@ async function loginUser(req, res) {
 
     // Generate a USER token
     const token = jwt.sign(
-      { userId: user.id, role: "USER" },
+      { userId: user.userId, role: "USER" },
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
@@ -113,7 +113,7 @@ async function loginUser(req, res) {
     return res.json({
       message: "Login success",
       token,
-      userId: user.id,
+      userId: user.userId,
     });
   } catch (error) {
     console.error("Error logging in user:", error);

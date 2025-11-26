@@ -2,7 +2,7 @@
 import prisma from "../prisma/prisma.js";
 
 const baseQuestionSelect = {
-  id: true,
+  questionId: true,
   type: true,
   text: true,
   mediaUrl: true,
@@ -13,7 +13,7 @@ const baseQuestionSelect = {
 };
 
 const publicQuestionSelect = {
-  id: true,
+  questionId: true,
   type: true,
   text: true,
   mediaUrl: true,
@@ -32,7 +32,7 @@ class QuestionModel {
 
   async getByIdPublic(id) {
     return prisma.question.findUnique({
-      where: { id },
+      where: { questionId: id },
       select: publicQuestionSelect
     });
   }
@@ -47,7 +47,7 @@ class QuestionModel {
 
   async getByIdAdmin(id) {
     return prisma.question.findUnique({
-      where: { id },
+      where: { questionId: id },
       select: baseQuestionSelect
     });
   }
@@ -63,7 +63,7 @@ class QuestionModel {
 
   async updateQuestion(id, data) {
     return prisma.question.update({
-      where: { id },
+      where: { questionId: id },
       data,
       select: baseQuestionSelect
     });
@@ -71,7 +71,7 @@ class QuestionModel {
 
   async deleteQuestion(id) {
     return prisma.question.delete({
-      where: { id },
+      where: { questionId: id },
       select: baseQuestionSelect
     });
   }

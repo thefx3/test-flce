@@ -2,7 +2,7 @@
 import prisma from "../prisma/prisma.js";
 
 const baseProfileSelect = {
-  id: true,
+  profileId: true,
   userId: true,
   civility: true,
   phone: true,
@@ -27,7 +27,7 @@ class ProfileModel {
     const now = new Date();    
     return await prisma.profile.create({
       data: {
-        user: { connect: { id: userId } },
+        user: { connect: { userId } },
         // Prisma schema uses non-null fields; provide safe defaults
         civility: data.civility ?? "",
         phone: data.phone ?? 0,

@@ -1,5 +1,6 @@
 // controllers/testController.js
 import testModel from "../models/testModel.js";
+import prisma from "../prisma/prisma.js";
 
 const isAdmin = (role) => role === "ADMIN" || role === "SUPERADMIN";
 
@@ -98,7 +99,7 @@ async function submitResponses(req, res) {
     const test = await testModel.getTestAdmin(testId);
     if (!test) return res.status(404).json({ message: "Test not found" });
 
-    const allowedIds = new Set(test.responses.map((r) => r.id));
+    const allowedIds = new Set(test.responses.map((r) => r.responseId));
     const invalid = responses.find(
       (r) => !allowedIds.has(r.responseId)
     );
@@ -111,7 +112,7 @@ async function submitResponses(req, res) {
     await testModel.submitAnswers(responses);
 
     await prisma.test.update({
-      where: { id: testId },
+      where: { testId },
       data: { status: "AUTO_GRADED" }
     });
 
@@ -141,7 +142,7 @@ async function gradeAuto(req, res) {
     await testModel.gradeAuto(testId);
 
     await prisma.test.update({
-      where: { id: testId },
+      where: { testId },
       data: { status: "AUTO_GRADED" }
     });
     
@@ -179,7 +180,7 @@ async function gradeManual(req, res) {
     await testModel.gradeManual(grades);
 
     await prisma.test.update({
-      where: { id: testId },
+      where: { testId },
       data: { status: "CORRECTED" }
     });
 

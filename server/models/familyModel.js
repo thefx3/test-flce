@@ -2,7 +2,7 @@
 import prisma from "../prisma/prisma.js";
 
 const baseFamilySelect = {
-    id: true, 
+    familyId: true, 
     userId: true,
     familyname1: true,
     familyname2: true,
@@ -40,7 +40,7 @@ class FamilyModel {
 
   async getFamily(id){
     return await prisma.auPairFamily.findUnique({
-        where: { id: id },
+        where: { familyId: id },
         select: baseFamilySelect
     })
   }
@@ -54,7 +54,7 @@ class FamilyModel {
   //Need to delete Family from a known userId
   async deleteFamilyById (id) {
     return await prisma.auPairFamily.delete({
-        where: { id: id },
+        where: { familyId: id },
         select: baseFamilySelect
     })
   }
@@ -62,7 +62,7 @@ class FamilyModel {
   //Need to update Family from a known userId
   async updateFamily(id, data) {
     return await prisma.auPairFamily.update({
-        where: { id: id },
+        where: { familyId: id },
         data,
         select: baseFamilySelect
     })

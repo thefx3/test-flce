@@ -23,19 +23,19 @@ async function startTest(req, res) {
       });
 
       // Create profile only on first time
-      await profileModel.createProfile(user.id, data);
+      await profileModel.createProfile(user.userId, data);
 
       
     } else {
       // Check if profile exists
-      const existingProfile = await profileModel.getProfileByUserId(user.id);
+      const existingProfile = await profileModel.getProfileByUserId(user.userId);
       if (!existingProfile) {
-        await profileModel.createProfile(user.id, data);
+        await profileModel.createProfile(user.userId, data);
       }
     }
 
     // 3. Create test
-    const test = await testModel.createTest(user.id);
+    const test = await testModel.createTest(user.userId);
 
     // 4. Create session token for this test
     const secret = process.env.TEST_SESSION_SECRET;
@@ -47,14 +47,14 @@ async function startTest(req, res) {
     }
 
     const sessionToken = jwt.sign(
-      { testId: test.id, createdAt: Date.now() },
+      { testId: test.testId, createdAt: Date.now() },
       secret,
       { expiresIn: "2h" }
     );
 
     return res.status(201).json({
-      userId: user.id,
-      testId: test.id,
+      userId: user.userId,
+      testId: test.testId,
       sessionToken,
     });
   } catch (err) {
@@ -115,7 +115,7 @@ async function submitResponses(req, res) {
 
     // Build a map: questionId → responseId
     const mapQtoR = new Map(
-      test.responses.map(r => [r.questionId, r.id])
+      test.responses.map(r => [r.questionId, r.responseId])
     );
 
     // Convert questionId → responseId

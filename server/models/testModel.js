@@ -2,7 +2,7 @@
 import prisma from "../prisma/prisma.js";
 
 const responseSelect = {
-  id: true,
+  responseId: true,
   questionId: true,
   answerBool: true,
   answerText: true,
@@ -10,7 +10,7 @@ const responseSelect = {
 };
 
 const baseTestSelect = {
-  id: true,
+  testId: true,
   userId: true,
   testresponse: {
     select: responseSelect,
@@ -30,9 +30,10 @@ class TestModel {
   async createTest(userId) {
     // Create test row
     const test = await prisma.test.create({
-      data: { userId,
-        status: "IN_PROGRESS"
-       },
+      data: {
+        userId,
+        status: "IN_PROGRESS",
+      },
     });
 
     // Load all questions
@@ -42,8 +43,8 @@ class TestModel {
 
     // Create empty responses
     const responsesData = questions.map(q => ({
-      testId: test.id,
-      questionId: q.id,
+      testId: test.testId,
+      questionId: q.questionId,
       answerBool: null,
       answerText: "",
       score: 0,
@@ -53,7 +54,7 @@ class TestModel {
       await prisma.testResponse.createMany({ data: responsesData });
     }
 
-    return this.getTestById(test.id);
+    return this.getTestById(test.testId);
   }
 
   // ----------------------------------------------------
@@ -62,9 +63,9 @@ class TestModel {
   //Get all informations about the test - for admin
   async getTestAdmin(id) {
     const test = await prisma.test.findUnique({
-      where: { id },
+      where: { testId: id },
       select: {
-        id: true,
+        testId: true,
         userId: true,
         testresponse: {
           select: {
@@ -93,7 +94,7 @@ class TestModel {
 
   async getTestById(id) {
     const test = await prisma.test.findUnique({
-      where: { id },
+      where: { testId: id },
       select: baseTestSelect
     });
     return mapTest(test);
@@ -110,13 +111,13 @@ class TestModel {
   //FROM ADMIN
   async getAllTests() {
     const tests = await prisma.test.findMany({
-      orderBy: { id: "asc" },
+      orderBy: { testId: "asc" },
       select: {
-        id: true,
+        testId: true,
         userId: true,
-        testresponse: {
+      testresponse: {
           select: {
-            id: true,
+            responseId: true,
             questionId: true,
             answerBool: true,
             answerText: true,
@@ -140,11 +141,11 @@ class TestModel {
   }
 
   async deleteTest(id){
-    return prisma.test.delete({ where: { id } });
+    return prisma.test.delete({ where: { testId: id } });
   }
 
   async deleteTests(userId){
-    return prisma.test.delete({ where : userId })
+    return prisma.test.delete({ where : { userId } })
   }
 
   // ----------------------------------------------------
@@ -158,7 +159,7 @@ class TestModel {
 
     const updates = answers.map(a =>
       prisma.testResponse.update({
-        where: { id: a.responseId },
+        where: { responseId: a.responseId },
         data: {
           answerBool:
             a.answerBool === undefined ? null : a.answerBool,
@@ -189,7 +190,7 @@ class TestModel {
           r.answerBool === correct ? r.question.points : 0;
 
         return prisma.testResponse.update({
-          where: { id: r.id },
+          where: { responseId: r.responseId },
           data: { score },
         });
       });
@@ -213,7 +214,7 @@ class TestModel {
 
     const updates = grades.map(g =>
       prisma.testResponse.update({
-        where: { id: g.responseId },
+        where: { responseId: g.responseId },
         data: { score: g.score },
       })
     );
@@ -227,7 +228,7 @@ class TestModel {
 // ---------------------------
 async scoreQuestion(responseId) {
   const r = await prisma.testResponse.findUnique({
-    where: { id: responseId },
+    where: { responseId },
     select: { score: true }
   });
 

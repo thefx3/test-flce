@@ -3,7 +3,7 @@ import prisma from "../prisma/prisma.js";
 
 //Choose what we want to return - not the password
 const baseUserSelect = {
-  id: true, //generated automatically
+  userId: true, //generated automatically
   email: true,
   name: true,
   lastname: true,
@@ -37,7 +37,7 @@ async getAdmins() {
 
 async getSingleAdminById(id) {
   return prisma.user.findUnique({
-    where: { id },
+    where: { userId: id },
     select: baseUserSelect
   });
 }
@@ -70,7 +70,7 @@ async updateAdmin(id, data) {
   const safeData = pickAllowedFields(data, allowedAdminFields);
 
   return prisma.user.update({
-    where: { id },
+    where: { userId: id },
     data: safeData,
     select: baseUserSelect
   });
@@ -102,7 +102,7 @@ async getAllUsers() {
 
 async getSingleUserById(id) {
   return prisma.user.findUnique({
-    where: { id },
+    where: { userId: id },
     select: baseUserSelect
   });
 }
@@ -121,7 +121,7 @@ async updateUser(id, data) {
   const safeData = pickAllowedFields(data, allowedUserFields);
 
   return prisma.user.update({
-    where: { id },
+    where: { userId: id },
     data: safeData,
     select: baseUserSelect
   });
@@ -132,7 +132,7 @@ async updateUser(id, data) {
 //FOR USERS AND ADMINS
 
 async deleteUserById(id) {
-  return prisma.user.delete({ where: { id } });
+  return prisma.user.delete({ where: { userId: id } });
 }
 
 }

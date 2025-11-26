@@ -13,7 +13,7 @@ datasource db {
 }
 
 model User {
-    id            Int      @id @default(autoincrement())
+    userId            Int      @id @default(autoincrement())
     email         String   @unique
     name          String?
     lastname      String?
@@ -31,9 +31,9 @@ model User {
 // -------------------- PROFILE -----------------------
 
 model Profile {
-  id                Int     @id @default(autoincrement())
+  profileId                Int     @id @default(autoincrement())
 
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
   userId            Int     @unique
 
   civility          String?
@@ -53,9 +53,9 @@ model Profile {
 // -------------------- AU-PAIR FAMILY -----------------
 
 model AuPairFamily {
-  id          Int      @id @default(autoincrement())
+  familyId          Int      @id @default(autoincrement())
 
-  user        User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User  @relation(fields: [userId], references: [userId], onDelete: Cascade)
   userId      Int    
 
   familyname1 String
@@ -68,9 +68,9 @@ model AuPairFamily {
 // -------------------- TEST ----------------------------
 
 model Test {
-  id          Int           @id @default(autoincrement())
+  testId          Int           @id @default(autoincrement())
 
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [userId], onDelete: Cascade)
   userId      Int
   status      TestStatus    @default(IN_PROGRESS)
 
@@ -80,7 +80,7 @@ model Test {
 // -------------------- QUESTION BANK -------------------
 
 model Question {
-  id          Int      @id @default(autoincrement())
+  questionId          Int      @id @default(autoincrement())
   type        QuestionType
   text        String
   mediaUrl    String?   // video/audio/image
@@ -95,12 +95,12 @@ model Question {
 // -------------------- RESPONSES -----------------------
 
 model TestResponse {
-  id         Int      @id @default(autoincrement())
+  responseId         Int      @id @default(autoincrement())
 
-  test       Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+  test       Test     @relation(fields: [testId], references: [testId], onDelete: Cascade)
   testId     Int
 
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [questionId], onDelete: Cascade)
   questionId Int
 
   answerBool Boolean?

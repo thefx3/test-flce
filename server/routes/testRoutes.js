@@ -9,7 +9,6 @@ const router = Router();
 // ADMIN creates test manually for a user
 router.post("/create/:userId", authRequired, adminRequired, testController.createTest);
 
-
 // ADMIN sees all tests
 router.get("/", authRequired, adminRequired, testController.getAllTests);
 
@@ -21,7 +20,6 @@ router.delete("/:testId", authRequired, adminRequired, testController.deleteTest
 
 // USER logged-in submits answers (optional feature)
 router.post("/:testId/responses", authRequired, testController.submitResponses);
-
 
 // ADMIN grading
 router.post("/:testId/grade-auto", authRequired, adminRequired, testController.gradeAuto);

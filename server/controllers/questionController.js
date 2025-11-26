@@ -1,5 +1,6 @@
 // controllers/questionController.js
 import questionModel from "../models/questionModel.js";
+import prisma from "../prisma/prisma.js";
 
 // All questions for the test - ADMIN ONLY (via routes middlewares)
 async function getQuestionsAdmin(req, res) {
@@ -184,7 +185,7 @@ async function updateQuestion(req, res) {
     }
 
     // 5. Mise à jour réelle via model
-    const q = await questionModel.update(id, data);
+    const q = await questionModel.updateQuestion(id, data);
     res.json(q);
 
   } catch (err) {
