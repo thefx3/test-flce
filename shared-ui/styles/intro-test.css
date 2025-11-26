@@ -1,0 +1,332 @@
+  /* =========================
+   GLOBAL WRAPPER
+========================= */
+
+.intro {
+    flex: 1;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: var(--space-32) var(--space-20);
+    font-family: var(--font-family);
+    color: var(--color-black);
+    width: 130%;
+  }
+
+  /* ----------------------------------------------------
+     HERO SECTION
+  ----------------------------------------------------- */
+  
+  .hero {
+    text-align: center;
+    padding: 30px 0;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    max-width: 60ch;
+    margin: var(--space-12) auto 0;
+    line-height: 1.6;
+  }
+  
+  /* ----------------------------------------------------
+     OUR CLASSES
+  ----------------------------------------------------- */
+  
+  .classes {
+    text-align: center;
+  }
+  
+  .classes-grid {
+    display: grid;
+    flex-direction: row wrap;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-12);
+  }
+  
+  .class-item {
+    padding: var(--space-20) var(--space-12);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    transition: transform 0.25s ease;
+    border-top: 5px solid var(--color-primary-light);
+  }
+
+  .class-item.workshop {
+    border-top: 5px solid var(--color-secondary-light);
+  }
+  
+  .class-item:hover {
+    transform: translateY(-4px);
+  }
+  
+  .class-item img {
+    width: 50px;
+    margin-bottom: var(--space-12);
+  }
+  
+  .class-item p {
+    font-size: var(--font-body);
+    color: var(--color-text-soft);
+    line-height: 2;
+  }
+  
+
+.schedule-table {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    background: var(--color-surface);
+  }
+  
+
+  .schedule table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-body);
+  }
+  
+  .schedule thead th {
+    background: var(--color-primary);
+    color: var(--color-surface);
+    padding: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  
+  .schedule thead th.highlight {
+    background: var(--color-secondary-light);
+    color: var(--color-text-main);
+  }
+  
+
+  .schedule tbody td {
+    padding: 14px 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+    color: var(--color-text-main);
+  }
+  
+ 
+  .schedule tbody tr:nth-child(even) td {
+    background: #fafafa;
+  }
+
+  .schedule tbody td.highlight, .schedule tbody tr.highlight {
+    background: color-mix(in srgb, var(--color-secondary-light) 25%, transparent) !important;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .schedule tbody tr:hover td {
+    background: #f0f4fa;
+  }
+  
+
+  .schedule thead th:first-child {
+    border-top-left-radius: var(--radius);
+  }
+  .schedule thead th:last-child {
+    border-top-right-radius: var(--radius);
+  }
+
+  
+  /* On cache les cards version mobile par défaut (desktop) */
+  .schedule-cards {
+    display: none;
+  }
+  
+
+/* ============================
+   ABOUT THE TEST – DESKTOP
+============================= */
+
+.about-test {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+    padding: var(--space-32) var(--space-20);
+    border-radius: var(--radius);
+    color: white;
+    box-shadow: var(--shadow-soft);
+    margin-top: var(--space-20);
+  }
+  
+  .about-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--space-20);
+  }
+  
+  /* Grid of 3 cards */
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-20);
+    margin-bottom: var(--space-20);
+  }
+  
+  .about-item {
+    text-align: center;
+  }
+  
+  .about-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: var(--space-8);
+    opacity: 0.9;
+  }
+  
+  .about-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  
+  .about-desc {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.9rem;
+    margin-top: 4px;
+  }
+  
+  .about-text {
+    text-align: center;
+    max-width: 65ch;
+    margin: 0 auto var(--space-20);
+    opacity: 0.9;
+    line-height: 1.6;
+  }
+  
+  .about-cta {
+    text-align: center;
+    margin: var(--space-32) 0;
+  }
+  
+  .about-btn {
+    text-decoration: none;
+    padding: var(--space-12) var(--space-20);
+    background: white;
+    color: var(--color-primary);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .about-btn:hover {
+    background: var(--color-secondary-light);
+    transform: scale(1.05);
+  }
+  
+  .about-link-wrapper {
+    text-align: center;
+  }
+  
+  .about-link {
+    font-size: 1rem;
+    color: var(--color-secondary-light);
+    text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+.lucide-icon,
+.about-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-12);
+  color: var(--color-primary);
+}
+
+.about-icon {
+  color: white; /* Car section dégradée */
+}
+
+
+@media (max-width: 950px) {
+
+
+    .schedule-cards {
+        display: flex;
+    }
+
+    .schedule-card-day {
+        font-weight: 600;
+        color: var(--color-primary);
+        margin-bottom: var(--space-4);
+    }
+
+    /* Wrapper full-width */
+    .intro {
+      padding: var(--space-12);
+      max-width: 100%;
+    }
+  
+    .hero {
+      padding: 10px 0 20px;
+    }
+  
+    .hero-title {
+      font-size: 2rem;
+    }
+  
+    .hero-subtitle {
+      font-size: 1.1rem;
+      margin-top: var(--space-8);
+    }
+  
+    /* Classes : 1 colonne */
+    .classes-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-12);
+    }
+  
+    .class-item {
+      width: 100%;
+    }
+  
+    /* Tableau desktop -> caché */
+    .schedule-table {
+      display: none;
+    }
+  
+  
+    /* Bouton Start : fixé en bas de l'écran */
+    .cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: var(--space-8) var(--space-12);
+      background: linear-gradient(
+        to top,
+        rgba(247, 247, 247, 0.95),
+        rgba(247, 247, 247, 0.7)
+      );
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+      z-index: 50;
+    }
+  
+    .cta-btn {
+      width: 100%;
+      padding: var(--space-12);
+      font-size: 1.1rem;
+    }
+  
+    /* Pour éviter que le bouton couvre le contenu : on ajoute un "padding-bottom" général */
+    .intro {
+      padding-bottom: calc(var(--space-32) + 60px);
+    }
+  }
+  

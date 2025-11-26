@@ -114,8 +114,6 @@ async function createQuestion(req, res) {
 }
 
 
-
-// Update question - ADMIN ONLY
 // Update question - ADMIN ONLY
 async function updateQuestion(req, res) {
   try {
