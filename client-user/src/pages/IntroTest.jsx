@@ -1,7 +1,17 @@
 // src/pages/IntroTest.jsx
-import "shared-ui/styles/french-test.css";
+import "shared-ui/styles/intro-test.css";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function IntroTest({ onStart }) {
+import {
+  Users,
+  MapPin,
+  BookOpenCheck,
+  Clock,
+  Book,
+  Award
+} from "lucide-react";
+
+export default function IntroTest() {
   return (
     <div className="intro">
 
@@ -16,35 +26,40 @@ export default function IntroTest({ onStart }) {
       {/* CLASSES SECTION */}
       <section className="classes">
         <div className="classes-grid">
+
+          {/* GROUP CLASSES */}
           <div className="class-item">
-            <img src="/icons/group.svg" alt="Group Classes" />
-            <p><strong>Group classes</strong> – 8 to 12 students</p>
+            <Users className="lucide-icon" />
+            <p><strong>Group class</strong> – 8 to 12 students</p>
             <p><strong>Class Level</strong> – From A1 to C2</p>
             <p><strong>6+ hours/week</strong></p>
           </div>
 
+          {/* LOCATION */}
           <div className="class-item">
-            <img src="/icons/map.svg" alt="Localisation" />
+            <MapPin className="lucide-icon" />
             <p>
               <strong>LA CLEF St Germain-en-Laye</strong><br />
               46 rue de Mareil, 78100
             </p>
           </div>
 
+          {/* WORKSHOP */}
           <div className="class-item workshop">
-            <img src="/icons/levels.svg" alt="Levels" />
+            <BookOpenCheck className="lucide-icon" />
             <p>
               <strong>Friday Workshop </strong><em>(Paid option)</em><br />
               2h Reinforcement, oral practice
             </p>
           </div>
+
         </div>
       </section>
 
       {/* SCHEDULE SECTION */}
       <section className="schedule">
 
-        {/* Version TABLEAU (desktop) */}
+        {/* DESKTOP TABLE */}
         <div className="schedule-table">
           <table>
             <thead>
@@ -54,7 +69,6 @@ export default function IntroTest({ onStart }) {
                 <th>Tuesday</th>
                 <th>Thursday</th>
                 <th className="highlight">Friday</th>
-
               </tr>
             </thead>
 
@@ -63,7 +77,6 @@ export default function IntroTest({ onStart }) {
                 <td>Session 1</td>
                 <td>9:00 – 11:00</td>
                 <td>9:00 – 11:00</td>
-
                 <td>9:00 – 11:00</td>
                 <td className="highlight">9:00 – 11:00</td>
               </tr>
@@ -72,16 +85,14 @@ export default function IntroTest({ onStart }) {
                 <td>Session 2</td>
                 <td>11:15 – 13:15</td>
                 <td>11:15 – 13:15</td>
-
                 <td>11:15 – 13:15</td>
                 <td className="highlight">11:15 – 13:15</td>
-
-                
               </tr>
             </tbody>
           </table>
         </div>
 
+        {/* MOBILE CARDS */}
         <div className="schedule-cards">
           <table>
             <thead>
@@ -91,76 +102,75 @@ export default function IntroTest({ onStart }) {
                 <th>Session 2</th>
               </tr>
             </thead>
+
             <tbody>
-              <tr className="schedule-card">
-                <td className="schedule-card-day">Monday</td>
-                <td>9:00 – 11:00</td>
-                <td>11:15 – 13:15</td>
-              </tr>
-              <tr className="schedule-card">
-                <td className="schedule-card-day">Tuesday</td>
-                <td>9:00 – 11:00</td>
-                <td>11:15 – 13:15</td>
-              </tr>
-              <tr className="schedule-card">
-                <td className="schedule-card-day">Thursday</td>
-                <td>9:00 – 11:00</td>
-                <td>11:15 – 13:15</td>
-              </tr>
-              <tr className="schedule-card highlight" id="highlight">
-                <td className="schedule-card-day">Friday</td>
-                <td>9:00 – 11:00</td>
-                <td>11:15 – 13:15</td>
-              </tr>
+              {[
+                ["Monday", "9:00 – 11:00", "11:15 – 13:15"],
+                ["Tuesday", "9:00 – 11:00", "11:15 – 13:15"],
+                ["Thursday", "9:00 – 11:00", "11:15 – 13:15"],
+                ["Friday", "9:00 – 11:00", "11:15 – 13:15"],
+              ].map(([day, s1, s2], i) => (
+                <tr
+                  key={i}
+                  className={`schedule-card ${day === "Friday" ? "highlight" : ""}`}
+                >
+                  <td className="schedule-card-day">{day}</td>
+                  <td>{s1}</td>
+                  <td>{s2}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
       </section>
 
-
       {/* ABOUT THE TEST SECTION */}
       <section className="about-test">
         <h3 className="about-title">About the test</h3>
 
         <div className="about-grid">
-            <div className="about-item">
-            <img src="/icons/clock.svg" className="about-icon" alt="clock" />
+          
+          {/* Duration */}
+          <div className="about-item">
+            <Clock className="about-icon" />
             <p className="about-label">30–45 minutes</p>
             <p className="about-desc">Estimated duration</p>
-            </div>
+          </div>
 
-            <div className="about-item">
-            <img src="/icons/book.svg" className="about-icon" alt="book" />
+          {/* Sections */}
+          <div className="about-item">
+            <Book className="about-icon" />
             <p className="about-label">3 sections</p>
             <p className="about-desc">Listen, writing, grammar</p>
-            </div>
+          </div>
 
-            <div className="about-item">
-            <img src="/icons/award.svg" className="about-icon" alt="award" />
+          {/* Free test */}
+          <div className="about-item">
+            <Award className="about-icon" />
             <p className="about-label">Free Test</p>
             <p className="about-desc">For all</p>
-            </div>
+          </div>
+
         </div>
 
         <p className="about-text">
-            Ce test évaluera votre niveau en compréhension écrite, grammaire, vocabulaire et expression
-            écrite. Vos résultats nous permettront de vous orienter vers le cours le plus adapté à votre niveau.
+          This test evaluates your written comprehension, grammar, vocabulary and written expression.
+          Your results help us assign you to the most appropriate French class level.
         </p>
 
         <div className="about-cta">
-            <button className="about-btn" onClick={onStart}>
+          <Link to="/test" className="about-btn">
             Start the test
-            </button>
+          </Link>
         </div>
 
         <div className="about-link-wrapper">
-            <button className="about-link" onClick={() => setView("student")}>
+          <button className="about-link" onClick={() => setView("student")}>
             Already did the test ? See your registration process
-            </button>
+          </button>
         </div>
       </section>
-
 
     </div>
   );
