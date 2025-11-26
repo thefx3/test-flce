@@ -58,6 +58,7 @@ export default function StartTestForm({ onSuccess }) {
         family: auPair ? family : null,
       };
 
+      //PUBLIC API FETCH
       const res = await startTest(payload);
 
       onSuccess({
@@ -76,8 +77,14 @@ export default function StartTestForm({ onSuccess }) {
     <div className="start-container">
       <h1 className="start-title">Start your French Test</h1>
       <p className="start-subtitle">
-        Please fill in your personal information to begin the placement test.
+        
       </p>
+
+      <div className="form-section first-section">
+        <p className="instructions">
+        Please fill in your personal information to begin the placement test.
+        </p>
+      </div>
 
       <form className="start-form" onSubmit={handleSubmit}>
 

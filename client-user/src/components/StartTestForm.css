@@ -49,6 +49,10 @@
   border-radius: var(--radius);
 }
 
+.first-section {
+    margin-bottom: 25px;
+    background: linear-gradient(80deg, #cac7ff79 0%, #c1d1ff18 45%, #eef3fb 100%);
+}
 .form-boolean {
     display: flex;
     flex-flow: row wrap;
