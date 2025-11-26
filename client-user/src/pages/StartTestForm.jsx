@@ -7,7 +7,7 @@ import "../components/StartTestForm.css"
 
 export default function StartTestForm({ onSuccess }) {
   const [auPair, setAuPair] = useState(false);
-  const [firstRegister, setFirstRegister] = useState("");
+  const [firstRegister, setFirstRegister] = useState(true);
 
   const [form, setForm] = useState({
     email: "",
@@ -54,10 +54,31 @@ export default function StartTestForm({ onSuccess }) {
     try {
       const payload = {
         ...form,
+      
+        // ⏳ Convert numeric fields
+        phone: form.phone ? Number(form.phone) : null,
+        address_number: form.address_number ? Number(form.address_number) : null,
+        address_zipcode: form.address_zipcode ? Number(form.address_zipcode) : null,
+      
+        // ⏳ Convert dates
+        birthdate: form.birthdate ? new Date(form.birthdate) : null,
+        arrivaldate: form.arrivaldate ? new Date(form.arrivaldate) : null, // ⚠ harmoniser le nom
+      
+        // Other
         aupair: auPair,
         firstregister: firstRegister,
-        family: auPair ? family : null,
+      
+        // Family block
+        family: auPair
+          ? {
+              ...family,
+              phone: family.phone ? Number(family.phone) : null,
+            }
+          : null,
       };
+      
+      
+      
 
       //PUBLIC API FETCH
       const res = await startTest(payload);
@@ -76,7 +97,7 @@ export default function StartTestForm({ onSuccess }) {
 
   return (
     <div className="start-container">
-      <h1 className="start-title">Start your French Test</h1>
+      <h1 className="start-title">Informations Details</h1>
       <p className="start-subtitle">
         
       </p>
@@ -103,8 +124,8 @@ export default function StartTestForm({ onSuccess }) {
                 type="radio"
                 name="firstregister"
                 value="yes"
-                checked={firstRegister === "yes"}
-                onChange={() => setFirstRegister("yes")}
+                checked={firstRegister === true}
+                onChange={() => setFirstRegister(true)}
               />
               Yes
             </label>
@@ -114,8 +135,8 @@ export default function StartTestForm({ onSuccess }) {
                 type="radio"
                 name="firstregister"
                 value="no"
-                checked={firstRegister === "no"}
-                onChange={() => setFirstRegister("no")}
+                checked={firstRegister === false}
+                onChange={() => setFirstRegister(false)}
               />
               No
             </label>

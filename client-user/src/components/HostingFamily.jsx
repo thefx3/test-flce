@@ -2,7 +2,7 @@ import "../components/StartTestForm.css"
 export default function HostingFamily({ family, onChange }) {
     return (
       <div className="form-section">
-        <h2 className="section-title">Hosting Family Information</h2>
+        <h2 className="section-title">Hosting Family</h2>
   
         <label className="field">
           <span>Family Name 1</span>
@@ -37,7 +37,7 @@ export default function HostingFamily({ family, onChange }) {
             <label className="field">
               <span>Phone</span>
               <input
-                type="text"
+                type="number"
                 name="phone"
                 value={family.phone}
                 onChange={onChange}

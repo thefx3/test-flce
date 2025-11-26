@@ -3,9 +3,8 @@ import "../components/StartTestForm.css";
 export default function PersonnalInfos({ form, onChange }) {
   return (
     <div className="form-section">
-
-      <label className="section-label">Civility</label>
       <div className="radio-group">
+        <label className="section-label civility">Civility</label>
         <label className="radio-line">
           <input
             type="radio"
@@ -119,9 +118,9 @@ export default function PersonnalInfos({ form, onChange }) {
 
       <div className="grid-2">
         <label className="field">
-          <span>Number</span>
+          <span>N°</span>
           <input
-            type="text"
+            type="number"
             name="address_number"
             value={form.address_number}
             onChange={onChange}
@@ -175,7 +174,7 @@ export default function PersonnalInfos({ form, onChange }) {
           <span>Arrival Date</span>
           <input
             type="date"
-            name="arrivaldate"
+            name="arrival_date"
             value={form.arrival_date}
             onChange={onChange}
           />

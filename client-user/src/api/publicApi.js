@@ -9,7 +9,7 @@ export async function startTest(data) {
   });
 
   if (!res.ok) {
-    throw new Error("Erreur lors du démarrage du test");
+    throw new Error("Error while ");
   }
 
   return res.json(); // { userId, testId, sessionToken }

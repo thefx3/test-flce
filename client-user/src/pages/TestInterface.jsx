@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import IntroTest from "./IntroTest";
 import StartTestForm from "./StartTestForm";
 import TestQuestions from "./TestQuestions";
 import TestEnd from "./TestEnd";
