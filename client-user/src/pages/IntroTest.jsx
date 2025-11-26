@@ -118,12 +118,50 @@ export default function IntroTest({ onStart }) {
 
       </section>
 
-      {/* CTA BUTTON */}
-      <div className="cta">
-        <button className="cta-btn" onClick={onStart}>
-          Start the test
-        </button>
-      </div>
+
+      {/* ABOUT THE TEST SECTION */}
+      <section className="about-test">
+        <h3 className="about-title">About the test</h3>
+
+        <div className="about-grid">
+            <div className="about-item">
+            <img src="/icons/clock.svg" className="about-icon" alt="clock" />
+            <p className="about-label">30–45 minutes</p>
+            <p className="about-desc">Estimated duration</p>
+            </div>
+
+            <div className="about-item">
+            <img src="/icons/book.svg" className="about-icon" alt="book" />
+            <p className="about-label">3 sections</p>
+            <p className="about-desc">Listen, writing, grammar</p>
+            </div>
+
+            <div className="about-item">
+            <img src="/icons/award.svg" className="about-icon" alt="award" />
+            <p className="about-label">Free Test</p>
+            <p className="about-desc">For all</p>
+            </div>
+        </div>
+
+        <p className="about-text">
+            Ce test évaluera votre niveau en compréhension écrite, grammaire, vocabulaire et expression
+            écrite. Vos résultats nous permettront de vous orienter vers le cours le plus adapté à votre niveau.
+        </p>
+
+        <div className="about-cta">
+            <button className="about-btn" onClick={onStart}>
+            Start the test
+            </button>
+        </div>
+
+        <div className="about-link-wrapper">
+            <button className="about-link" onClick={() => setView("student")}>
+            Already did the test ? See your registration process
+            </button>
+        </div>
+      </section>
+
+
     </div>
   );
 }
