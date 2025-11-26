@@ -23,6 +23,7 @@ export default function StartTestForm({ onSuccess }) {
     address_city: "",
     address_zipcode: "",
     address_country: "",
+    arrival_date: "",
   });
 
   const [family, setFamily] = useState({
@@ -157,7 +158,7 @@ export default function StartTestForm({ onSuccess }) {
 
         {error && <p className="form-error">{error}</p>}
 
-        <button className="start-btn" disabled={loading}>
+        <button type="submit" className="start-btn" disabled={loading}>
           {loading ? "Loading..." : "Begin the test"}
         </button>
       </form>

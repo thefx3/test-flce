@@ -170,6 +170,16 @@ export default function PersonnalInfos({ form, onChange }) {
           onChange={onChange}
         />
       </label>
+
+      <label className="field">
+          <span>Arrival Date</span>
+          <input
+            type="date"
+            name="arrivaldate"
+            value={form.arrival_date}
+            onChange={onChange}
+          />
+        </label>
     </div>
   );
 }
