@@ -166,9 +166,9 @@ export default function IntroTest() {
         </div>
 
         <div className="about-link-wrapper">
-          <button className="about-link" onClick={() => setView("student")}>
+          <Link to="/" className="about-link" onClick={() => setView("student")}>
             Already did the test ? See your registration process
-          </button>
+          </Link>
         </div>
       </section>
 

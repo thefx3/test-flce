@@ -3,16 +3,25 @@ CLIENT-USER
 ==================== TEST INTERFACE ========================
 3 steps : Test Form > Questions > End
 
-To start a test, we need : 
-- Email : @unique
-- Name
-- Last Name
-- Au Pair : Yes | No
---- At least --- 
+Personnal Infos :
+Civility | First Name | Last Name 
+Email | Phone Number | Birthdate 
 
+Birth Place | Nationality 
 
+First Registration? 
 
+Are you an Au Pair ? 
 
+--- Hosting Family Details ----
+
+Family Name 1 | Family Name 2 
+Email | Phone Number 
+Address 
+
+--------(---END----------------
+
+Address
 
 ===================== MY RESULTS ===========================
 

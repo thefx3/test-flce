@@ -1,0 +1,85 @@
+/* FORM GLOBAL */
+.start-form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* TITLES */
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+  }
+  
+  .section-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  
+  /* FIELDS */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+  
+  .field span {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .field input {
+    padding: 10px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+  }
+  
+  /* 2-COLUMN GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  
+  /* RADIO */
+  .radio-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  
+  /* BUTTON */
+  .submit-btn {
+    background: var(--color-primary);
+    color: white;
+    padding: 14px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: 0.2s ease;
+  }
+  
+  .submit-btn:hover {
+    background: var(--color-primary-light);
+    transform: translateY(-2px);
+  }
+  
+  /* ERROR */
+  .form-error {
+    color: red;
+    font-weight: 600;
+    background: #ffe5e5;
+    padding: 10px;
+    border-radius: var(--radius);
+  }
+  

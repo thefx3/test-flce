@@ -1,100 +1,147 @@
 // src/pages/StartTestForm.jsx
 import { useState } from "react";
 import { startTest } from "../api/publicApi";
+import PersonnalInfos from "../components/PersonnalInfos";
+import HostingFamily from "../components/HostingFamily";
+import "../components/StartTestForm.css"
 
 export default function StartTestForm({ onSuccess }) {
+  const [auPair, setAuPair] = useState(false);
+  const [firstRegister, setFirstRegister] = useState(null);
+
   const [form, setForm] = useState({
     email: "",
     name: "",
     lastname: "",
+    civility: "",
+    phone: "",
+    birthdate: "",
+    birthplace: "",
+    nationality: "",
     aupair: false,
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  function handleChange(e) {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    address_number: "",
+    address_street: "",
+    address_city: "",
+    address_zipcode: "",
+    address_country: "",
+  });
+
+  const [family, setFamily] = useState({
+    familyname1: "",
+    familyname2: "",
+    email: "",
+    phone: "",
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  function handleForm(e) {
+    const { name, value } = e.target;
+    setForm(f => ({ ...f, [name]: value }));
+  }
+
+  function handleFamily(e) {
+    const { name, value } = e.target;
+    setFamily(f => ({ ...f, [name]: value }));
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setError("");
     setLoading(true);
+    setError("");
 
     try {
-      const res = await startTest(form);
-      // Optionnel : stocker dans localStorage si tu veux
-      localStorage.setItem("testId", res.testId);
-      localStorage.setItem("sessionToken", res.sessionToken);
+      const payload = {
+        ...form,
+        aupair: auPair,
+        firstregister: firstRegister,
+        family: auPair ? family : null,
+      };
 
-      onSuccess({ testId: res.testId, sessionToken: res.sessionToken });
+      const res = await startTest(payload);
+
+      onSuccess({
+        testId: res.testId,
+        sessionToken: res.sessionToken
+      });
     } catch (err) {
-      setError(err.message || "Erreur inconnue");
+      setError(err.message || "Unknown error");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6">
-      <h1 className="text-2xl font-bold mb-4">Démarrer le test de français</h1>
-      <p className="mb-4 text-sm text-gray-600">
-        Merci de renseigner vos informations avant de commencer le test.
-      </p>
+    <form className="start-form" onSubmit={handleSubmit}>
+      <h2 className="section-title">Your Information</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <input
-          name="email"
-          type="email"
-          placeholder="Adresse email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="w-full border rounded p-2"
-        />
+      <PersonnalInfos form={form} onChange={handleForm} />
 
-        <input
-          name="name"
-          type="text"
-          placeholder="Prénom"
-          value={form.name}
-          onChange={handleChange}
-          className="w-full border rounded p-2"
-        />
+      {/* First Registration */}
+      <div className="form-section">
+        <p className="section-label">Is it your first registration at La CLEF?</p>
 
-        <input
-          name="lastname"
-          type="text"
-          placeholder="Nom"
-          value={form.lastname}
-          onChange={handleChange}
-          className="w-full border rounded p-2"
-        />
-
-        <label className="flex items-center gap-2 text-sm">
+        <label className="radio-line">
           <input
-            type="checkbox"
-            name="aupair"
-            checked={form.aupair}
-            onChange={handleChange}
+            type="radio"
+            name="firstregister"
+            value="true"
+            checked={firstRegister === "true"}
+            onChange={() => setFirstRegister("true")}
           />
-          Je suis jeune au pair
+          Yes
         </label>
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        <label className="radio-line">
+          <input
+            type="radio"
+            name="firstregister"
+            value="false"
+            checked={firstRegister === "false"}
+            onChange={() => setFirstRegister("false")}
+          />
+          No
+        </label>
+      </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-60"
-        >
-          {loading ? "Démarrage..." : "Commencer le test"}
-        </button>
-      </form>
-    </div>
+      {/* Au Pair */}
+      <div className="form-section">
+        <p className="section-label">Are you an Au Pair?</p>
+
+        <label className="radio-line">
+          <input
+            type="radio"
+            name="aupair"
+            value="true"
+            checked={auPair === true}
+            onChange={() => setAuPair(true)}
+          />
+          Yes
+        </label>
+
+        <label className="radio-line">
+          <input
+            type="radio"
+            name="aupair"
+            value="false"
+            checked={auPair === false}
+            onChange={() => setAuPair(false)}
+          />
+          No
+        </label>
+      </div>
+
+      {auPair && (
+        <HostingFamily family={family} onChange={handleFamily} />
+      )}
+
+      {error && <p className="form-error">{error}</p>}
+
+      <button className="submit-btn" disabled={loading}>
+        {loading ? "Loading..." : "Start the test"}
+      </button>
+    </form>
   );
 }
