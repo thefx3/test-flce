@@ -1,13 +1,13 @@
 // src/pages/StartTestForm.jsx
 import { useState } from "react";
-import { startTest } from "../api/publicApi";
 import PersonnalInfos from "../components/PersonnalInfos";
 import HostingFamily from "../components/HostingFamily";
+import { startTest } from "../api/publicApi";
 import "../components/StartTestForm.css"
 
 export default function StartTestForm({ onSuccess }) {
   const [auPair, setAuPair] = useState(false);
-  const [firstRegister, setFirstRegister] = useState(null);
+  const [firstRegister, setFirstRegister] = useState("");
 
   const [form, setForm] = useState({
     email: "",
@@ -18,8 +18,6 @@ export default function StartTestForm({ onSuccess }) {
     birthdate: "",
     birthplace: "",
     nationality: "",
-    aupair: false,
-
     address_number: "",
     address_street: "",
     address_city: "",
@@ -37,20 +35,20 @@ export default function StartTestForm({ onSuccess }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function handleForm(e) {
+  function updateForm(e) {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
   }
 
-  function handleFamily(e) {
+  function updateFamily(e) {
     const { name, value } = e.target;
     setFamily(f => ({ ...f, [name]: value }));
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
     setError("");
+    setLoading(true);
 
     try {
       const payload = {
@@ -64,8 +62,9 @@ export default function StartTestForm({ onSuccess }) {
 
       onSuccess({
         testId: res.testId,
-        sessionToken: res.sessionToken
+        sessionToken: res.sessionToken,
       });
+
     } catch (err) {
       setError(err.message || "Unknown error");
     } finally {
@@ -74,74 +73,87 @@ export default function StartTestForm({ onSuccess }) {
   }
 
   return (
-    <form className="start-form" onSubmit={handleSubmit}>
-      <h2 className="section-title">Your Information</h2>
+    <div className="start-container">
+      <h1 className="start-title">Start your French Test</h1>
+      <p className="start-subtitle">
+        Please fill in your personal information to begin the placement test.
+      </p>
 
-      <PersonnalInfos form={form} onChange={handleForm} />
+      <form className="start-form" onSubmit={handleSubmit}>
 
-      {/* First Registration */}
-      <div className="form-section">
-        <p className="section-label">Is it your first registration at La CLEF?</p>
+        {/* ▶ PERSONAL INFOS */}
+        <PersonnalInfos form={form} onChange={updateForm} />
 
-        <label className="radio-line">
-          <input
-            type="radio"
-            name="firstregister"
-            value="true"
-            checked={firstRegister === "true"}
-            onChange={() => setFirstRegister("true")}
-          />
-          Yes
-        </label>
+        <div className="form-boolean">
+        {/* ▶ FIRST REGISTRATION */}
+        <div className="form-section">
+          <label className="section-label">Is it your first registration at La CLEF?</label>
 
-        <label className="radio-line">
-          <input
-            type="radio"
-            name="firstregister"
-            value="false"
-            checked={firstRegister === "false"}
-            onChange={() => setFirstRegister("false")}
-          />
-          No
-        </label>
-      </div>
+          <div className="radio-group">
+            <label className="radio-line">
+              <input
+                type="radio"
+                name="firstregister"
+                value="yes"
+                checked={firstRegister === "yes"}
+                onChange={() => setFirstRegister("yes")}
+              />
+              Yes
+            </label>
 
-      {/* Au Pair */}
-      <div className="form-section">
-        <p className="section-label">Are you an Au Pair?</p>
+            <label className="radio-line">
+              <input
+                type="radio"
+                name="firstregister"
+                value="no"
+                checked={firstRegister === "no"}
+                onChange={() => setFirstRegister("no")}
+              />
+              No
+            </label>
+          </div>
+        </div>
 
-        <label className="radio-line">
-          <input
-            type="radio"
-            name="aupair"
-            value="true"
-            checked={auPair === true}
-            onChange={() => setAuPair(true)}
-          />
-          Yes
-        </label>
+        {/* ▶ AU PAIR */}
+        <div className="form-section">
+          <label className="section-label">Are you an Au Pair?</label>
 
-        <label className="radio-line">
-          <input
-            type="radio"
-            name="aupair"
-            value="false"
-            checked={auPair === false}
-            onChange={() => setAuPair(false)}
-          />
-          No
-        </label>
-      </div>
+          <div className="radio-group">
+            <label className="radio-line">
+              <input
+                type="radio"
+                name="aupair"
+                value="true"
+                checked={auPair === true}
+                onChange={() => setAuPair(true)}
+              />
+              Yes
+            </label>
 
-      {auPair && (
-        <HostingFamily family={family} onChange={handleFamily} />
-      )}
+            <label className="radio-line">
+              <input
+                type="radio"
+                name="aupair"
+                value="false"
+                checked={auPair === false}
+                onChange={() => setAuPair(false)}
+              />
+              No
+            </label>
+          </div>
+        </div>
 
-      {error && <p className="form-error">{error}</p>}
+        </div>
+        {auPair && (
+          <HostingFamily family={family} onChange={updateFamily} />
+        )}
 
-      <button className="submit-btn" disabled={loading}>
-        {loading ? "Loading..." : "Start the test"}
-      </button>
-    </form>
+        {error && <p className="form-error">{error}</p>}
+
+        <button className="start-btn" disabled={loading}>
+          {loading ? "Loading..." : "Begin the test"}
+        </button>
+      </form>
+    </div>
   );
 }
