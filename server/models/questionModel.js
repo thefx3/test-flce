@@ -1,7 +1,7 @@
-// questionModel.js
+// models/questionModel.js
 import prisma from "../prisma/prisma.js";
 
-const baseQuestionSelect = {
+const adminQuestionSelect = {
   questionId: true,
   type: true,
   text: true,
@@ -9,7 +9,7 @@ const baseQuestionSelect = {
   correctBool: true,
   correctText: true,
   points: true,
-  order: true
+  order: true,
 };
 
 const publicQuestionSelect = {
@@ -17,63 +17,69 @@ const publicQuestionSelect = {
   type: true,
   text: true,
   mediaUrl: true,
-  order: true
+  order: true,
 };
 
 class QuestionModel {
 
-//====== QUESTIONS ===============
 //Public
 async getAllQuestionsPublic() {
-    return prisma.question.findMany({
-      orderBy: { order: "asc" },
-      select: publicQuestionSelect
-    });
-  
+  return prisma.question.findMany({
+    orderBy: { order: "asc" },
+    select: publicQuestionSelect,
+  });
 }
 
-async getQuestionByIdPublic(questionId) {
-    return prisma.question.findUnique({
-      where: { questionId },
-      select: publicQuestionSelect
-    });
+async getSingleQuestionPublic(questionId) {
+  return prisma.question.findUnique({
+    where: { questionId: Number(questionId) },
+    select: publicQuestionSelect,
+  })
 }
 
 //Admin
 async getAllQuestionsAdmin() {
-    return prisma.question.findMany({
-      orderBy: { order: "asc" },
-      select: baseQuestionSelect
-    });
+  return prisma.question.findMany({
+    orderBy: { order: "asc" },
+    select: adminQuestionSelect,
+  });
 }
 
-async getQuestionByIdAdmin(questionId) {
-    return prisma.question.findUnique({
-      where: { questionId },
-      select: baseQuestionSelect
-    });
+async getSingleQuestionAdmin(questionId) {
+  return prisma.question.findUnique({
+    where: { questionId: Number(questionId) },
+    select: adminQuestionSelect,
+  });
 }
 
 async createQuestion(data) {
-    return prisma.question.create({
-      data,
-      select: baseQuestionSelect
-    });
+  return prisma.question.create({
+    data: {
+      type: data.type,
+      text: data.text,
+      mediaUrl: data.mediaUrl ?? null,
+      correctBool: data.correctBool ?? null,
+      correctText: data.correctText ?? null,
+      points: data.points ?? 1,
+      order: data.order,
+    },
+    select: adminQuestionSelect,
+  });
 }
 
 async updateQuestion(questionId, data) {
-    return prisma.question.update({
-      where: { questionId },
-      data,
-      select: baseQuestionSelect
-    });
+  return prisma.question.update({
+    where: { questionId: Number(questionId) },
+    data,
+    select: adminQuestionSelect,
+  });
 }
 
 async deleteQuestion(questionId) {
-    return prisma.question.delete({
-      where: { questionId },
-      select: baseQuestionSelect
-    });
+  return prisma.question.delete({
+    where: { questionId: Number(questionId) },
+    select: adminQuestionSelect,
+  });
 }
 
 }
