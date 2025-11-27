@@ -7,6 +7,8 @@ import adminRequired from "../auth/adminRequired.js"
 import userController from "../controllers/userController.js";
 import profileController from "../controllers/profileController.js";
 import familyController from "../controllers/familyController.js";
+import testController from "../controllers/testController.js";
+import questionController from "../controllers/questionController.js";
 
 const router = Router();
 
@@ -44,15 +46,23 @@ router.delete("/users/:userId/family", authRequired, adminRequired, familyContro
 
 
 // --- TESTS --- 
+router.post("/users/:userId/tests", authRequired, adminRequired, testController.createTest);
 router.get("/users/:userId/tests", authRequired, adminRequired, testController.getAllTests);
 router.get("/users/:userId/tests/:testId", authRequired, adminRequired, testController.getSingleTest); //Public
 router.put("/users/:userId/tests/:testId", authRequired, adminRequired, testController.updateTest); //Public
 router.delete("/users/:userId/tests/:testId", authRequired, adminRequired, adminController.deleteSingleTest);
+
 
 // --- GRADES ---
 router.put("/users/:userId/tests/:testId/auto-grade", authRequired, adminRequired, adminController.gradeTestAuto);
 router.put("/users/:userId/tests/:testId/manual-grade", authRequired, adminRequired, adminController.gradeTestManual);
 
 
+// --- QUESTIONS --- 
+router.post("/questions", authRequired, adminRequired, questionController.createQuestion);
+router.get("/questions", authRequired, adminRequired, questionController.getAllQuestionsAdmin);
+router.get("/questions/:questionId", authRequired, adminRequired, questionController.getSingleQuestionAdmin);
+router.put("/questions/:questionId", authRequired, adminRequired, questionController.updateQuestion);
+router.delete("/questions/:questionId", authRequired, adminRequired, questionController.deleteQuestion);
 
 export default router;
