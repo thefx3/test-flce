@@ -1,21 +1,6 @@
 // profileController.js
 import profileModel from "../models/profileModel.js";
 
-async function getSingleProfile(req, res) {
-  try {
-    const userId = req.user?.userId;
-    if (!userId) return res.status(401).json({ message: "Unauthorized" });
-
-    const profile = await profileModel.getProfileByUserId(userId);
-    if (!profile) return res.status(404).json({ message: "Profile not found" });
-
-    res.json(profile);
-  } catch (err) {
-    console.error("Error fetching profile:", err);
-    res.status(500).json({ message: "Internal error" });
-  }
-}
-
 async function createProfile(req, res) {
   try {
     const userId = req.user?.userId;
@@ -28,6 +13,32 @@ async function createProfile(req, res) {
     res.status(201).json(profile);
   } catch (err) {
     console.error("Error creating profile:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+async function getAllProfiles(req, res) {
+
+  try {
+    const profiles = await profileModel.getAllProfiles();
+    res.json(profiles);
+  } catch (err) {
+    console.error("Error fetching profiles:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+async function getSingleProfile(req, res) {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const profile = await profileModel.getProfileByUserId(userId);
+    if (!profile) return res.status(404).json({ message: "Profile not found" });
+
+    res.json(profile);
+  } catch (err) {
+    console.error("Error fetching profile:", err);
     res.status(500).json({ message: "Internal error" });
   }
 }
@@ -48,6 +59,17 @@ async function updateProfile(req, res) {
   }
 }
 
+async function deleteProfile(req, res) {
+  try {
+    const userId = Number(req.params.userId);
+
+    await profileModel.deleteProfileByUserId(userId);
+    res.json({ message: "Profile deleted" });
+  } catch (err) {
+    console.error("Error deleting profile:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
 
 async function setLevel(req, res) {
   try {
@@ -72,21 +94,10 @@ async function setLevel(req, res) {
   }
 }
 
-async function deleteProfile(req, res) {
-  try {
-    const userId = Number(req.params.userId);
-
-    await profileModel.deleteProfileByUserId(userId);
-    res.json({ message: "Profile deleted" });
-  } catch (err) {
-    console.error("Error deleting profile:", err);
-    res.status(500).json({ message: "Internal error" });
-  }
-}
-
 export default {
-  getSingleProfile,
   createProfile,
+  getAllProfiles,
+  getSingleProfile,
   updateProfile,
   deleteProfile,
   setLevel

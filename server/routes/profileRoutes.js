@@ -8,20 +8,12 @@ import ownerRequired from "../auth/ownerRequired.js"
 const router = Router();
 
 //Public
-router.get("/users/:userId/profile", authRequired, ownerRequired, profileController.getProfile);
-router.post("/users/:userId/profile",authRequired, ownerRequired, profileController.createProfile);
-router.put("/users/:userId/profile",authRequired, ownerRequired,profileController.updateProfile);
-
+router.get("/users/:userId", authRequired, ownerRequired, profileController.getSingleProfile);
+router.post("/users/:userId",authRequired, ownerRequired, profileController.createProfile);
+router.put("/users/:userId",authRequired, ownerRequired,profileController.updateProfile);
 
 //Admin
-router.delete("/users/:userId/profile", authRequired, ownerRequired, profileController.deleteProfile);
-router.patch("/:userId/profile/level",authRequired, adminRequired, profileController.setLevel);
-
-//Public routes with Admin permissions
-router.get("/users/:userId/profile", authRequired, ownerRequired, profileController.getProfile);
-router.post("/users/:userId/profile",authRequired, ownerRequired, profileController.createProfile);
-router.put("/users/:userId/profile",authRequired, ownerRequired,profileController.updateProfile);
-
-
+router.get("/", authRequired, adminRequired, profileController.getAllProfiles);
+router.delete("/:profileId", authRequired, adminRequired, profileController.deleteProfile);
 
 export default router;

@@ -24,9 +24,5 @@ router.delete("/admins/:userId", authRequired, adminRequired, userController.del
 router.get("/users",authRequired, adminRequired, userController.getAllUsers);
 router.delete("/users/:userId", authRequired, adminRequired, userController.deleteUser);
 
-//Public routes with Admin permissions
-router.post("/users", authRequired, adminRequired, userController.createTestUser);
-router.get("/users/:userId", authRequired, adminRequired, userController.getSingleUser);
-router.put("/users/:userId", authRequired, adminRequired, userController.updateUser);
 
 export default router;

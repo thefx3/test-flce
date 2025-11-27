@@ -1,7 +1,7 @@
 // familyController.js
 import familyModel from "../models/familyModel.js";
 
-async function addFamily(req, res) {
+async function createFamily(req, res) {
   try {
     const userId = req.user?.userId;
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
@@ -17,12 +17,23 @@ async function addFamily(req, res) {
   }
 }
 
-async function getFamilies(req, res) {
+async function getAllFamilies(req, res) {
+
   try {
     const families = await familyModel.getAllFamilies();
     res.json(families);
   } catch (err) {
     console.error("Error fetching families:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+async function getSingleFamily(req, res) {
+  try {
+    const family = await familyModel.getFamily();
+    res.json(family);
+  } catch (err) {
+    console.error("Error fetching family:", err);
     res.status(500).json({ message: "Internal error" });
   }
 }
@@ -81,8 +92,9 @@ async function deleteFamily(req, res) {
 }
 
 export default {
-  addFamily,
-  getFamilies,
+  createFamily,
+  getAllFamilies,
+  getSingleFamily,
   updateFamily,
   deleteFamily
 };

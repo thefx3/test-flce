@@ -9,15 +9,14 @@ const baseFamilySelect = {
     email: true,
     phone: true,
     address: true
-}
+};
 
 class FamilyModel {
 
 // =============== TEST USER ACCOUNTS ==================
 // All people who are taking the test and are Au Pair
 
-  //NEED user.aupair = "TRUE"
-  async addFamily(userId, data) {
+  async createFamily(userId, data) {
     return await prisma.auPairFamily.create({
         data: {
             userId,
@@ -44,9 +43,10 @@ class FamilyModel {
     })
   }
 
-  async getFamily(familyId){
-    return await prisma.auPairFamily.findUnique({
+  async updateFamily(familyId, data) {
+    return await prisma.auPairFamily.update({
         where: { familyId },
+        data,
         select: baseFamilySelect
     })
   }
@@ -55,21 +55,6 @@ class FamilyModel {
     return await prisma.auPairFamily.deleteMany({
         where: { userId: userId },
     });
-  }
-
-  async deleteFamilyById (familyId) {
-    return await prisma.auPairFamily.delete({
-        where: { familyId },
-        select: baseFamilySelect
-    })
-  }
-
-  async updateFamily(familyId, data) {
-    return await prisma.auPairFamily.update({
-        where: { familyId },
-        data,
-        select: baseFamilySelect
-    })
   }
 
 }

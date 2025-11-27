@@ -6,6 +6,7 @@ import authRequired from "../auth/authRequired.js";
 import adminRequired from "../auth/adminRequired.js"
 import userController from "../controllers/userController.js";
 import profileController from "../controllers/profileController.js";
+import familyController from "../controllers/familyController.js";
 
 const router = Router();
 
@@ -15,6 +16,7 @@ router.get("/admins", userController.getAllAdmins);
 router.get("/admins/:id", userController.getSingleAdmin);
 router.put("/admins/:id", userController.updateAdmin);
 router.delete("/admins/:id", userController.deleteAdmin);
+
 
 // --- USERS --- (Test Users)
 router.post("/users", userController.createTestUser); //Public
@@ -26,6 +28,7 @@ router.put("/users/:userId", userController.deleteUser);
 
 //--- PROFILE ---
 router.post("/users/:userId/profile", authRequired, adminRequired, profileController.createProfile); //Public
+router.get("/users/profiles", authRequired, adminRequired, profileController.getAllProfiles);
 router.get("/users/:userId/profile", authRequired, adminRequired, profileController.getSingleProfile); //Public
 router.put("/users/:userId/profile", authRequired, adminRequired, profileController.updateProfile); //Public
 router.delete("/users/:userId/profile", authRequired, adminRequired, profileController.deleteProfile)
@@ -33,18 +36,23 @@ router.put("/users/:userId/profile/level", authRequired, adminRequired, profileC
 
 
 // --- FAMILY ---
-router.post("/users/:userId/family", authRequired, adminRequired, adminController.addFamily);
-router.get("/users/:userId/families", authRequired, adminRequired, adminController.getFamilies);
-router.put("/users/:userId/families/:familyId", authRequired, adminRequired, adminController.updateFamily);
-router.delete("/users/:userId/families/:familyId", authRequired, adminRequired, adminController.deleteFamily);
+router.post("/users/:userId/family", authRequired, adminRequired, familyController.createFamily); //Public
+router.get("/users/families", authRequired, adminRequired, familyController.getAllFamilies);
+router.get("/users/:userId/family", authRequired, adminRequired, familyController.getSingleFamily); //Public
+router.put("/users/:userId/family", authRequired, adminRequired, familyController.updateFamily); //Public
+router.delete("/users/:userId/family", authRequired, adminRequired, familyController.deleteFamily)
+
 
 // --- TESTS --- 
-router.get("/users/:userId/tests", authRequired, adminRequired, adminController.getAllTests);
-router.get("/users/:userId/tests/:testId", authRequired, adminRequired, adminController.getSingleTest);
+router.get("/users/:userId/tests", authRequired, adminRequired, testController.getAllTests);
+router.get("/users/:userId/tests/:testId", authRequired, adminRequired, testController.getSingleTest); //Public
+router.put("/users/:userId/tests/:testId", authRequired, adminRequired, testController.updateTest); //Public
 router.delete("/users/:userId/tests/:testId", authRequired, adminRequired, adminController.deleteSingleTest);
 
 // --- GRADES ---
 router.put("/users/:userId/tests/:testId/auto-grade", authRequired, adminRequired, adminController.gradeTestAuto);
 router.put("/users/:userId/tests/:testId/manual-grade", authRequired, adminRequired, adminController.gradeTestManual);
+
+
 
 export default router;

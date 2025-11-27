@@ -16,33 +16,41 @@ const baseProfileSelect = {
   level: true
 };
 
-
 class ProfileModel {
 
-  // =============== TEST USER ACCOUNTS ==================
-  // All people who are taking the test
-
   async createProfile(userId, data) {
-    const now = new Date();    
-    return await prisma.profile.create({
-      data: {
-        user: { connect: { userId } },
-        civility: data.civility ?? "",
-        phone: data.phone ?? 0,
-        birthdate: data.birthdate ?? now,
-        birthplace: data.birthplace ?? "",
-        nationality: data.nationality ?? "",
-        photoPath: data.photoPath ?? "",
-        firstregister: data.firstregister ?? false,
-        address: data.address ?? "",
-        arrivaldate: data.arrivaldate ?? now,
-        level: data.level ?? "",
-      },
-      select: baseProfileSelect
+  const now = new Date();    
+  return await prisma.profile.create({
+    data: {
+      user: { connect: { userId } },
+      civility: data.civility ?? "",
+      phone: data.phone ?? 0,
+      birthdate: data.birthdate ?? now,
+      birthplace: data.birthplace ?? "",
+      nationality: data.nationality ?? "",
+      photoPath: data.photoPath ?? "",
+      firstregister: data.firstregister ?? false,
+      address: data.address ?? "",
+      arrivaldate: data.arrivaldate ?? now,
+      level: data.level ?? "",
+    },
+    select: baseProfileSelect
+  });
+  }
+
+  async getAllProfiles(){
+    return prisma.profile.findMany({
+        select: baseProfileSelect
     });
   }
 
-  // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
+  async getProfileByUserId(userId) {
+    return await prisma.profile.findUnique({
+      where: { userId },
+      select: baseProfileSelect
+    })
+  }
+
   async updateProfile(userId, data) {
     return await prisma.profile.update({
       where: { userId },
@@ -51,24 +59,16 @@ class ProfileModel {
     })
   }
 
+  async deleteProfileByUserId(userId) {
+    return prisma.profile.delete({ where: { userId } });
+  }
+
   async updateProfileLevel(userId, level) {
     return await prisma.profile.update({
       where: { userId },
       data: { level },
       select: baseProfileSelect,
     });
-  }
-
-  // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
-  async getProfileByUserId(userId) {
-    return await prisma.profile.findUnique({
-      where: { userId },
-      select: baseProfileSelect
-    })
-  }
-
-  async deleteProfileByUserId(userId) {
-    return prisma.profile.delete({ where: { userId } });
   }
 
 }

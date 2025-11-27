@@ -25,6 +25,7 @@ function pickAllowedFields(source, allowedFields) {
   }
   return safe;
 }
+
 class UserModel {
 // ================= ADMIN ACCOUNTS ===================
 // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
@@ -131,7 +132,6 @@ async updateUser(userId, data) {
     select: baseUserSelect
   });
 }
-
 
 async deleteUserById(userId) {
   return prisma.user.delete({ where: { userId } });
