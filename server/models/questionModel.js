@@ -82,6 +82,18 @@ async deleteQuestion(questionId) {
   });
 }
 
+async getScoreOfQuestion(testId, questionId) {
+  const response = await prisma.testResponse.findFirst({
+    where: {
+      testId,
+      questionId
+    },
+    select: { score: true }
+  });
+
+  return response?.score ?? 0;
+}
+
 }
 
 export default new QuestionModel();

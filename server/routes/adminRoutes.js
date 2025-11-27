@@ -50,12 +50,13 @@ router.post("/users/:userId/tests", authRequired, adminRequired, testController.
 router.get("/users/:userId/tests", authRequired, adminRequired, testController.getAllTests);
 router.get("/users/:userId/tests/:testId", authRequired, adminRequired, testController.getSingleTest); //Public
 router.put("/users/:userId/tests/:testId", authRequired, adminRequired, testController.updateTest); //Public
-router.delete("/users/:userId/tests/:testId", authRequired, adminRequired, adminController.deleteSingleTest);
+router.delete("/users/:userId/tests/:testId", authRequired, adminRequired, testController.deleteTest);
+router.get("/users/:userId/tests/:testId/score", authRequired, adminRequired, testController.getScoreOfTest);
 
 
 // --- GRADES ---
-router.put("/users/:userId/tests/:testId/auto-grade", authRequired, adminRequired, adminController.gradeTestAuto);
-router.put("/users/:userId/tests/:testId/manual-grade", authRequired, adminRequired, adminController.gradeTestManual);
+router.put("/users/:userId/tests/:testId/auto-grade", authRequired, adminRequired, testController.gradeAuto);
+router.put("/users/:userId/tests/:testId/manual-grade", authRequired, adminRequired, testController.gradeManual);
 
 
 // --- QUESTIONS --- 
@@ -64,5 +65,6 @@ router.get("/questions", authRequired, adminRequired, questionController.getAllQ
 router.get("/questions/:questionId", authRequired, adminRequired, questionController.getSingleQuestionAdmin);
 router.put("/questions/:questionId", authRequired, adminRequired, questionController.updateQuestion);
 router.delete("/questions/:questionId", authRequired, adminRequired, questionController.deleteQuestion);
+router.get("/tests/:testId/questions/:questionId", authRequired, adminRequired, questionController.getScoreQuestion);
 
 export default router;

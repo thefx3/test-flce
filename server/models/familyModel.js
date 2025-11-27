@@ -13,49 +13,46 @@ const baseFamilySelect = {
 
 class FamilyModel {
 
-// =============== TEST USER ACCOUNTS ==================
-// All people who are taking the test and are Au Pair
+async createFamily(userId, data) {
+  return await prisma.auPairFamily.create({
+      data: {
+          userId,
+          familyname1: data.familyname1,
+          familyname2: data.familyname2 ?? null,
+          email: data.email,
+          phone: data.phone,
+          address: data.address ?? null
+      },
+      select: baseFamilySelect
+  });
+}
 
-  async createFamily(userId, data) {
-    return await prisma.auPairFamily.create({
-        data: {
-            userId,
-            familyname1: data.familyname1,
-            familyname2: data.familyname2 ?? null,
-            email: data.email,
-            phone: data.phone,
-            address: data.address ?? null
-        },
-        select: baseFamilySelect
-    });
-  }
+async getAllFamilies() {
+  return await prisma.auPairFamily.findMany({
+      select: baseFamilySelect
+  })
+}
 
-  async getAllFamilies() {
-    return await prisma.auPairFamily.findMany({
-        select: baseFamilySelect
-    })
-  }
+async getSingleFamily(userId) {
+  return await prisma.auPairFamily.findMany({
+      where: { userId },
+      select: baseFamilySelect
+  })
+}
 
-  async getFamilyByUserId(userId) {
-    return await prisma.auPairFamily.findMany({
-        where: { userId: userId },
-        select: baseFamilySelect
-    })
-  }
+async updateFamily(userId, data) {
+  return await prisma.auPairFamily.update({
+      where: { userId },
+      data,
+      select: baseFamilySelect
+  })
+}
 
-  async updateFamily(familyId, data) {
-    return await prisma.auPairFamily.update({
-        where: { familyId },
-        data,
-        select: baseFamilySelect
-    })
-  }
-
-  async deleteFamiliesByUserId (userId) {
-    return await prisma.auPairFamily.deleteMany({
-        where: { userId: userId },
-    });
-  }
+async deleteFamily (userId) {
+  return await prisma.auPairFamily.delete({
+      where: { userId },
+  });
+}
 
 }
 export default new FamilyModel();

@@ -267,18 +267,6 @@ async gradeManual(grades) {
 }
  
 //Admin
-async getScoreOfQuestion(testId, questionId) {
-  const response = await prisma.testResponse.findFirst({
-    where: {
-      testId,
-      questionId
-    },
-    select: { score: true }
-  });
-
-  return response?.score ?? 0;
-}
-
 async getScoreOfTest(testId) {
   const responses = await prisma.testResponse.findMany({
     where: { testId },

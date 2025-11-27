@@ -3,10 +3,10 @@ import profileModel from "../models/profileModel.js";
 
 async function createProfile(req, res) {
   try {
-    const userId = req.user?.userId;
+    const userId = Number(req.params.userId)
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-    const existing = await profileModel.getProfileByUserId(userId);
+    const existing = await profileModel.getProfile(userId);
     if (existing) return res.status(409).json({ message: "Profile already exists" });
 
     const profile = await profileModel.createProfile(userId, req.body);
@@ -30,10 +30,10 @@ async function getAllProfiles(req, res) {
 
 async function getSingleProfile(req, res) {
   try {
-    const userId = req.user?.userId;
+    const userId = Number(req.params.userId)
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-    const profile = await profileModel.getProfileByUserId(userId);
+    const profile = await profileModel.getProfile(userId);
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
     res.json(profile);
@@ -45,10 +45,10 @@ async function getSingleProfile(req, res) {
 
 async function updateProfile(req, res) {
   try {
-    const userId = req.user?.userId;
+    const userId = Number(req.params.userId)
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-    const existing = await profileModel.getProfileByUserId(userId);
+    const existing = await profileModel.getProfile(userId);
     if (!existing) return res.status(404).json({ message: "Profile not found" });
 
     const updated = await profileModel.updateProfile(userId, req.body);
@@ -63,7 +63,7 @@ async function deleteProfile(req, res) {
   try {
     const userId = Number(req.params.userId);
 
-    await profileModel.deleteProfileByUserId(userId);
+    await profileModel.deleteProfile(userId);
     res.json({ message: "Profile deleted" });
   } catch (err) {
     console.error("Error deleting profile:", err);
@@ -81,7 +81,7 @@ async function setLevel(req, res) {
       return res.status(400).json({ message: "Invalid level" });
     }
 
-    const updated = await prisma.profile.update({
+    const updated = await prisma.profile.updateProfile({
       where: { userId },
       data: { level }
     });

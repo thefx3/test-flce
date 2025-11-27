@@ -58,8 +58,6 @@ app.use("/tests", testRoutes);
 app.use("/questions", questionRoutes);
 
 
-
-
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });

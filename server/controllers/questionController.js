@@ -90,6 +90,18 @@ async deleteQuestion(req, res, next) {
     next(err);
   }
 }
+
+async getScoreQuestion(req, res, next) {
+  try {
+    const { testId, questionId } = req.params;
+
+    const questionScore = await testModel.getScoreOfQuestion(Number(testId), Number(questionId));
+
+    res.json({ points : questionScore })
+  } catch (err) {
+    next(err);
+  }
 }
 
+}
 export default new QuestionController();

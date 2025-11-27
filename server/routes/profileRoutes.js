@@ -12,8 +12,5 @@ router.get("/users/:userId", authRequired, ownerRequired, profileController.getS
 router.post("/users/:userId",authRequired, ownerRequired, profileController.createProfile);
 router.put("/users/:userId",authRequired, ownerRequired,profileController.updateProfile);
 
-//Admin
-router.get("/", authRequired, adminRequired, profileController.getAllProfiles);
-router.delete("/:profileId", authRequired, adminRequired, profileController.deleteProfile);
 
 export default router;
