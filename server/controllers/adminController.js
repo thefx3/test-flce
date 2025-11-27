@@ -4,7 +4,7 @@ import profileModel from "../models/profileModel.js";
 import familyModel from "../models/familyModel.js";
 import testModel from "../models/testModel.js";
 
-// =============== ADMIN ACCOUNTS ==================
+// =========== ADMIN ACCOUNTS ============
 
 async function getAdmins(req, res) {
   try {
@@ -60,7 +60,8 @@ async function deleteAdmin(req, res) {
   }
 }
 
-// =============== USER ACCOUNTS ==================
+// ============ USER ACCOUNTS ============
+
 
 async function getAllUsers(req, res) {
   try {
@@ -112,7 +113,23 @@ async function updateUser(req, res) {
   }
 }
 
-// =============== PROFILE ==================
+// =========== PROFILE ==================
+
+async function createProfile(req, res) {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const existing = await profileModel.getProfileByUserId(userId);
+    if (existing) return res.status(409).json({ message: "Profile already exists" });
+
+    const profile = await profileModel.createProfile(userId, req.body);
+    res.status(201).json(profile);
+  } catch (err) {
+    console.error("Error creating profile:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
 
 async function getProfile(req, res) {
   try {
@@ -166,19 +183,28 @@ async function updateProfileLevel(req, res) {
   }
 }
 
-// =============== FAMILIES ==================
+// =========== FAMILIES =================
 
-async function getFamilies(req, res) {
+//Needs to be an Au Pair + Role.user = "USER"
+async function addFamily(req, res) {
   try {
-    const userId = Number(req.params.userId);
-    const families = Number.isNaN(userId)
-      ? []
-      : await familyModel.listFamilies(userId);
+    const userId = req.user?.userId;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
-    if (!families.length) {
-      return res.status(404).json({ message: "Families not found" });
-    }
+    const existing = await familyModel.getFamilyByUserId(userId);
+    if (existing) return res.status(409).json({ message: "Family already exists" });
 
+    const profile = await profileModel.addFamily(userId, req.body);
+    res.status(201).json(profile);
+  } catch (err) {
+    console.error("Error creating profile:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+async function getAllFamilies(req, res) {
+  try {
+    const families = await familyModel.getAllFamilies();
     res.json(families);
   } catch (err) {
     console.error("Error fetching families:", err);
@@ -241,6 +267,22 @@ async function deleteFamily(req, res) {
 
 // =============== TESTS ==================
 
+// GET for userId USER, all his tests
+async function getAllTests(req, res) {
+  try {
+    const userId = Number(req.params.userId);
+    if (Number.isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid user id" });
+    }
+
+    const tests = await testModel.getTestsByUserId(userId);
+    res.json(tests);
+  } catch (err) {
+    console.error("Error fetching tests:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
 // GET for userId USER, the testId TEST. 
 async function getSingleTest(req, res) {
   try {
@@ -267,7 +309,7 @@ async function getSingleTest(req, res) {
   }
 }
 
-// GET for userId USER, the testId TEST. 
+// DELETE for userId USER, the testId TEST. 
 async function deleteSingleTest(req, res) {
   try {
     const { userId, testId } = req.params;
@@ -289,22 +331,6 @@ async function deleteSingleTest(req, res) {
     res.json(test);
   } catch (err) {
     console.error("Error fetching test:", err);
-    res.status(500).json({ message: "Internal error" });
-  }
-}
-
-// GET for userId USER, all his tests
-async function getAllTests(req, res) {
-  try {
-    const userId = Number(req.params.userId);
-    if (Number.isNaN(userId)) {
-      return res.status(400).json({ message: "Invalid user id" });
-    }
-
-    const tests = await testModel.getTestsByUserId(userId);
-    res.json(tests);
-  } catch (err) {
-    console.error("Error fetching tests:", err);
     res.status(500).json({ message: "Internal error" });
   }
 }
@@ -373,18 +399,25 @@ export default {
   getSingleAdmin,
   updateAdmin,
   deleteAdmin,
+
   getAllUsers,
   getUser,
   updateUser,
+
+  createProfile,
   getProfile,
   updateProfile,
   updateProfileLevel,
-  getFamilies,
+
+  addFamily,
+  getAllFamilies,
   updateFamily,
   deleteFamily,
+
+  getAllTests,
   getSingleTest,
   deleteSingleTest,
-  getAllTests,
+
   gradeTestAuto,
   gradeTestManual,
 };

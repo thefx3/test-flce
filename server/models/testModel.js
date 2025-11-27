@@ -24,9 +24,8 @@ const mapTest = (test) => {
 };
 
 class TestModel {
-  // ----------------------------------------------------
-  // 1. Create a new test and auto-create blank responses
-  // ----------------------------------------------------
+
+// ===== TESTS =====
   async createTest(userId) {
     // Create test row
     const test = await prisma.test.create({
@@ -57,13 +56,9 @@ class TestModel {
     return this.getTestById(test.testId);
   }
 
-  // ----------------------------------------------------
-  // 2. Get a test (single or all)
-  // ----------------------------------------------------
-  //Get all informations about the test - for admin
-  async getTestAdmin(id) {
+  async getTestAdmin(testId) {
     const test = await prisma.test.findUnique({
-      where: { testId: id },
+      where: { testId },
       select: {
         testId: true,
         userId: true,
@@ -92,9 +87,9 @@ class TestModel {
     return mapTest(test);
   }
 
-  async getTestById(id) {
+  async getTestById(testId) {
     const test = await prisma.test.findUnique({
-      where: { testId: id },
+      where: { testId },
       select: baseTestSelect
     });
     return mapTest(test);
@@ -108,7 +103,6 @@ class TestModel {
     return tests.map(mapTest);
   }
 
-  //FROM ADMIN
   async getAllTests() {
     const tests = await prisma.test.findMany({
       orderBy: { testId: "asc" },
@@ -140,17 +134,15 @@ class TestModel {
     return tests.map(mapTest);
   }
 
-  async deleteTest(id){
-    return prisma.test.delete({ where: { testId: id } });
+  async deleteTest(testId){
+    return prisma.test.delete({ where: { testId } });
   }
 
   async deleteTests(userId){
     return prisma.test.delete({ where : { userId } })
   }
 
-  // ----------------------------------------------------
-  // 3. Update answers
-  // ----------------------------------------------------
+// ===== SUBMIT =====
   async submitAnswers(answers) {
     // answers = [{ responseId, answerBool?, answerText? }]
     if (!Array.isArray(answers) || answers.length === 0) {
@@ -173,9 +165,7 @@ class TestModel {
     return { message: "Responses updated" };
   }
 
-  // ----------------------------------------------------
-  // 4. Automatic grading
-  // ----------------------------------------------------
+// ===== GRADES =====
   async gradeAuto(testId) {
     const responses = await prisma.testResponse.findMany({
       where: { testId },
@@ -202,9 +192,6 @@ class TestModel {
     return this.getTestAdmin(testId);
   }
 
-  // ----------------------------------------------------
-  // 5. Manual grading (only for open questions)
-  // ----------------------------------------------------
   async gradeManual(grades) {
     // grades = [{ responseId, score }]
 
@@ -223,21 +210,7 @@ class TestModel {
     return { message: "Manual grading updated" };
   }
 
-  // ---------------------------
-// SCORE D’UNE QUESTION
-// ---------------------------
-async scoreQuestion(responseId) {
-  const r = await prisma.testResponse.findUnique({
-    where: { responseId },
-    select: { score: true }
-  });
-
-  return r ? r.score || 0 : 0;
-}
-
-// -------------------------------
-// Score d’une seule question d’un test
-// -------------------------------
+  // ===== SCORE =====
 async getScoreOfQuestion(testId, questionId) {
   const response = await prisma.testResponse.findFirst({
     where: {
@@ -250,9 +223,6 @@ async getScoreOfQuestion(testId, questionId) {
   return response?.score ?? 0;
 }
 
-// ---------------------------
-// SCORE TOTAL D’UN TEST
-// ---------------------------
 async getScoreOfTest(testId) {
   const responses = await prisma.testResponse.findMany({
     where: { testId },
@@ -261,8 +231,7 @@ async getScoreOfTest(testId) {
 
   return responses.reduce((sum, r) => sum + (r.score || 0), 0);
 }
-    
-  
+
 }
 
 export default new TestModel();

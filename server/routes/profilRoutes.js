@@ -6,31 +6,13 @@ import profileController from "../controllers/profileController.js";
 
 const router = Router();
 
-router.get(
-  "/user/:userId",
-  authRequired,
-  profileController.ensureOwnProfile,
-  profileController.getProfile
-);
+router.get("/user/:userId", authRequired, profileController.ensureOwnProfile, profileController.getProfile);
 
-router.post(
-  "/user/:userId",
-  authRequired,
-  profileController.ensureOwnProfile,
-  profileController.createProfile
-);
+router.post("/user/:userId",authRequired,profileController.ensureOwnProfile, profileController.createProfile);
 
-router.put(
-  "/user/:userId",
-  authRequired,
-  profileController.ensureOwnProfile,
-  profileController.updateProfile
-);
+router.put("/user/:userId",authRequired,profileController.ensureOwnProfile,profileController.updateProfile);
 
-router.patch("/:userId/level",
-  authRequired, 
-  adminRequired, 
-  profileController.setLevel);
+router.patch("/:userId/level",authRequired, adminRequired, profileController.setLevel);
 
 
 export default router;

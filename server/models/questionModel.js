@@ -23,37 +23,35 @@ const publicQuestionSelect = {
 class QuestionModel {
 
   //Public
-  async getAllPublic() {
+  async getAllQuestionsPublic() {
     return prisma.question.findMany({
       orderBy: { order: "asc" },
       select: publicQuestionSelect
     });
   }
 
-  async getByIdPublic(id) {
+  async getQuestionByIdPublic(questionIdd) {
     return prisma.question.findUnique({
-      where: { questionId: id },
+      where: { questionId },
       select: publicQuestionSelect
     });
   }
 
   //Admin
-  async getAllAdmin() {
+  async getAllQuestionsAdmin() {
     return prisma.question.findMany({
       orderBy: { order: "asc" },
       select: baseQuestionSelect
     });
   }
 
-  async getByIdAdmin(id) {
+  async getQuestionByIdAdmin(questionId) {
     return prisma.question.findUnique({
-      where: { questionId: id },
+      where: { questionId },
       select: baseQuestionSelect
     });
   }
 
-
-  //Admin
   async createQuestion(data) {
     return prisma.question.create({
       data,
@@ -61,17 +59,17 @@ class QuestionModel {
     });
   }
 
-  async updateQuestion(id, data) {
+  async updateQuestion(questionId, data) {
     return prisma.question.update({
-      where: { questionId: id },
+      where: { questionId },
       data,
       select: baseQuestionSelect
     });
   }
 
-  async deleteQuestion(id) {
+  async deleteQuestion(questionId) {
     return prisma.question.delete({
-      where: { questionId: id },
+      where: { questionId },
       select: baseQuestionSelect
     });
   }

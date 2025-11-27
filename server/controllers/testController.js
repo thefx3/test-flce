@@ -68,7 +68,7 @@ async function deleteTest(req, res) {
         return res.status(400).json({ message: "Invalid testId" });
       }
   
-      await questionModel.deleteTest(testId);
+      await questionModel.deleteTestById(testId);
       res.json({ message: "Deleted" });
     } catch (err) {
       console.error("Error deleting question:", err);
@@ -214,7 +214,6 @@ async function getScoreOfQuestion(req, res) {
     res.status(500).json({ message: "Internal error" });
   }
 }
-
 
 // -------------------------------
 // Get total score of a test

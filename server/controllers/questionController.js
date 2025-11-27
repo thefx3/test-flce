@@ -3,9 +3,9 @@ import questionModel from "../models/questionModel.js";
 import prisma from "../prisma/prisma.js";
 
 // All questions for the test - ADMIN ONLY (via routes middlewares)
-async function getQuestionsAdmin(req, res) {
+async function getAllQuestionsAdmin(req, res) {
   try {
-    const q = await questionModel.getAllAdmin();
+    const q = await questionModel.getAllQuestionsAdmin();
     res.json(q);
   } catch (err) {
     console.error("Error fetching questions:", err);
@@ -16,12 +16,12 @@ async function getQuestionsAdmin(req, res) {
 // Single question - ADMIN ONLY
 async function getQuestionAdmin(req, res) {
   try {
-    const id = Number(req.params.questionId);
-    if (Number.isNaN(id)) {
-      return res.status(400).json({ message: "Invalid id" });
+    const questionId = Number(req.params.questionId);
+    if (Number.isNaN(questionId)) {
+      return res.status(400).json({ message: "Invalid questionId" });
     }
 
-    const q = await questionModel.getByIdAdmin(id);
+    const q = await questionModel.getQuestionByIdAdmin(questionId);
     if (!q) return res.status(404).json({ message: "Not found" });
     res.json(q);
   } catch (err) {
@@ -114,19 +114,18 @@ async function createQuestion(req, res) {
   }
 }
 
-
 // Update question - ADMIN ONLY
 async function updateQuestion(req, res) {
   try {
-    const id = Number(req.params.questionId);
-    if (Number.isNaN(id)) {
-      return res.status(400).json({ message: "Invalid id" });
+    const questionId = Number(req.params.questionId);
+    if (Number.isNaN(questionId)) {
+      return res.status(400).json({ message: "Invalid questionId" });
     }
 
     const data = req.body;
 
     // 1. Vérifier que la question existe
-    const existing = await questionModel.getByIdAdmin(id);
+    const existing = await questionModel.getQuestionByIdAdmin(questionId);
     if (!existing) {
       return res.status(404).json({ message: "Question not found" });
     }
@@ -185,7 +184,7 @@ async function updateQuestion(req, res) {
     }
 
     // 5. Mise à jour réelle via model
-    const q = await questionModel.updateQuestion(id, data);
+    const q = await questionModel.updateQuestion(questionId, data);
     res.json(q);
 
   } catch (err) {
@@ -194,16 +193,15 @@ async function updateQuestion(req, res) {
   }
 }
 
-
 // Delete question - ADMIN ONLY
 async function deleteQuestion(req, res) {
   try {
-    const id = Number(req.params.questionId);
-    if (Number.isNaN(id)) {
-      return res.status(400).json({ message: "Invalid id" });
+    const questionId = Number(req.params.questionId);
+    if (Number.isNaN(questionId)) {
+      return res.status(400).json({ message: "Invalid questionId" });
     }
 
-    await questionModel.deleteQuestion(id);
+    await questionModel.deleteQuestion(questionId);
     res.json({ message: "Deleted" });
   } catch (err) {
     console.error("Error deleting question:", err);
@@ -212,7 +210,7 @@ async function deleteQuestion(req, res) {
 }
 
 export default {
-  getQuestionsAdmin,
+  getAllQuestionsAdmin,
   getQuestionAdmin,
   createQuestion,
   updateQuestion,

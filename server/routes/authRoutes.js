@@ -6,7 +6,7 @@ import adminRequired from "../auth/adminRequired.js";
 
 const router = Router();
 
-// Register (admin only via controller)
+// Register
 router.post('/register', authRequired, adminRequired, authController.register);
 
 // Login

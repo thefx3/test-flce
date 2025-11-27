@@ -66,7 +66,7 @@ async function startTest(req, res) {
 // Public: get questions (NO corrections)
 async function getQuestions(req, res) {
   try {
-    const q = await questionModel.getAllPublic();
+    const q = await questionModel.getAllQuestionsPublic();
     res.json(q);
   } catch (err) {
     console.error("Error fetching questions:", err);
@@ -77,12 +77,12 @@ async function getQuestions(req, res) {
 // Public: get single question (NO corrections)
 async function getQuestion(req, res) {
   try {
-    const id = Number(req.params.questionId);
-    if (Number.isNaN(id)) {
+    const questionId = Number(req.params.questionId);
+    if (Number.isNaN(questionId)) {
       return res.status(400).json({ message: "Invalid id" });
     }
 
-    const q = await questionModel.getByIdPublic(id);
+    const q = await questionModel.getQuestionByIdPublic(questionId);
     if (!q) return res.status(404).json({ message: "Not found" });
     res.json(q);
   } catch (err) {
@@ -91,7 +91,6 @@ async function getQuestion(req, res) {
   }
 }
 
-// Public: submit responses for anonymous test (session protected)
 async function submitResponses(req, res) {
   try {
     const testId = Number(req.params.testId);
@@ -139,7 +138,7 @@ async function submitResponses(req, res) {
     await testModel.submitAnswers(converted);
 
     await prisma.test.update({
-      where: { id: testId },
+      where: { testId },
       data: { status: "SUBMITTED" }
     });
 

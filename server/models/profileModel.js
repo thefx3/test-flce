@@ -22,13 +22,11 @@ class ProfileModel {
   // =============== TEST USER ACCOUNTS ==================
   // All people who are taking the test
 
-
   async createProfile(userId, data) {
     const now = new Date();    
     return await prisma.profile.create({
       data: {
         user: { connect: { userId } },
-        // Prisma schema uses non-null fields; provide safe defaults
         civility: data.civility ?? "",
         phone: data.phone ?? 0,
         birthdate: data.birthdate ?? now,

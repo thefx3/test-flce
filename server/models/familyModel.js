@@ -13,8 +13,8 @@ const baseFamilySelect = {
 
 class FamilyModel {
 
-  // =============== TEST USER ACCOUNTS ==================
-  // All people who are taking the test and are Au Pair
+// =============== TEST USER ACCOUNTS ==================
+// All people who are taking the test and are Au Pair
 
   //NEED user.aupair = "TRUE"
   async addFamily(userId, data) {
@@ -31,16 +31,22 @@ class FamilyModel {
     });
   }
 
-  async listFamilies(userId) {
+  async getAllFamilies() {
+    return await prisma.auPairFamily.findMany({
+        select: baseFamilySelect
+    })
+  }
+
+  async getFamilyByUserId(userId) {
     return await prisma.auPairFamily.findMany({
         where: { userId: userId },
         select: baseFamilySelect
     })
   }
 
-  async getFamily(id){
+  async getFamily(familyId){
     return await prisma.auPairFamily.findUnique({
-        where: { familyId: id },
+        where: { familyId },
         select: baseFamilySelect
     })
   }
@@ -51,18 +57,16 @@ class FamilyModel {
     });
   }
 
-  //Need to delete Family from a known userId
-  async deleteFamilyById (id) {
+  async deleteFamilyById (familyId) {
     return await prisma.auPairFamily.delete({
-        where: { familyId: id },
+        where: { familyId },
         select: baseFamilySelect
     })
   }
 
-  //Need to update Family from a known userId
-  async updateFamily(id, data) {
+  async updateFamily(familyId, data) {
     return await prisma.auPairFamily.update({
-        where: { familyId: id },
+        where: { familyId },
         data,
         select: baseFamilySelect
     })
