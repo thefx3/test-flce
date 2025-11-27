@@ -135,8 +135,11 @@ async getScoreOfTest(req, res, next) {
   try {
     const { userId, testId } = req.params;
 
-    const existing = await testModel.getSingleTestAdmin(Number(userId));
-    if (!existing) return res.status(404).json({ message: "Test not found" });
+    const test = await testModel.getSingleTestAdmin(Number(testId));
+    if (!test) return res.status(404).json({ message: "Test not found" });
+    if (userId && Number(userId) !== Number(test.userId)) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
 
     const totalScore = await testModel.getScoreOfTest(Number(testId));
 

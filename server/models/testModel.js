@@ -6,7 +6,7 @@ const responseSelect = {
   questionId: true,
   answerBool: true,
   answerText: true,
-  score: false,
+  score: true,
 };
 
 const baseTestSelect = {
@@ -67,14 +67,14 @@ async createTest(userId) {
 }
 
 async updateTest(testId, data){
-  const allowedUserFields = ["answerBool", "answerText"];
+  const allowed = ["status"];
 
-  const safeData = pickAllowedFields(data, allowedUserFields);
+  const safeData = pickAllowedFields(data, allowed);
 
   return prisma.test.update({
     where: { testId },
     data: safeData,
-    select: baseTestSelect
+    select: baseTestSelect,
   });
 }
 
@@ -102,6 +102,7 @@ async getAllTests() {
     select: {
       testId: true,
       userId: true,
+      status: true,
     testresponse: {
         select: {
           responseId: true,
@@ -159,37 +160,6 @@ async getSingleTestAdmin(testId) {
   return mapTest(test);
 }
 
-async getAllTestsByUserIdAdmin(userId){
-  const tests = await prisma.test.findMany({
-    where: { userId},
-    orderBy: { testId: "asc" },
-    select: {
-      testId: true,
-      userId: true,
-    testresponse: {
-        select: {
-          responseId: true,
-          questionId: true,
-          answerBool: true,
-          answerText: true,
-          score: true,
-          question: {
-            select: {
-              type: true,
-              text: true,
-              mediaUrl: true,
-              correctBool:true,
-              correctText: true,
-              points: true,
-              order: true
-            }
-          }
-        }
-      }
-    }
-  });
-  return tests.map(mapTest);
-}
 
 async deleteSingleTest(testId){
   return prisma.test.delete({ where: { testId } });
@@ -209,10 +179,8 @@ async submitAnswers(answers) {
       prisma.testResponse.update({
         where: { responseId: a.responseId },
         data: {
-          answerBool:
-            a.answerBool === undefined ? null : a.answerBool,
-          answerText:
-            a.answerText === undefined ? "" : a.answerText,
+          answerBool: a.answerBool ?? null,
+          answerText: a.answerText ?? "",
         },
       })
     );
@@ -245,7 +213,7 @@ async gradeAuto(testId) {
         await prisma.$transaction(updates);
       }
 
-    return this.getTestAdmin(testId);
+    return this.getSingleTestAdmin(testId);
 }
 
 async gradeManual(grades) {

@@ -1,6 +1,5 @@
 //adminRoutes.js
 import { Router } from "express";
-import adminController from "../controllers/adminController.js";
 import authController from "../controllers/authController.js";
 import authRequired from "../auth/authRequired.js";
 import adminRequired from "../auth/adminRequired.js"
@@ -25,7 +24,7 @@ router.post("/users", userController.createTestUser); //Public
 router.get("/users", userController.getAllUsers); 
 router.get("/users/:userId", userController.getSingleUser); //Public
 router.put("/users/:userId", userController.updateUser); //Public 
-router.put("/users/:userId", userController.deleteUser);
+router.delete("/users/:userId", userController.deleteUser);
 
 
 //--- PROFILE ---

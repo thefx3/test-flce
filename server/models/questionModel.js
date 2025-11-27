@@ -20,6 +20,16 @@ const publicQuestionSelect = {
   order: true,
 };
 
+function pickAllowedFields(source, allowedFields) {
+  const safe = {};
+  for (const key of allowedFields) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      safe[key] = source[key];
+    }
+  }
+  return safe;
+}
+
 class QuestionModel {
 
 //Public
@@ -35,6 +45,11 @@ async getSingleQuestionPublic(questionId) {
     where: { questionId: Number(questionId) },
     select: publicQuestionSelect,
   })
+}
+
+// Alias for clarity in controllers
+async getQuestionByIdPublic(questionId) {
+  return this.getSingleQuestionPublic(questionId);
 }
 
 //Admin
@@ -68,9 +83,21 @@ async createQuestion(data) {
 }
 
 async updateQuestion(questionId, data) {
+  const allowedFields = [
+    "type",
+    "text",
+    "mediaUrl",
+    "correctBool",
+    "correctText",
+    "points",
+    "order",
+  ];
+
+  const safeData = pickAllowedFields(data, allowedFields);
+
   return prisma.question.update({
     where: { questionId: Number(questionId) },
-    data,
+    data: safeData,
     select: adminQuestionSelect,
   });
 }
@@ -84,10 +111,7 @@ async deleteQuestion(questionId) {
 
 async getScoreOfQuestion(testId, questionId) {
   const response = await prisma.testResponse.findFirst({
-    where: {
-      testId,
-      questionId
-    },
+    where: { testId, questionId },
     select: { score: true }
   });
 

@@ -8,10 +8,10 @@ import ensureIsOwner from "../auth/ownerRequired.js";
 const router = Router();
 
 //Public 
-router.get("/:userId", authRequired, ensureIsOwner, testController.getAllTests);
-router.get("/:testId", authRequired, ensureIsOwner, testController.getSingleTest);
-router.post("/",authRequired, ensureIsOwner, testController.createTest);
-router.put("/:testId",authRequired, ensureIsOwner,testController.updateTest);
+router.get("/users/:userId", authRequired, ensureIsOwner, testController.getAllTests);
+router.get("/users/:userId/:testId", authRequired, ensureIsOwner, testController.getSingleTest);
+router.post("/users/:userId", authRequired, ensureIsOwner, testController.createTest);
+router.put("/users/:userId/:testId", authRequired, ensureIsOwner, testController.updateTest);
 router.post("/:testId/responses", authRequired, testController.submitResponses);
 
   

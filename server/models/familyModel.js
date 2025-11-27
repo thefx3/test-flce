@@ -11,6 +11,16 @@ const baseFamilySelect = {
     address: true
 };
 
+function pickAllowedFields(source, allowedFields) {
+  const safe = {};
+  for (const key of allowedFields) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      safe[key] = source[key];
+    }
+  }
+  return safe;
+}
+
 class FamilyModel {
 
 async createFamily(userId, data) {
@@ -34,16 +44,25 @@ async getAllFamilies() {
 }
 
 async getSingleFamily(userId) {
-  return await prisma.auPairFamily.findMany({
+  return await prisma.auPairFamily.findUnique({
       where: { userId },
       select: baseFamilySelect
   })
 }
 
+// Alias used by controllers
+async getFamily(userId) {
+  return this.getSingleFamily(userId);
+}
+
 async updateFamily(userId, data) {
+  const allowedFields = ["familyname1", "familyname2", "email", "phone", "address"];
+  
+  const safeData = pickAllowedFields(data, allowedFields);
+
   return await prisma.auPairFamily.update({
       where: { userId },
-      data,
+      data: safeData,
       select: baseFamilySelect
   })
 }

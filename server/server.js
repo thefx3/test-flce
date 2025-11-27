@@ -30,8 +30,14 @@ const app = express();
 // ---------------- SECURITY GLOBAL MIDDLEWARES -----------------
 app.use(helmet());           // Secure HTTP headers
 app.use(cookieParser());     // Parse cookies
-app.use(cors());             // CORS
-app.use(express.json());     // JSON body
+app.use(express.json({ limit: "1mb" }));     // JSON body
+
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 
 // ---------------- RATE LIMITER -----------------
@@ -87,6 +93,5 @@ const PORT = process.env.PORT || 3000;
     process.exit(1);
   }
 })();
-
 
 

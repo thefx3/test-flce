@@ -42,14 +42,14 @@ async getAllAdmins() {
 async getSingleAdminById(userId) {
   return prisma.user.findUnique({
     where: { userId },
-    select: baseUserSelect
+    select: baseUserSelect,
   });
 }
 
 async getSingleAdminByEmail(email) {
   return prisma.user.findUnique({
     where: { email },
-    select: authUserSelect
+    select: authUserSelect,
   });
 }
 
@@ -98,6 +98,11 @@ async createUser(data) {
     },
     select: baseUserSelect
   });
+}
+
+// Public-facing creation for test takers (no password, forced USER role)
+async createTestUser(data) {
+  return this.createUser(data);
 }
 
 async getAllUsers() {

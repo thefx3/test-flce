@@ -56,7 +56,7 @@ model AuPairFamily {
   familyId          Int      @id @default(autoincrement())
 
   user        User  @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userId      Int    
+  userId      Int   @unique
 
   familyname1 String
   familyname2 String?
@@ -71,7 +71,7 @@ model Test {
   testId          Int           @id @default(autoincrement())
 
   user        User          @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userId      Int
+  userId      Int           @unique
   status      TestStatus    @default(IN_PROGRESS)
 
   testresponse TestResponse[]

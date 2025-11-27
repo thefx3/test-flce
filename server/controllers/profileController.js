@@ -81,10 +81,10 @@ async function setLevel(req, res) {
       return res.status(400).json({ message: "Invalid level" });
     }
 
-    const updated = await prisma.profile.updateProfile({
-      where: { userId },
-      data: { level }
-    });
+    const existing = await profileModel.getProfile(userId);
+    if (!existing) return res.status(404).json({ message: "Profile not found" });
+
+    const updated = await profileModel.updateProfileLevel(userId, level);
 
     return res.json(updated);
 

@@ -1,5 +1,6 @@
 // controllers/questionController.js
 import questionModel from "../models/questionModel.js";
+import testModel from "../models/testModel.js";
 
 class QuestionController {
 //Public
@@ -83,7 +84,7 @@ async deleteQuestion(req, res, next) {
   try {
     const { questionId } = req.params;
 
-    const deleted = await questionModel.delete(questionId);
+    const deleted = await questionModel.deleteQuestion(questionId);
 
     res.json({ message: "Question deleted", deleted });
   } catch (err) {

@@ -16,6 +16,16 @@ const baseProfileSelect = {
   level: true
 };
 
+function pickAllowedFields(source, allowedFields) {
+  const safe = {};
+  for (const key of allowedFields) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      safe[key] = source[key];
+    }
+  }
+  return safe;
+}
+
 class ProfileModel {
 
 async createProfile(userId, data) {
@@ -23,16 +33,17 @@ const now = new Date();
 return await prisma.profile.create({
   data: {
     user: { connect: { userId } },
-    civility: data.civility ?? "",
-    phone: data.phone ?? 0,
-    birthdate: data.birthdate ?? now,
-    birthplace: data.birthplace ?? "",
-    nationality: data.nationality ?? "",
-    photoPath: data.photoPath ?? "",
+
+    civility: data.civility ?? null,
+    phone: data.phone ?? null,
+    birthdate: data.birthdate ? new Date(data.birthdate) : null,
+    birthplace: data.birthplace ?? null,
+    nationality: data.nationality ?? null,
+    photoPath: data.photoPath ?? null,
     firstregister: data.firstregister ?? false,
-    address: data.address ?? "",
-    arrivaldate: data.arrivaldate ?? now,
-    level: data.level ?? "",
+    address: data.address ?? null,
+    arrivaldate: data.arrivaldate ? new Date(data.arrivaldate) : now,
+    level: data.level ?? null,
   },
   select: baseProfileSelect
 });
@@ -51,10 +62,30 @@ async getProfile(userId) {
   })
 }
 
+// Alias to keep controllers readable
+async getProfileByUserId(userId) {
+  return this.getProfile(userId);
+}
+
 async updateProfile(userId, data) {
+  const allowed = [
+    "civility",
+    "phone",
+    "birthdate",
+    "birthplace",
+    "nationality",
+    "photoPath",
+    "firstregister",
+    "address",
+    "arrivaldate",
+    "level",
+  ];
+
+  const safeData = pickAllowedFields(data, allowed);
+
   return await prisma.profile.update({
     where: { userId },
-    data,
+    data: safeData,
     select: baseProfileSelect
   })
 }
