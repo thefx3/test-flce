@@ -45,7 +45,7 @@ class ProfileModel {
   // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
   async updateProfile(userId, data) {
     return await prisma.profile.update({
-      where: { userId: userId },
+      where: { userId },
       data,
       select: baseProfileSelect
     })
@@ -62,7 +62,7 @@ class ProfileModel {
   // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
   async getProfileByUserId(userId) {
     return await prisma.profile.findUnique({
-      where: { userId: userId },
+      where: { userId },
       select: baseProfileSelect
     })
   }

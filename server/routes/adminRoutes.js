@@ -15,6 +15,7 @@ router.put("/admins/:id", authRequired, adminRequired, adminController.updateAdm
 router.delete("/admins/:id", authRequired, adminRequired, adminController.deleteAdmin);
 
 // --- USERS --- (Test Users)
+router.post("/users", authRequired, adminRequired, adminController.createTestUser);
 router.get("/users", authRequired, adminRequired, adminController.getAllUsers);
 router.get("/users/:userId", authRequired, adminRequired, adminController.getUser);
 router.put("/users/:userId", authRequired, adminRequired, adminController.updateUser);
@@ -26,6 +27,7 @@ router.put("/users/:userId/profile", authRequired, adminRequired, adminControlle
 router.put("/users/:userId/profile/level", authRequired, adminRequired, adminController.updateProfileLevel);
 
 // --- FAMILY ---
+router.post("/users/:userId/family", authRequired, adminRequired, adminController.addFamily);
 router.get("/users/:userId/families", authRequired, adminRequired, adminController.getFamilies);
 router.put("/users/:userId/families/:familyId", authRequired, adminRequired, adminController.updateFamily);
 router.delete("/users/:userId/families/:familyId", authRequired, adminRequired, adminController.deleteFamily);

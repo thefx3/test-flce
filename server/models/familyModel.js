@@ -23,8 +23,8 @@ class FamilyModel {
             userId,
             familyname1: data.familyname1,
             familyname2: data.familyname2 ?? null,
-            email: data.email ?? null,
-            phone: data.phone ?? null,
+            email: data.email,
+            phone: data.phone,
             address: data.address ?? null
         },
         select: baseFamilySelect

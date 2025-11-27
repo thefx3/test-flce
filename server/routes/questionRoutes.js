@@ -11,7 +11,7 @@ router.get(
   "/",
   authRequired,
   adminRequired,
-  questionController.getQuestionsAdmin
+  questionController.getAllQuestionsAdmin
 );
 
 // Get a single question (with corrections) - ADMIN ONLY

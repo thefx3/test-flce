@@ -61,20 +61,20 @@ async function getAllTests(req, res) {
   }
 }
 
-async function deleteTest(req, res) {
+  async function deleteTest(req, res) {
     try {
       const testId = Number(req.params.testId);
       if (Number.isNaN(testId)) {
         return res.status(400).json({ message: "Invalid testId" });
       }
-  
-      await questionModel.deleteTestById(testId);
+
+      await testModel.deleteTest(testId);
       res.json({ message: "Deleted" });
     } catch (err) {
       console.error("Error deleting question:", err);
       res.status(500).json({ message: "Internal error" });
     }
-}
+  }
 
 // POST /tests/:testId/responses  (admin-only, pour l’instant)
 async function submitResponses(req, res) {

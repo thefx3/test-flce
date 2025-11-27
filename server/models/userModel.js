@@ -16,6 +16,15 @@ const authUserSelect = {
   password: true,
 };
 
+function pickAllowedFields(source, allowedFields) {
+  const safe = {};
+  for (const key of allowedFields) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      safe[key] = source[key];
+    }
+  }
+  return safe;
+}
 class UserModel {
 // ================= ADMIN ACCOUNTS ===================
 // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"

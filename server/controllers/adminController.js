@@ -62,6 +62,21 @@ async function deleteAdmin(req, res) {
 
 // ============ USER ACCOUNTS ============
 
+async function createTestUser(req, res) {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    const existing = await userModel.getSingleUserByEmail(email);
+    if (existing) return res.status(409).json({ message: "User already exists" });
+
+    const user = await userModel.createTestUser(req.body);
+    res.status(201).json(user);
+  } catch (err) {
+    console.error("Error creating user:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
 
 async function getAllUsers(req, res) {
   try {
@@ -117,8 +132,11 @@ async function updateUser(req, res) {
 
 async function createProfile(req, res) {
   try {
-    const userId = req.user?.userId;
-    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const userIdParam = req.params.userId;
+    const userId = userIdParam ? Number(userIdParam) : req.user?.userId;
+    if (!userId || Number.isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid user id" });
+    }
 
     const existing = await profileModel.getProfileByUserId(userId);
     if (existing) return res.status(409).json({ message: "Profile already exists" });
@@ -188,16 +206,21 @@ async function updateProfileLevel(req, res) {
 //Needs to be an Au Pair + Role.user = "USER"
 async function addFamily(req, res) {
   try {
-    const userId = req.user?.userId;
-    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const userIdParam = req.params.userId;
+    const userId = userIdParam ? Number(userIdParam) : req.user?.userId;
+    if (!userId || Number.isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid user id" });
+    }
 
     const existing = await familyModel.getFamilyByUserId(userId);
-    if (existing) return res.status(409).json({ message: "Family already exists" });
+    if (existing && existing.length > 0) {
+      return res.status(409).json({ message: "Family already exists" });
+    }
 
-    const profile = await profileModel.addFamily(userId, req.body);
-    res.status(201).json(profile);
+    const family = await familyModel.addFamily(userId, req.body);
+    res.status(201).json(family);
   } catch (err) {
-    console.error("Error creating profile:", err);
+    console.error("Error creating family:", err);
     res.status(500).json({ message: "Internal error" });
   }
 }
@@ -205,6 +228,21 @@ async function addFamily(req, res) {
 async function getAllFamilies(req, res) {
   try {
     const families = await familyModel.getAllFamilies();
+    res.json(families);
+  } catch (err) {
+    console.error("Error fetching families:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
+async function getFamilies(req, res) {
+  try {
+    const userId = Number(req.params.userId);
+    if (Number.isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid user id" });
+    }
+
+    const families = await familyModel.getFamilyByUserId(userId);
     res.json(families);
   } catch (err) {
     console.error("Error fetching families:", err);
@@ -399,7 +437,8 @@ export default {
   getSingleAdmin,
   updateAdmin,
   deleteAdmin,
-
+  
+  createTestUser,
   getAllUsers,
   getUser,
   updateUser,
@@ -410,6 +449,7 @@ export default {
   updateProfileLevel,
 
   addFamily,
+  getFamilies,
   getAllFamilies,
   updateFamily,
   deleteFamily,

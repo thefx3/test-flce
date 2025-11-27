@@ -6,9 +6,11 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import prisma from "./prisma/prisma.js";
+
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import profilRoutes from "./routes/profilRoutes.js";
+import familyRoutes from "./routes/familyRoutes.js"
 import testRoutes from "./routes/testRoutes.js";
 import questionRoutes from "./routes/questionRoutes.js"
 import publicRoutes from "./routes/publicRoutes.js"
@@ -34,12 +36,13 @@ const publicLimiter = rateLimit({
 app.use("/auth", authRoutes);
 
 // PUBLIC
-app.use("/public", publicRoutes);
-app.use("/tests", testRoutes);
+app.use("/public", publicLimiter, publicRoutes);
+app.use("/tests", publicLimiter, testRoutes);
 
 // PROTECTED
 app.use("/admin", authRequired, adminRoutes);
 app.use("/profile", authRequired, profilRoutes);
+app.use("/families", authRequired, familyRoutes);
 app.use("/questions", authRequired, questionRoutes);
 
 

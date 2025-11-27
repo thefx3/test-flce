@@ -61,7 +61,7 @@ model AuPairFamily {
   familyname1 String
   familyname2 String?
   email       String
-  phone       Int
+  phone       String
   address     String
 }
 

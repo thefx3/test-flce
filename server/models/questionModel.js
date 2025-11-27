@@ -30,7 +30,7 @@ class QuestionModel {
     });
   }
 
-  async getQuestionByIdPublic(questionIdd) {
+  async getQuestionByIdPublic(questionId) {
     return prisma.question.findUnique({
       where: { questionId },
       select: publicQuestionSelect

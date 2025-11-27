@@ -64,13 +64,14 @@ class TestModel {
         userId: true,
         testresponse: {
           select: {
-            id: true,
+            responseId: true,
             questionId: true,
             answerBool: true,
             answerText: true,
             score: true,
             question: {
               select: {
+                questionId: true,
                 type: true,
                 text: true,
                 mediaUrl: true,
@@ -139,7 +140,7 @@ class TestModel {
   }
 
   async deleteTests(userId){
-    return prisma.test.delete({ where : { userId } })
+    return prisma.test.deleteMany({ where : { userId } })
   }
 
 // ===== SUBMIT =====

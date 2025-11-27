@@ -4,6 +4,7 @@ import userModel from "../models/userModel.js";
 import profileModel from "../models/profileModel.js";
 import testModel from "../models/testModel.js";
 import questionModel from "../models/questionModel.js";
+import prisma from "../prisma/prisma.js";
 
 // Start a new test (public)
 async function startTest(req, res) {
@@ -90,6 +91,7 @@ async function getQuestion(req, res) {
     res.status(500).json({ message: "Internal error" });
   }
 }
+
 
 async function submitResponses(req, res) {
   try {
