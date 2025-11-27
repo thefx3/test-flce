@@ -124,6 +124,6 @@ async function loginUser(req, res) {
 export default {
   register,
   login,
-  loginUser,   // 👈 ajouté
+  loginUser,
   loginSuccess,
 };

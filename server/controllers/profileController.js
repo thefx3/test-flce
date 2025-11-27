@@ -1,7 +1,7 @@
 // profileController.js
 import profileModel from "../models/profileModel.js";
 
-async function getProfile(req, res) {
+async function getSingleProfile(req, res) {
   try {
     const userId = req.user?.userId;
     if (!userId) return res.status(401).json({ message: "Unauthorized" });
@@ -48,15 +48,6 @@ async function updateProfile(req, res) {
   }
 }
 
-function ensureOwnProfile(req, res, next) {
-  if (req.user.role === "ADMIN" || req.user.role === "SUPERADMIN") {
-    return next();
-  }
-  if (Number(req.user.userId) !== Number(req.params.userId)) {
-    return res.status(403).json({ message: "Not allowed" });
-  }
-  next();
-}
 
 async function setLevel(req, res) {
   try {
@@ -81,11 +72,22 @@ async function setLevel(req, res) {
   }
 }
 
+async function deleteProfile(req, res) {
+  try {
+    const userId = Number(req.params.userId);
+
+    await profileModel.deleteProfileByUserId(userId);
+    res.json({ message: "Profile deleted" });
+  } catch (err) {
+    console.error("Error deleting profile:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
 
 export default {
-  getProfile,
+  getSingleProfile,
   createProfile,
   updateProfile,
-  ensureOwnProfile,
+  deleteProfile,
   setLevel
 };

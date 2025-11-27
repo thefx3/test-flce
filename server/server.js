@@ -7,14 +7,22 @@ import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import prisma from "./prisma/prisma.js";
 
+//PUBLIC
 import authRoutes from "./routes/authRoutes.js";
+import publicRoutes from "./routes/publicRoutes.js"
+
+//PROTECTED
 import adminRoutes from "./routes/adminRoutes.js";
-import profilRoutes from "./routes/profilRoutes.js";
+
+//ALL ROUTES
+import userRoutes from "./routes/userRoutes.js"
+import profileRoutes from "./routes/profileRoutes.js";
 import familyRoutes from "./routes/familyRoutes.js"
 import testRoutes from "./routes/testRoutes.js";
 import questionRoutes from "./routes/questionRoutes.js"
-import publicRoutes from "./routes/publicRoutes.js"
+
 import authRequired from "./auth/authRequired.js";
+import adminRequired from "./auth/adminRequired.js";
 
 // Initialize express app
 const app = express();
@@ -33,17 +41,21 @@ const publicLimiter = rateLimit({
   message: { message: "Too many requests, slow down." }
 });
 
-app.use("/auth", authRoutes);
+// ---------------- ROUTES -----------------
 
 // PUBLIC
-app.use("/public", publicLimiter, publicRoutes);
-app.use("/tests", publicLimiter, testRoutes);
+app.use("/auth", authRoutes); //Ok
+app.use("/public", publicLimiter, publicRoutes); 
 
 // PROTECTED
-app.use("/admin", authRequired, adminRoutes);
-app.use("/profile", authRequired, profilRoutes);
-app.use("/families", authRequired, familyRoutes);
-app.use("/questions", authRequired, questionRoutes);
+app.use("/admin", authRequired, adminRequired, adminRoutes);
+
+// Contains Public and Protected functions
+app.use("/accounts", userRoutes); //Ok
+app.use("/profiles", profileRoutes);
+app.use("/families", familyRoutes);
+app.use("/tests", testRoutes);
+app.use("/questions", questionRoutes);
 
 
 

@@ -29,7 +29,7 @@ class UserModel {
 // ================= ADMIN ACCOUNTS ===================
 // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
 
-async getAdmins() {
+async getAllAdmins() {
   return prisma.user.findMany({
     where: {
       OR: [{ role: "ADMIN" }, { role: "SUPERADMIN" }]
@@ -78,10 +78,15 @@ async updateAdmin(userId, data) {
   });
 }
 
+async deleteAdminById(userId) {
+  return prisma.user.delete({ where: { userId } });
+}
+
+
 // ================= USER ACCOUNTS ===================
 // NEED user.role = "ADMIN" or user.role = "SUPERADMIN"
 
-async createTestUser(data) {
+async createUser(data) {
   return prisma.user.create({
     data: {
       email: data.email,
@@ -127,8 +132,9 @@ async updateUser(userId, data) {
   });
 }
 
+
 async deleteUserById(userId) {
-  return prisma.user.delete({ where: { userId} });
+  return prisma.user.delete({ where: { userId } });
 }
 
 }

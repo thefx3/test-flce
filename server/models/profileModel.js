@@ -67,5 +67,9 @@ class ProfileModel {
     })
   }
 
+  async deleteProfileByUserId(userId) {
+    return prisma.profile.delete({ where: { userId } });
+  }
+
 }
 export default new ProfileModel();
