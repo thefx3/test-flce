@@ -12,7 +12,7 @@ import questionController from "../controllers/questionController.js";
 const router = Router();
 
 // --- ADMINS --- (Admin Users)
-router.post("/register",  authController.register);
+router.post("/register", authController.register);
 router.get("/admins", userController.getAllAdmins);
 router.get("/admins/:id", userController.getSingleAdmin);
 router.put("/admins/:id", userController.updateAdmin);

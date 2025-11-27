@@ -26,6 +26,7 @@ import adminRequired from "./auth/adminRequired.js";
 
 // Initialize express app
 const app = express();
+export { app }; // exported for testing
 
 // ---------------- SECURITY GLOBAL MIDDLEWARES -----------------
 app.use(helmet());           // Secure HTTP headers
@@ -80,18 +81,21 @@ app.use((err, req, res, next) => {
 // -------------- SERVER --------------------------------
 
 const PORT = process.env.PORT || 3000;
-(async () => {
-  try {
-    await prisma.$connect();
-    console.log("✅ Connected to database");
 
-    app.listen(PORT, () => {
-      console.log(`✅ App listening on port ${PORT}`);
-    });
-  } catch (err) {
+export async function startServer() {
+  await prisma.$connect();
+  console.log("✅ Connected to database");
+
+  return app.listen(PORT, () => {
+    console.log(`✅ App listening on port ${PORT}`);
+  });
+}
+
+// Do not start the server when running tests
+if (process.env.NODE_ENV !== "test") {
+  startServer().catch(err => {
     console.error("❌ Database initialization failed:", err);
     process.exit(1);
-  }
-})();
-
+  });
+}
 

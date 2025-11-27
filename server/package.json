@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test jest",
+    "pretest": "NODE_ENV=test prisma db push --force-reset --schema prisma/schema.prisma",
+    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles",
     "dev": "nodemon server.js"
   },
   "keywords": [],
@@ -12,11 +13,7 @@
   "license": "ISC",
   "type": "module",
   "jest": {
-    "testEnvironment": "node",
-    "extensionsToTreatAsEsm": [
-      ".js"
-    ],
-    "transform": {}
+    "testEnvironment": "node"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.0.0",
@@ -29,13 +26,15 @@
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "psql": "^0.0.1"
   },
   "devDependencies": {
     "eslint": "^9.39.1",
     "jest": "^30.2.0",
     "nodemon": "^3.1.11",
     "prettier": "^3.6.2",
-    "prisma": "^7.0.0"
+    "prisma": "^7.0.0",
+    "supertest": "^6.3.4"
   }
 }

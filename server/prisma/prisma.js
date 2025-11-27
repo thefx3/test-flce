@@ -8,11 +8,10 @@ const { Pool } = pg;
 // Re-use a single pool/prisma instance in dev to avoid exhausting connections with nodemon reloads
 const globalForPrisma = globalThis;
 
-const pool =
-  globalForPrisma.pgPool ||
-  new Pool({
-    connectionString: process.env.DATABASE_URL,
-  });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL, // Supabase en prod/dev
+});
+
 
 const adapter = new PrismaPg(pool);
 
@@ -27,5 +26,6 @@ if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
   globalForPrisma.pgPool = pool;
 }
+
 
 export default prisma;
