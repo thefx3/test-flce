@@ -8,7 +8,7 @@ import adminRequired from "../auth/adminRequired.js"
 const router = Router();
 
 // --- ADMINS --- (Admin Users)
-router.post("/register", authRequired, adminRequired, authController.register);
+router.post("/register",  authController.register);
 router.get("/admins", authRequired, adminRequired, adminController.getAdmins);
 router.get("/admins/:id", authRequired, adminRequired, adminController.getSingleAdmin);
 router.put("/admins/:id", authRequired, adminRequired, adminController.updateAdmin);
