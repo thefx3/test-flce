@@ -106,6 +106,30 @@ async updateTest(req, res, next) {
     });
     if (!test) return;
 
+    // Allow admin/owner to submit answers via this route too
+    if (Array.isArray(data.answers)) {
+      // Build a map: questionId -> responseId from existing responses
+      const mapQtoR = new Map(
+        (test.responses || []).map(r => [r.questionId, r.responseId])
+      );
+
+      const converted = [];
+      for (const r of data.answers) {
+        if (!mapQtoR.has(r.questionId)) {
+          return res.status(403).json({
+            message: `Question ${r.questionId} does not belong to test ${testId}`,
+          });
+        }
+        converted.push({
+          responseId: mapQtoR.get(r.questionId),
+          answerBool: r.answerBool ?? null,
+          answerText: r.answerText ?? "",
+        });
+      }
+
+      await testModel.submitAnswers(converted);
+    }
+
     const updated = await testModel.updateTest(testId, data);
 
     res.json(updated);

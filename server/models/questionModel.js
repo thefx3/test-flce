@@ -76,7 +76,7 @@ async createQuestion(data) {
       correctBool: data.correctBool ?? null,
       correctText: data.correctText ?? null,
       points: data.points ?? 1,
-      order: data.order,
+      order: Number(data.order),
     },
     select: adminQuestionSelect,
   });

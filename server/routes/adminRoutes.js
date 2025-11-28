@@ -12,8 +12,8 @@ import questionController from "../controllers/questionController.js";
 const router = Router();
 
 // --- ADMINS --- (Admin Users)
-router.post("/register", authController.register); //Ok
-router.get("/admins", userController.getAllAdmins); //Ok
+// Registration is handled publicly in /auth/register so the first admin can be created
+router.get("/admins", userController.getAllAdmins);
 router.get("/admins/:userId", userController.getSingleAdmin);
 router.put("/admins/:userId", userController.updateAdmin);
 router.delete("/admins/:userId", userController.deleteAdmin);

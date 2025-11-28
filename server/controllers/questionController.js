@@ -59,6 +59,17 @@ async createQuestion(req, res, next) {
   try {
     const data = req.body;
 
+    const validTypes = ["QCM", "VIDEO", "OPEN"];
+    if (!validTypes.includes(data.type)) {
+      return res.status(400).json({ message: "Invalid question type" });
+    }
+    if (!data.text || typeof data.text !== "string") {
+      return res.status(400).json({ message: "Question text is required" });
+    }
+    if (data.order === undefined || data.order === null) {
+      return res.status(400).json({ message: "Question order is required" });
+    }
+
     const created = await questionModel.createQuestion(data);
 
     res.status(201).json(created);

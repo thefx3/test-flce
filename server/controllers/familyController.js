@@ -1,6 +1,39 @@
 // familyController.js
 import familyModel from "../models/familyModel.js";
 
+function normalizeFamilyPayload(body) {
+  const familyname1 =
+    body.familyname1 ||
+    body.fatherName ||
+    body.motherName ||
+    body.familyName ||
+    null;
+
+  return {
+    familyname1,
+    familyname2: body.familyname2 ?? null,
+    email: body.email ?? body.familyEmail ?? null,
+    phone: body.phone ?? body.familyPhone ?? null,
+    address: body.address ?? null,
+  };
+}
+
+function validateFamilyPayload(res, payload) {
+  if (!payload.familyname1) {
+    res.status(400).json({ message: "familyname1 is required" });
+    return false;
+  }
+  if (!payload.email) {
+    res.status(400).json({ message: "email is required" });
+    return false;
+  }
+  if (!payload.phone) {
+    res.status(400).json({ message: "phone is required" });
+    return false;
+  }
+  return true;
+}
+
 async function createFamily(req, res) {
   try {
     const userId = Number(req.params.userId)
@@ -9,7 +42,10 @@ async function createFamily(req, res) {
     const existing = await familyModel.getFamily(userId);
     if (existing) return res.status(409).json({ message: "Family already exists" });
 
-    const family = await familyModel.createFamily(userId, req.body);
+    const payload = normalizeFamilyPayload(req.body);
+    if (!validateFamilyPayload(res, payload)) return;
+
+    const family = await familyModel.createFamily(userId, payload);
     res.status(201).json(family);
   } catch (err) {
     console.error("Error creating family:", err);
@@ -31,6 +67,7 @@ async function getSingleFamily(req, res) {
   try {
     const userId = Number(req.params.userId)
     const family = await familyModel.getSingleFamily(userId);
+    if (!family) return res.status(404).json({ message: "Family not found" });
     res.json(family);
   } catch (err) {
     console.error("Error fetching family:", err);
@@ -46,7 +83,10 @@ async function updateFamily(req, res) {
     const existing = await familyModel.getFamily(userId);
     if (!existing) return res.status(404).json({ message: "Family not found" });
 
-    const updated = await familyModel.updateFamily(userId, req.body);
+    const payload = normalizeFamilyPayload(req.body);
+    if (!validateFamilyPayload(res, payload)) return;
+
+    const updated = await familyModel.updateFamily(userId, payload);
     res.json(updated);
   } catch (err) {
     console.error("Error updating family:", err);
