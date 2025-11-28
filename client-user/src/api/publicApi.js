@@ -25,7 +25,7 @@ export async function fetchQuestions() {
   return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
 }
 
-export async function submitResponses(testId, sessionToken, responses) {
+export async function submitResponses(testId, responses, sessionToken) {
   const res = await fetch(`${API_BASE}/tests/${testId}/responses`, {
     method: "POST",
     headers: {

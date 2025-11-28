@@ -1,6 +1,6 @@
 // src/pages/IntroTest.jsx
 import "shared-ui/styles/intro-test.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
   Users,
@@ -166,7 +166,7 @@ export default function IntroTest() {
         </div>
 
         <div className="about-link-wrapper">
-          <Link to="/" className="about-link" onClick={() => setView("student")}>
+          <Link to="/" className="about-link">
             Already did the test ? See your registration process
           </Link>
         </div>

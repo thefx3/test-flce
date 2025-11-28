@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { fetchQuestions, submitResponses } from "../api/publicApi";
 
-export default function TestQuestions({ testId, sessionToken, onSubmitted }) {
+export default function TestVideo({ testId, sessionToken, onSubmitted }) {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({}); // { [questionId]: selectedValue }
   const [loading, setLoading] = useState(true);

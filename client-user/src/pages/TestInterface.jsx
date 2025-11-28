@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import StartTestForm from "./StartTestForm";
 import TestQuestions from "./TestQuestions";
+import TestVideo from "./TestVideo";
 import TestEnd from "./TestEnd";
 
 export default function TestInterface() {
@@ -12,32 +13,39 @@ export default function TestInterface() {
   const [testId, setTestId] = useState(null);
   const [sessionToken, setSessionToken] = useState(null);
 
-  function handleIntroNext() {
-    setStep("start");
-  }
 
   function handleStartSuccess({ testId, sessionToken }) {
     setTestId(testId);
     setSessionToken(sessionToken);
-    setStep("questions");
+    setStep("intro"); //Go to QCM
+  }
+
+  function handleNext() {
+    setStep("questions"); //Go to VIDEO
   }
 
   function handleTestSubmitted() {
-    setStep("end");
-
-    // On peut décider : après 2 secondes → retourner à la home
+    setStep("end"); //Go to OPEN QUESTIONS
     setTimeout(() => navigate("/"), 2500);
   }
 
   return (
     <div className="french-test">
 
-      {step === "start" && (
+      {step === "intro" && (
         <StartTestForm onSuccess={handleStartSuccess} />
       )}
 
       {step === "questions" && (
         <TestQuestions
+          testId={testId}
+          sessionToken={sessionToken}
+          onSubmitted={handleNext}
+        />
+      )}
+
+      {step === "part2" && (
+        <TestVideo
           testId={testId}
           sessionToken={sessionToken}
           onSubmitted={handleTestSubmitted}

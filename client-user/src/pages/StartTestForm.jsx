@@ -62,7 +62,7 @@ export default function StartTestForm({ onSuccess }) {
       
         // ⏳ Convert dates
         birthdate: form.birthdate ? new Date(form.birthdate) : null,
-        arrivaldate: form.arrivaldate ? new Date(form.arrivaldate) : null, // ⚠ harmoniser le nom
+        arrivaldate: form.arrival_date ? new Date(form.arrival_date) : null, // ⚠ harmoniser le nom
       
         // Other
         aupair: auPair,
@@ -77,9 +77,6 @@ export default function StartTestForm({ onSuccess }) {
           : null,
       };
       
-      
-      
-
       //PUBLIC API FETCH
       const res = await startTest(payload);
 
