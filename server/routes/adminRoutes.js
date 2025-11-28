@@ -12,11 +12,11 @@ import questionController from "../controllers/questionController.js";
 const router = Router();
 
 // --- ADMINS --- (Admin Users)
-router.post("/register", authController.register);
-router.get("/admins", userController.getAllAdmins);
-router.get("/admins/:id", userController.getSingleAdmin);
-router.put("/admins/:id", userController.updateAdmin);
-router.delete("/admins/:id", userController.deleteAdmin);
+router.post("/register", authController.register); //Ok
+router.get("/admins", userController.getAllAdmins); //Ok
+router.get("/admins/:userId", userController.getSingleAdmin);
+router.put("/admins/:userId", userController.updateAdmin);
+router.delete("/admins/:userId", userController.deleteAdmin);
 
 
 // --- USERS --- (Test Users)

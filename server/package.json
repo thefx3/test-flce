@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "pretest": "NODE_ENV=test prisma db push --force-reset --schema prisma/schema.prisma",
-    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
     "dev": "nodemon server.js"
   },
   "keywords": [],
@@ -13,8 +12,11 @@
   "license": "ISC",
   "type": "module",
   "jest": {
-    "testEnvironment": "node"
-  },
+  "testEnvironment": "node",
+  "transform": {},
+  "setupFiles": ["./jest.setup.mjs"]
+}
+,
   "dependencies": {
     "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^7.0.0",
