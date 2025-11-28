@@ -37,7 +37,40 @@ class TestModel {
 
 //Public & Admin
 async createTest(userId) {
-  // Create test row
+  // If the user already has a test (userId is unique), reuse it instead of crashing
+  const existing = await prisma.test.findUnique({
+    where: { userId },
+    include: { testresponse: true },
+  });
+
+  // Load all questions once (used for both new and existing tests)
+  const questions = await prisma.question.findMany({
+    orderBy: { order: "asc" },
+  });
+
+  if (existing) {
+    // Create missing responses if new questions were added after the first attempt
+    const existingQuestionIds = new Set(
+      existing.testresponse.map(r => r.questionId)
+    );
+    const missingResponses = questions
+      .filter(q => !existingQuestionIds.has(q.questionId))
+      .map(q => ({
+        testId: existing.testId,
+        questionId: q.questionId,
+        answerBool: null,
+        answerText: "",
+        score: 0,
+      }));
+
+    if (missingResponses.length > 0) {
+      await prisma.testResponse.createMany({ data: missingResponses });
+    }
+
+    return this.getTestById(existing.testId);
+  }
+
+  // Create a brand-new test for this user
   const test = await prisma.test.create({
     data: {
       userId,
@@ -45,12 +78,6 @@ async createTest(userId) {
     },
   });
 
-  // Load all questions
-  const questions = await prisma.question.findMany({
-    orderBy: { order: "asc" },
-  });
-
-  // Create empty responses
   const responsesData = questions.map(q => ({
     testId: test.testId,
     questionId: q.questionId,

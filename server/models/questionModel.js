@@ -6,6 +6,7 @@ const adminQuestionSelect = {
   type: true,
   text: true,
   mediaUrl: true,
+  choices: true,
   correctBool: true,
   correctText: true,
   points: true,
@@ -17,6 +18,7 @@ const publicQuestionSelect = {
   type: true,
   text: true,
   mediaUrl: true,
+  choices: true,
   order: true,
 };
 
@@ -73,6 +75,7 @@ async createQuestion(data) {
       type: data.type,
       text: data.text,
       mediaUrl: data.mediaUrl ?? null,
+      choices: data.choices ?? [],
       correctBool: data.correctBool ?? null,
       correctText: data.correctText ?? null,
       points: data.points ?? 1,
@@ -87,6 +90,7 @@ async updateQuestion(questionId, data) {
     "type",
     "text",
     "mediaUrl",
+    "choices",
     "correctBool",
     "correctText",
     "points",

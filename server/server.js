@@ -6,6 +6,7 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import prisma from "./prisma/prisma.js";
+import { initDb } from "./db/initdb.js";
 
 //PUBLIC
 import authRoutes from "./routes/authRoutes.js";
@@ -85,6 +86,8 @@ const PORT = process.env.PORT || 3000;
 export async function startServer() {
   await prisma.$connect();
   console.log("✅ Connected to database");
+
+  await initDb();
 
   return app.listen(PORT, () => {
     console.log(`✅ App listening on port ${PORT}`);
