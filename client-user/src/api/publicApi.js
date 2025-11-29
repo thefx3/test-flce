@@ -15,7 +15,7 @@ export async function startTest(data) {
   return res.json(); // { userId, testId, sessionToken }
 }
 
-export async function fetchQuestions() {
+export async function fetchQuestionsQCM() {
   const res = await fetch(`${API_BASE}/questions`);
 
   if (!res.ok) {

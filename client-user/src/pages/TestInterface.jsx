@@ -13,26 +13,25 @@ export default function TestInterface() {
   const [testId, setTestId] = useState(null);
   const [sessionToken, setSessionToken] = useState(null);
 
-
   function handleStartSuccess({ testId, sessionToken }) {
     setTestId(testId);
     setSessionToken(sessionToken);
-    setStep("intro"); //Go to QCM
+    setStep("questions"); // move to QCM section
   }
 
   function handleNext() {
-    setStep("questions"); //Go to VIDEO
+    setStep("part2"); // move to VIDEO section
   }
 
   function handleTestSubmitted() {
-    setStep("end"); //Go to OPEN QUESTIONS
+    setStep("end");
     setTimeout(() => navigate("/"), 2500);
   }
 
   return (
     <div className="french-test">
 
-      {step === "intro" && (
+      {step === "start" && (
         <StartTestForm onSuccess={handleStartSuccess} />
       )}
 

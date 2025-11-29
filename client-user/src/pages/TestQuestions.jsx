@@ -1,6 +1,6 @@
 // src/pages/TestQuestions.jsx
 import { useEffect, useState } from "react";
-import { fetchQuestions, submitResponses } from "../api/publicApi";
+import { fetchQuestionsQCM, submitResponses } from "../api/publicApi";
 
 export default function TestQuestions({ testId, sessionToken, onSubmitted }) {
   const [questions, setQuestions] = useState([]);
@@ -12,7 +12,7 @@ export default function TestQuestions({ testId, sessionToken, onSubmitted }) {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetchQuestions(sessionToken); 
+        const res = await fetchQuestionsQCM(sessionToken); 
         setQuestions(res);
       } catch (err) {
         console.error("Error fetching questions:", err);
@@ -56,8 +56,10 @@ export default function TestQuestions({ testId, sessionToken, onSubmitted }) {
     const [before, after] = q.text.split("{{BLANK}}");
 
     return (
+
       <div key={q.questionId} className="question-block">
         <p className="question-text">
+          {q.order}
           {before}
 
           <select
@@ -74,6 +76,7 @@ export default function TestQuestions({ testId, sessionToken, onSubmitted }) {
           {after}
         </p>
       </div>
+
     );
   }
 
