@@ -4,6 +4,34 @@ import testModel from "../models/testModel.js";
 
 class QuestionController {
 //Public
+
+async getQuestionsQCMPublic(req, res, next) {
+  try {
+    const questions = await questionModel.getQuestionsQCMPublic();
+    res.json(questions);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async getQuestionsVIDEOPublic(req, res, next) {
+  try {
+    const questions = await questionModel.getQuestionsVIDEOPublic();
+    res.json(questions);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async getQuestionsOPENPublic(req, res, next) {
+  try {
+    const questions = await questionModel.getQuestionsOPENPublic();
+    res.json(questions);
+  } catch (err) {
+    next(err);
+  }
+}
+
 async getAllQuestionsPublic(req, res, next) {
   try {
     const questions = await questionModel.getAllQuestionsPublic();
@@ -30,14 +58,41 @@ async getSingleQuestionPublic(req, res, next) {
 }
 
 //Admin
-  async getAllQuestionsAdmin(req, res, next) {
+async getQuestionsQCMAdmin(req, res, next) {
+try {
+  const questions = await questionModel.getQuestionsQCMAdmin();
+  res.json(questions);
+} catch (err) {
+  next(err);
+}
+}
+
+async getQuestionsVIDEOAdmin(req, res, next) {
+try {
+  const questions = await questionModel.getQuestionsVIDEOAdmin();
+  res.json(questions);
+} catch (err) {
+  next(err);
+}
+}
+
+async getQuestionsOPENAdmin(req, res, next) {
+try {
+  const questions = await questionModel.getQuestionsOPENAdmin();
+  res.json(questions);
+} catch (err) {
+  next(err);
+}
+}
+
+async getAllQuestionsAdmin(req, res, next) {
     try {
       const questions = await questionModel.getAllQuestionsAdmin();
       res.json(questions);
     } catch (err) {
       next(err);
     }
-  }
+}
 
 async getSingleQuestionAdmin(req, res, next) {
   try {
@@ -68,6 +123,9 @@ async createQuestion(req, res, next) {
     }
     if (data.order === undefined || data.order === null) {
       return res.status(400).json({ message: "Question order is required" });
+    }
+    if (data.type === "VIDEO" && !data.videoId) {
+      return res.status(400).json({ message: "videoId is required for VIDEO questions" });
     }
 
     const created = await questionModel.createQuestion(data);

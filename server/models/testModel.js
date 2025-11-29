@@ -141,11 +141,12 @@ async getAllTests() {
             select: {
               type: true,
               text: true,
-              mediaUrl: true,
               correctBool:true,
               correctText: true,
               points: true,
-              order: true
+              order: true,
+              videoId: true,
+              video: { select: { videoId: true, url: true, title: true } },
             }
           }
         }
@@ -173,11 +174,12 @@ async getSingleTestAdmin(testId) {
               questionId: true,
               type: true,
               text: true,
-              mediaUrl: true,
               correctBool:true,
               correctText: true,
               points: true,
-              order: true
+              order: true,
+              videoId: true,
+              video: { select: { videoId: true, url: true, title: true } },
             }
           }
         }

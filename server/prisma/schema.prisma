@@ -83,12 +83,14 @@ model Question {
   questionId          Int      @id @default(autoincrement())
   type        QuestionType
   text        String
-  mediaUrl    String?   // video/audio/image
   correctBool Boolean?  // for QCM and VIDEOS
   correctText String?   // for open questions
   points      Int      @default(1)
   order       Int      @unique
   choices     String[]
+  videoId Int?  
+  video   Video? @relation(fields: [videoId], references: [videoId], onDelete: Cascade)
+
 
   responses   TestResponse[]
 }
@@ -108,6 +110,14 @@ model TestResponse {
   answerText String?
   score      Int?     // auto or manual
 }
+
+model Video {
+  videoId   Int      @id @default(autoincrement())
+  url       String
+  title     String?
+  questions Question[]
+}
+
 
 enum QuestionType {
   QCM

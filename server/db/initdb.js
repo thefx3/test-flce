@@ -3,11 +3,20 @@ import prisma from "../prisma/prisma.js";
 export async function initDb() {
   console.log("🔄 Seeding default questions…");
 
+  // Avoid reseeding if data already exists
   const existing = await prisma.question.count();
   if (existing > 0) {
     console.log("➡️ Questions already exist, skipping.");
     return;
   }
+
+  // Create a placeholder video for VIDEO questions (replace url/title as needed)
+  const defaultVideo = await prisma.video.create({
+    data: {
+      url: "https://example.com/video.mp4",
+      title: "Vidéo de compréhension",
+    },
+  });
 
   const questions = [
     {
@@ -137,53 +146,53 @@ export async function initDb() {
         order: 21,
         type: "VIDEO",
         text: "Les étudiantes sont {{BLANK}}.",
-        mediaUrl: null, // ajoute ton URL de vidéo
         choices: ["Allemandes", "Anglaises", "Mexicaines"],
         correctText: "Mexicaines",
+        videoId: defaultVideo.videoId,
       },
       {
         order: 22,
         type: "VIDEO",
         text: "Il y a cours {{BLANK}}.",
-        mediaUrl: null,
         choices: ["5h par semaine", "6h par semaine", "8h par semaine"],
         correctText: "6h par semaine",
+        videoId: defaultVideo.videoId,
       },
       {
         order: 23,
         type: "VIDEO",
         text: "Les cours {{BLANK}}.",
-        mediaUrl: null,
         choices: ["ont commencé", "commencent bientôt", "on ne sait pas"],
         correctText: "commencent bientôt",
+        videoId: defaultVideo.videoId,
       },
       {
         order: 24,
         type: "VIDEO",
         text: "Le prix est de {{BLANK}}.",
-        mediaUrl: null,
         choices: ["2000 euros", "1700 euros", "1600 euros"],
         correctText: "1600 euros",
+        videoId: defaultVideo.videoId,
       },
       {
         order: 25,
         type: "VIDEO",
         text: "La personne au téléphone cherche {{BLANK}}.",
-        mediaUrl: null,
         choices: [
           "des cours de musique",
           "des cours de français",
           "des cours de danse",
         ],
         correctText: "des cours de français",
+        videoId: defaultVideo.videoId,
       },
       {
         order: 26,
         type: "VIDEO",
         text: "L'étudiante fait {{BLANK}}.",
-        mediaUrl: null,
         choices: ["de la guitare", "de la danse", "du sport"],
         correctText: "de la danse",
+        videoId: defaultVideo.videoId,
       },
       {
         order: 27,
@@ -241,12 +250,15 @@ export async function initDb() {
 
   await prisma.question.createMany({
     data: questions.map(q => ({
-      ...q,
-      type: "QCM",
-      mediaUrl: null,
-      correctBool: null,
+      order: q.order,
+      type: q.type ?? "QCM",
+      text: q.text,
+      choices: q.choices ?? [],
+      correctText: q.correctText ?? null,
+      correctBool: q.correctBool ?? null,
+      points: q.points ?? 1,
+      videoId: q.videoId ?? null,
     })),
   });
-
-  console.log("✔ Questions for the test inserted.");
+  console.log("✔ All questions for the test inserted.");
 }

@@ -1,25 +1,29 @@
 // models/questionModel.js
 import prisma from "../prisma/prisma.js";
 
+const videoSelect = { videoId: true, url: true, title: true };
+
 const adminQuestionSelect = {
   questionId: true,
   type: true,
   text: true,
-  mediaUrl: true,
   choices: true,
   correctBool: true,
   correctText: true,
   points: true,
   order: true,
+  videoId: true,
+  video: { select: videoSelect },
 };
 
 const publicQuestionSelect = {
   questionId: true,
   type: true,
   text: true,
-  mediaUrl: true,
   choices: true,
   order: true,
+  videoId: true,
+  video: { select: videoSelect },
 };
 
 function pickAllowedFields(source, allowedFields) {
@@ -35,6 +39,30 @@ function pickAllowedFields(source, allowedFields) {
 class QuestionModel {
 
 //Public
+async getQuestionsQCMPublic(){
+  return prisma.question.findMany({
+    where: { type: "QCM" },
+    orderBy: { order: "asc" },
+    select: publicQuestionSelect,
+  });
+}
+
+async getQuestionsVIDEOPublic(){
+  return prisma.question.findMany({
+    where: { type: "VIDEO" },
+    orderBy: { order: "asc" },
+    select: publicQuestionSelect,
+  });
+}
+
+async getQuestionsOPENPublic(){
+  return prisma.question.findMany({
+    where: { type: "OPEN" },
+    orderBy: { order: "asc" },
+    select: publicQuestionSelect,
+  });
+}
+
 async getAllQuestionsPublic() {
   return prisma.question.findMany({
     orderBy: { order: "asc" },
@@ -55,6 +83,30 @@ async getQuestionByIdPublic(questionId) {
 }
 
 //Admin
+async getQuestionsQCMAdmin(){
+  return prisma.question.findMany({
+    where: { type: "QCM" },
+    orderBy: { order: "asc" },
+    select: adminQuestionSelect,
+  });
+}
+
+async getQuestionsVIDEOAdmin(){
+  return prisma.question.findMany({
+    where: { type: "VIDEO" },
+    orderBy: { order: "asc" },
+    select: adminQuestionSelect,
+  });
+}
+
+async getQuestionsOPENAdmin(){
+  return prisma.question.findMany({
+    where: { type: "OPEN" },
+    orderBy: { order: "asc" },
+    select: adminQuestionSelect,
+  });
+}
+
 async getAllQuestionsAdmin() {
   return prisma.question.findMany({
     orderBy: { order: "asc" },
@@ -74,12 +126,12 @@ async createQuestion(data) {
     data: {
       type: data.type,
       text: data.text,
-      mediaUrl: data.mediaUrl ?? null,
       choices: data.choices ?? [],
       correctBool: data.correctBool ?? null,
       correctText: data.correctText ?? null,
       points: data.points ?? 1,
       order: Number(data.order),
+      videoId: data.videoId ?? null,
     },
     select: adminQuestionSelect,
   });
@@ -89,12 +141,12 @@ async updateQuestion(questionId, data) {
   const allowedFields = [
     "type",
     "text",
-    "mediaUrl",
     "choices",
     "correctBool",
     "correctText",
     "points",
     "order",
+    "videoId",
   ];
 
   const safeData = pickAllowedFields(data, allowedFields);
