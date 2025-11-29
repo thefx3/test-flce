@@ -189,6 +189,9 @@ async getSingleTestAdmin(testId) {
   return mapTest(test);
 }
 
+async countAllTestsAdmin(){
+  return prisma.test.count()
+}
 
 async deleteSingleTest(testId){
   return prisma.test.delete({ where: { testId } });

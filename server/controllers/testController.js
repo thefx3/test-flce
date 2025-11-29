@@ -41,7 +41,7 @@ async function ensureTestAccess({ testId, userIdParam, req, res }) {
 class TestController {
 
 //Public
-async getAllTests(req, res, next) {
+async getAllTests(req, res, next) { 
     try {
       const userId = parseId(req.params.userId, "user id", res);
       if (!userId) return;
@@ -177,6 +177,16 @@ async getAllTestsAdmin(req, res, next) {
     next(err);
   }
 }
+
+async countAllTestsAdmin(req, res, next) {
+  try {
+    const count = await prisma.test.count();
+    res.json({ totalTests: count });
+  } catch (err) {
+    next(err);
+  }
+}
+
 
 async getTestAdmin(req, res, next) {
   try {
