@@ -2,6 +2,7 @@
 import { Router } from "express";
 import publicController from "../controllers/publicController.js";
 import testSessionRequired from "../auth/testSessionRequired.js";
+import questionController from "../controllers/questionController.js";
 
 const router = Router();
 
@@ -9,6 +10,9 @@ const router = Router();
 router.post("/start-test", publicController.startTest);
 
 // Public questions list
+router.get("/questions/OPEN", questionController.getQuestionsOPENPublic); //To do
+router.get("/questions/VIDEO", questionController.getQuestionsVIDEOPublic); //To do
+router.get("/questions/QCM", questionController.getQuestionsQCMPublic); //To do
 router.get("/questions", publicController.getQuestions);
 
 router.post("/tests/:testId/responses", testSessionRequired, publicController.submitResponses);
