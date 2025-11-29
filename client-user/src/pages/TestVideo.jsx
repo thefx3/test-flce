@@ -1,21 +1,21 @@
-// src/pages/TestQuestions.jsx
+// src/pages/TestVideo.jsx
 import { useEffect, useState } from "react";
-import { fetchQuestionsVIDEO, submitResponses } from "../api/publicApi";
+import { fetchVideosWithQuestions, submitResponses } from "../api/publicApi";
 
 export default function TestVideo({ testId, sessionToken, onSubmitted }) {
-  const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState({}); // { [questionId]: selectedValue }
+  const [videos, setVideos] = useState([]);       // [{ videoId, url, questions: [] }]
+  const [answers, setAnswers] = useState({});     // { [questionId]: selectedValue }
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch all questions from backend
+  // Fetch grouped videos + questions
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetchQuestionsVIDEO(sessionToken); 
-        setQuestions(res);
+        const data = await fetchVideosWithQuestions(sessionToken);
+        setVideos(data);
       } catch (err) {
-        console.error("Error fetching questions:", err);
+        console.error("Error fetching video questions:", err);
       } finally {
         setLoading(false);
       }
@@ -23,7 +23,7 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
     load();
   }, [sessionToken]);
 
-  // Update answer for a specific question
+  // Update answer
   function handleAnswer(questionId, value) {
     setAnswers(prev => ({
       ...prev,
@@ -31,7 +31,7 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
     }));
   }
 
-  // Submit answer to backend
+  // Submit all answers
   async function handleSubmit() {
     setSubmitting(true);
 
@@ -42,7 +42,7 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
       }));
 
       await submitResponses(testId, payload, sessionToken);
-      onSubmitted(); // move to end screen
+      onSubmitted();
 
     } catch (err) {
       console.error("Error submitting:", err);
@@ -51,14 +51,13 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
     }
   }
 
-  // Format each question into fragments
+  // Render a single QCM question with dropdown
   function renderQuestion(q) {
     const [before, after] = q.text.split("{{BLANK}}");
 
     return (
       <div key={q.questionId} className="question-block">
         <p className="question-text">
-          {q.order}
           {before}
 
           <select
@@ -83,14 +82,27 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
   return (
     <div className="questions-container">
 
-      <h2 className="test-title">Grammar Section</h2>
+      <h2 className="test-title">Test de compréhension vidéo</h2>
 
-      {questions.map(q => renderQuestion(q))}
+      {videos.map(video => (
+        <div key={video.videoId} className="video-section">
+
+          {/* ▶️ VIDEO */}
+          <video
+            src={video.url}
+            controls
+            className="video-player"
+            style={{ width: "100%", marginBottom: "20px", borderRadius: "10px" }}
+          />
+
+          {/* 📝 QUESTIONS ASSOCIÉES */}
+          {video.questions.map(q => renderQuestion(q))}
+        </div>
+      ))}
 
       <button
         className="submit-btn"
         onClick={handleSubmit}
-        // disabled={submitting || Object.keys(answers).length < questions.length}
       >
         {submitting ? "Loading…" : "Next"}
       </button>

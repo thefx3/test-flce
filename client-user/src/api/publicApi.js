@@ -45,6 +45,16 @@ export async function fetchQuestionsOPEN() {
   return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
 }
 
+export async function fetchVideosWithQuestions() {
+  const res = await fetch(`${API_BASE}/questions/videos`);
+
+  if (!res.ok) {
+    throw new Error("Erreur while fetching questions & videos");
+  }
+
+  return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
+}
+
 export async function submitResponses(testId, responses, sessionToken) {
   const res = await fetch(`${API_BASE}/tests/${testId}/responses`, {
     method: "POST",
