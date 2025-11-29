@@ -1,16 +1,99 @@
 // src/pages/TestEnd.jsx
-export default function TestEnd() {
+import { useEffect, useState } from "react";
+import { fetchQuestionsOPEN, submitResponses } from "../api/publicApi";
+
+export default function TestEnd({ testId, sessionToken, onSubmitted }) {
+  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState({}); // { [questionId]: selectedValue }
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Fetch all questions from backend
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetchQuestionsOPEN(sessionToken); 
+        setQuestions(res);
+      } catch (err) {
+        console.error("Error fetching questions:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [sessionToken]);
+
+  // Update answer for a specific question
+  function handleAnswer(questionId, value) {
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: value
+    }));
+  }
+
+  // Submit answer to backend
+  async function handleSubmit() {
+    setSubmitting(true);
+
+    try {
+      const payload = Object.entries(answers).map(([questionId, value]) => ({
+        questionId: Number(questionId),
+        answerText: value
+      }));
+
+      await submitResponses(testId, payload, sessionToken);
+      onSubmitted(); // move to end screen
+
+    } catch (err) {
+      console.error("Error submitting:", err);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  // Format each question into fragments
+  function renderQuestion(q) {
+    const [before, after] = q.text.split("{{BLANK}}");
+
     return (
-      <div className="bg-white rounded-xl shadow-lg p-6 text-center">
-        <h1 className="text-2xl font-bold mb-3">Merci ! 🎉</h1>
-        <p className="text-gray-700 mb-2">
-          Votre test a bien été soumis. Il sera corrigé par un responsable.
-        </p>
-        <p className="text-sm text-gray-500">
-          Vous pourrez consulter votre niveau ultérieurement dans &quot;Mes
-          résultats&quot;.
+      <div key={q.questionId} className="question-block">
+        <p className="question-text">
+          {q.order}
+          {before}
+
+          <select
+            className="dropdown"
+            value={answers[q.questionId] || ""}
+            onChange={(e) => handleAnswer(q.questionId, e.target.value)}
+          >
+            <option value="">---</option>
+            {q.choices.map(choice => (
+              <option key={choice} value={choice}>{choice}</option>
+            ))}
+          </select>
+
+          {after}
         </p>
       </div>
     );
   }
-  
+
+  if (loading) return <p>Loading questions…</p>;
+
+  return (
+    <div className="questions-container">
+
+      <h2 className="test-title">Grammar Section</h2>
+
+      {questions.map(q => renderQuestion(q))}
+
+      <button
+        className="submit-btn"
+        onClick={handleSubmit}
+        // disabled={submitting || Object.keys(answers).length < questions.length}
+      >
+        {submitting ? "Submitting…" : "Submit Test"}
+      </button>
+    </div>
+  );
+}

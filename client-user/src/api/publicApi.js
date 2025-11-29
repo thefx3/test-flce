@@ -16,10 +16,30 @@ export async function startTest(data) {
 }
 
 export async function fetchQuestionsQCM() {
-  const res = await fetch(`${API_BASE}/questions`);
+  const res = await fetch(`${API_BASE}/questions/QCM`);
 
   if (!res.ok) {
-    throw new Error("Erreur lors du chargement des questions");
+    throw new Error("Erreur while fetching qcm questions");
+  }
+
+  return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
+}
+
+export async function fetchQuestionsVIDEO() {
+  const res = await fetch(`${API_BASE}/questions/VIDEO`);
+
+  if (!res.ok) {
+    throw new Error("Erreur while fetching video questions");
+  }
+
+  return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
+}
+
+export async function fetchQuestionsOPEN() {
+  const res = await fetch(`${API_BASE}/questions/OPEN`);
+
+  if (!res.ok) {
+    throw new Error("Erreur while fetching open questions");
   }
 
   return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
@@ -37,7 +57,7 @@ export async function submitResponses(testId, responses, sessionToken) {
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || "Erreur lors de l'envoi des réponses");
+    throw new Error(err.message || "Erreur while submitting responses");
   }
 
   return res.json();

@@ -92,9 +92,9 @@ export default function TestQuestions({ testId, sessionToken, onSubmitted }) {
       <button
         className="submit-btn"
         onClick={handleSubmit}
-        disabled={submitting || Object.keys(answers).length < questions.length}
+        // disabled={submitting || Object.keys(answers).length < questions.length}
       >
-        {submitting ? "Submitting…" : "Submit test"}
+        {submitting ? "Loading…" : "Next"}
       </button>
     </div>
   );

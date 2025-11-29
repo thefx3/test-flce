@@ -1,6 +1,6 @@
 // src/pages/TestQuestions.jsx
 import { useEffect, useState } from "react";
-import { fetchQuestions, submitResponses } from "../api/publicApi";
+import { fetchQuestionsVIDEO, submitResponses } from "../api/publicApi";
 
 export default function TestVideo({ testId, sessionToken, onSubmitted }) {
   const [questions, setQuestions] = useState([]);
@@ -12,7 +12,7 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetchQuestions(sessionToken); 
+        const res = await fetchQuestionsVIDEO(sessionToken); 
         setQuestions(res);
       } catch (err) {
         console.error("Error fetching questions:", err);
@@ -58,6 +58,7 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
     return (
       <div key={q.questionId} className="question-block">
         <p className="question-text">
+          {q.order}
           {before}
 
           <select
@@ -89,9 +90,9 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
       <button
         className="submit-btn"
         onClick={handleSubmit}
-        disabled={submitting || Object.keys(answers).length < questions.length}
+        // disabled={submitting || Object.keys(answers).length < questions.length}
       >
-        {submitting ? "Submitting…" : "Submit test"}
+        {submitting ? "Loading…" : "Next"}
       </button>
     </div>
   );
