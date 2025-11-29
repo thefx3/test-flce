@@ -3,7 +3,7 @@ import prisma from "../prisma/prisma.js";
 export async function initDb() {
   console.log("🔄 Checking existing questions…");
 
-  const intendedCount = 32; // nombre exact de questions dans ton seed
+  const intendedCount = 33; // nombre exact de questions dans ton seed
   const existingCount = await prisma.question.count();
 
   // Si mismatch → wipe et reseed
@@ -25,14 +25,23 @@ export async function initDb() {
   // ------------------------------
   // 1. CREATE THE VIDEO ENTRY
   // ------------------------------
-  const defaultVideo = await prisma.video.create({
+  const defaultVideo1 = await prisma.video.create({
     data: {
-      url: "https://example.com/video.mp4",
-      title: "Vidéo de compréhension orale",
+      url: "https://cyziosjggxrlajefzyzd.supabase.co/storage/v1/object/public/videos/Legends%20Never%20Die%20-%20Avengers%20Infinity%20War.mp4",
+      title: "Legends Never Die",
     },
   });
 
-  console.log(`🎬 Video created with ID ${defaultVideo.videoId}`);
+  console.log(`🎬 Video 1 created with ID ${defaultVideo1.videoId}`);
+
+  const defaultVideo2 = await prisma.video.create({
+    data: {
+      url: "https://cyziosjggxrlajefzyzd.supabase.co/storage/v1/object/public/videos/Warriors%20-%20League%20of%20Legends.mp4",
+      title: "Warriors",
+    },
+  });
+
+  console.log(`🎬 Video 2 created with ID ${defaultVideo2.videoId}`);
 
   // ------------------------------
   // 2. ALL QUESTIONS
@@ -192,7 +201,7 @@ export async function initDb() {
       text: "Les étudiantes sont {{BLANK}}.",
       choices: ["Allemandes", "Anglaises", "Mexicaines"],
       correctText: "Mexicaines",
-      videoId: defaultVideo.videoId,
+      videoId: defaultVideo1.videoId,
     },
     {
       order: 22,
@@ -200,7 +209,7 @@ export async function initDb() {
       text: "Il y a cours {{BLANK}}.",
       choices: ["5h par semaine", "6h par semaine", "8h par semaine"],
       correctText: "6h par semaine",
-      videoId: defaultVideo.videoId,
+      videoId: defaultVideo1.videoId,
     },
     {
       order: 23,
@@ -208,7 +217,7 @@ export async function initDb() {
       text: "Les cours {{BLANK}}.",
       choices: ["ont commencé", "commencent bientôt", "on ne sait pas"],
       correctText: "commencent bientôt",
-      videoId: defaultVideo.videoId,
+      videoId: defaultVideo1.videoId,
     },
     {
       order: 24,
@@ -216,7 +225,7 @@ export async function initDb() {
       text: "Le prix est de {{BLANK}}.",
       choices: ["2000 euros", "1700 euros", "1600 euros"],
       correctText: "1600 euros",
-      videoId: defaultVideo.videoId,
+      videoId: defaultVideo2.videoId,
     },
     {
       order: 25,
@@ -224,7 +233,7 @@ export async function initDb() {
       text: "La personne au téléphone cherche {{BLANK}}.",
       choices: ["des cours de musique", "des cours de français", "des cours de danse"],
       correctText: "des cours de français",
-      videoId: defaultVideo.videoId,
+      videoId: defaultVideo2.videoId,
     },
     {
       order: 26,
@@ -232,7 +241,7 @@ export async function initDb() {
       text: "L'étudiante fait {{BLANK}}.",
       choices: ["de la guitare", "de la danse", "du sport"],
       correctText: "de la danse",
-      videoId: defaultVideo.videoId,
+      videoId: defaultVideo2.videoId,
     },
 
     // Question ouverte liée à la vidéo
@@ -242,7 +251,7 @@ export async function initDb() {
       text: "Expliquez en une phrase le problème de la dame à la fin de la vidéo.",
       choices: [],
       correctText: null,
-      videoId: defaultVideo.videoId,
+      videoId: defaultVideo2.videoId,
     },
 
     // -----------------------------
@@ -283,6 +292,15 @@ export async function initDb() {
       choices: [],
       correctText: null,
     },
+
+    {
+      order: 33,
+      type: "OPEN",
+      text: "Notes ?",
+      choices: [],
+      correctText: null,
+    },
+
   ];
 
   // Insert final

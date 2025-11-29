@@ -5,8 +5,8 @@ import questionController from "../controllers/questionController.js";
 const router = Router();
 
 //Public
-router.get("/Open", questionController.getQuestionsOPENPublic);
-router.get("/Video", questionController.getQuestionsVIDEOPublic);
+router.get("/OPEN", questionController.getQuestionsOPENPublic);
+router.get("/VIDEO", questionController.getQuestionsVIDEOPublic);
 router.get("/QCM", questionController.getQuestionsQCMPublic);
 
 router.get("/", questionController.getAllQuestionsPublic);

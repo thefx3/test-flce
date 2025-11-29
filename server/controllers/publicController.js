@@ -92,6 +92,24 @@ async function getQuestion(req, res) {
   }
 }
 
+async function getVideosWithQuestions(req, res) {
+  try {
+    const videos = await prisma.video.findMany({
+      include: {
+        questions: {
+          orderBy: { order: "asc" },
+        }
+      }
+    });
+
+    res.json(videos);
+
+  } catch (err) {
+    console.error("Error fetching videos:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
 
 async function submitResponses(req, res) {
   try {
@@ -159,4 +177,5 @@ export default {
   getQuestions,
   getQuestion,
   submitResponses,
+  getVideosWithQuestions
 };

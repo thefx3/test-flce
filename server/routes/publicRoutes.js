@@ -10,6 +10,7 @@ const router = Router();
 router.post("/start-test", publicController.startTest);
 
 // Public questions list
+router.get("/questions/videos", publicController.getVideosWithQuestions);
 router.get("/questions/OPEN", questionController.getQuestionsOPENPublic); //To do
 router.get("/questions/VIDEO", questionController.getQuestionsVIDEOPublic); //To do
 router.get("/questions/QCM", questionController.getQuestionsQCMPublic); //To do
