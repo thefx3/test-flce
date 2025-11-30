@@ -1,57 +1,60 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import StartTestForm from "./StartTestForm";
-import TestQuestions from "./TestQuestions";
-import TestVideo from "./TestVideo";
-import TestEnd from "./TestEnd";
+import TestForm from "./Test-1-Form";
+import TestQuestions from "./Test-2-Questions";
+import TestVideo from "./Test-3-Video";
+import TestOpen from "./Test-4-Open";
 
 export default function TestInterface() {
   const navigate = useNavigate();
 
-  const [step, setStep] = useState("start");
+  const [step, setStep] = useState("form");
   const [testId, setTestId] = useState(null);
   const [sessionToken, setSessionToken] = useState(null);
 
-  function handleStartSuccess({ testId, sessionToken }) {
+  function handleForm({ testId, sessionToken }) {
     setTestId(testId);
     setSessionToken(sessionToken);
-    setStep("questions"); // move to QCM section
+    setStep("qcm"); // move to QCM section
   }
 
-  function handleNext() {
-    setStep("part2"); // move to VIDEO section
+  function handleVideo() {
+    setStep("video"); // move to VIDEO section
+  }
+
+  function handleOpen() {
+    setStep("open"); // move to OPEN section
   }
 
   function handleTestSubmitted() {
-    setStep("end");
     setTimeout(() => navigate("/"), 2500);
   }
 
   return (
     <div className="french-test">
 
-      {step === "start" && (
-        <StartTestForm onSuccess={handleStartSuccess} />
+      {step === "form" && (
+        <TestForm onSuccess={handleForm} />
       )}
 
-      {step === "questions" && (
+      {step === "qcm" && (
         <TestQuestions
           testId={testId}
           sessionToken={sessionToken}
-          onSubmitted={handleNext}
+          onSubmitted={handleVideo}
         />
       )}
 
-      {step === "part2" && (
+      {step === "video" && (
         <TestVideo
           testId={testId}
           sessionToken={sessionToken}
-          onSubmitted={handleTestSubmitted}
+          onSubmitted={handleOpen}
         />
       )}
 
-      {step === "end" && <TestEnd />}
+      {step === "open" && <TestOpen onSubmitted={handleTestSubmitted}/>}
     </div>
   );
 }

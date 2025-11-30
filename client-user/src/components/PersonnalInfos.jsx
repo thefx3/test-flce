@@ -1,4 +1,4 @@
-import "../components/StartTestForm.css";
+import "../components/TestForm.css";
 
 export default function PersonnalInfos({ form, onChange }) {
   return (
