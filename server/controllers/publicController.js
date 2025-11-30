@@ -110,7 +110,6 @@ async function getVideosWithQuestions(req, res) {
   }
 }
 
-
 async function submitResponses(req, res) {
   try {
     const testId = Number(req.params.testId);
@@ -170,7 +169,6 @@ async function submitResponses(req, res) {
     res.status(500).json({ message: "Internal error" });
   }
 }
-
 
 export default {
   startTest,

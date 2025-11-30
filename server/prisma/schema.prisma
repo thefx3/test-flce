@@ -48,6 +48,7 @@ model Profile {
   arrivaldate       DateTime?
 
   level             String?
+  comment           String?
 }
 
 // -------------------- AU-PAIR FAMILY -----------------

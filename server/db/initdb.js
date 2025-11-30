@@ -3,7 +3,7 @@ import prisma from "../prisma/prisma.js";
 export async function initDb() {
   console.log("🔄 Checking existing questions…");
 
-  const intendedCount = 33; // nombre exact de questions dans ton seed
+  const intendedCount = 32; // nombre exact de questions dans ton seed
   const existingCount = await prisma.question.count();
 
   // Si mismatch → wipe et reseed
@@ -180,14 +180,14 @@ export async function initDb() {
     {
       order: 19,
       type: "QCM",
-      text: "… mais j'ai {{BLANK}} beaucoup pensé à toi.",
+      text: "Il y a longtemps que je ne t'ai pas téléphoné mais j'ai {{BLANK}} beaucoup pensé à toi.",
       choices: ["au fait", "quand même", "alors", "comme même"],
       correctText: "quand même",
     },
     {
       order: 20,
       type: "QCM",
-      text: "… il {{BLANK}} brusquement.",
+      text: "Quand l'homme au manteau blanc eut terminé son café, il {{BLANK}} brusquement.",
       choices: ["se leva", "se lève", "s'est levé", "se fut levé"],
       correctText: "se leva",
     },
@@ -289,14 +289,6 @@ export async function initDb() {
       order: 32,
       type: "OPEN",
       text: "À votre avis, qu'est-ce que les gens devraient faire pour bien vivre dans votre pays ?",
-      choices: [],
-      correctText: null,
-    },
-
-    {
-      order: 33,
-      type: "OPEN",
-      text: "Notes ?",
       choices: [],
       correctText: null,
     },
