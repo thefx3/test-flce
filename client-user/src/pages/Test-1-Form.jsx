@@ -93,7 +93,7 @@ export default function StartTestForm({ onSuccess }) {
   }
 
   return (
-    <div className="start-container">
+    <div className="test-wrapper">
       <h1 className="start-title">Informations Details</h1>
       <p className="start-subtitle">
         

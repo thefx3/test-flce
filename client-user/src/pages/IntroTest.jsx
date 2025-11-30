@@ -13,7 +13,7 @@ import {
 
 export default function IntroTest() {
   return (
-    <div className="intro">
+    <div className="test-wrapper">
 
       {/* HERO SECTION */}
       <section className="hero">

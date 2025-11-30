@@ -37,7 +37,7 @@ export default function TestOpen({ testId, sessionToken, onSubmitted }) {
   return (
     <div className="test-wrapper">
 
-      <h2 className="test-title">French Test - Part 3 and Last One</h2>
+      <h2 className="test-title">LA CLEF French Test - Part 3</h2>
 
       <div className="form-section first-section">
         <p className="instructions">
