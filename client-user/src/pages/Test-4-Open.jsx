@@ -49,9 +49,9 @@ export default function TestOpen({ sessionToken, onSubmitted }) {
   if (loading) return <p>Loading…</p>;
   if (error) return <p>{error}</p>;
 
-  const allAnswered = questions.length > 0 && questions.every(
-    (q) => answers[q.questionId] && answers[q.questionId].trim() !== ""
-  );
+  // const allAnswered = questions.length > 0 && questions.every(
+  //   (q) => answers[q.questionId] && answers[q.questionId].trim() !== ""
+  // );
 
   return (
     <div className="test-wrapper">

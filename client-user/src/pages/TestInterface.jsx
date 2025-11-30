@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import TestForm from "./Test-1-Form";
 import TestQuestions from "./Test-2-Questions";
 import TestVideo from "./Test-3-Video";
@@ -8,13 +6,19 @@ import TestOpen from "./Test-4-Open";
 import Submitted from "../components/Submitted";
 
 export default function TestInterface() {
-  const navigate = useNavigate();
 
   const [step, setStep] = useState("form");
   const [testId, setTestId] = useState(null);
   const [sessionToken, setSessionToken] = useState(null);
   const [allAnswers, setAllAnswers] = useState({});
   const [submitting, setSubmitting] = useState(false);
+
+  function resetSession() {
+    setTestId(null);
+    setSessionToken(null);
+    setAllAnswers({});
+    setStep("form");
+  }
 
   function mergeAnswers(partial) {
     setAllAnswers(prev => ({ ...prev, ...partial }));
@@ -56,6 +60,7 @@ export default function TestInterface() {
       setSubmitting(false);
       setStep("submitted");
     }
+
   }
 
   return (
@@ -88,7 +93,11 @@ export default function TestInterface() {
       )}
 
       {step === "submitted" && (
-        <Submitted testId={testId} sessionToken={sessionToken} />
+        <Submitted
+          testId={testId}
+          sessionToken={sessionToken}
+          onReset={resetSession}
+        />
       )}
     </div>
   );

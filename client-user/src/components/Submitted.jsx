@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { submitComment } from "../api/publicApi";
 import "../components/TestForm.css";
 
-export default function Submitted({ testId, sessionToken }) {
+export default function Submitted({ testId, sessionToken, onReset }) {
   const navigate = useNavigate();
   const [wantsComment, setWantsComment] = useState(false);
   const [comment, setComment] = useState("");
@@ -15,6 +15,7 @@ export default function Submitted({ testId, sessionToken }) {
     setSubmitting(true);
     try {
       await submitComment(testId, comment, sessionToken);
+      onReset?.();
       navigate("/");
     } catch (err) {
       setError(err.message || "Unable to send your comment");
@@ -24,6 +25,7 @@ export default function Submitted({ testId, sessionToken }) {
   }
 
   function handleSkip() {
+    onReset?.();
     navigate("/");
   }
 
