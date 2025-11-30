@@ -69,13 +69,14 @@ model AuPairFamily {
 // -------------------- TEST ----------------------------
 
 model Test {
-  testId          Int           @id @default(autoincrement())
+  testId      Int           @id @default(autoincrement())
 
   user        User          @relation(fields: [userId], references: [userId], onDelete: Cascade)
   userId      Int           @unique
   status      TestStatus    @default(IN_PROGRESS)
 
   testresponse TestResponse[]
+  created     DateTime      @default(now())
 }
 
 // -------------------- QUESTION BANK -------------------
