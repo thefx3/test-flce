@@ -26,6 +26,7 @@ model User {
     profile       Profile?
     aupairfamily  AuPairFamily[]
     frenchtest    Test[]
+    comment       String?
 }
 
 // -------------------- PROFILE -----------------------
@@ -48,7 +49,6 @@ model Profile {
   arrivaldate       DateTime?
 
   level             String?
-  comment           String?
 }
 
 // -------------------- AU-PAIR FAMILY -----------------

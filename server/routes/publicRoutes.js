@@ -17,5 +17,6 @@ router.get("/questions/QCM", questionController.getQuestionsQCMPublic); //To do
 router.get("/questions", publicController.getQuestions);
 
 router.post("/tests/:testId/responses", testSessionRequired, publicController.submitResponses);
+router.post("/tests/:testId/comment", testSessionRequired, publicController.submitComment);
 
 export default router;

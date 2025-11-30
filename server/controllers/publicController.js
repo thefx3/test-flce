@@ -170,10 +170,42 @@ async function submitResponses(req, res) {
   }
 }
 
+async function submitComment(req, res) {
+  try {
+    const testId = Number(req.params.testId);
+    if (Number.isNaN(testId)) {
+      return res.status(400).json({ message: "Invalid id" });
+    }
+
+    const comment = (req.body?.comment || "").trim();
+    if (!comment) {
+      return res.status(400).json({ message: "Comment is required" });
+    }
+
+    // Find test to get userId
+    const test = await prisma.test.findUnique({
+      where: { testId },
+      select: { userId: true },
+    });
+    if (!test) return res.status(404).json({ message: "Test not found" });
+
+    await prisma.user.update({
+      where: { userId: test.userId },
+      data: { comment },
+    });
+
+    return res.json({ message: "Comment saved" });
+  } catch (err) {
+    console.error("Error submitting comment:", err);
+    res.status(500).json({ message: "Internal error" });
+  }
+}
+
 export default {
   startTest,
   getQuestions,
   getQuestion,
   submitResponses,
-  getVideosWithQuestions
+  getVideosWithQuestions,
+  submitComment,
 };

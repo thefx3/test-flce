@@ -8,10 +8,25 @@ const { Pool } = pg;
 // Re-use a single pool/prisma instance in dev to avoid exhausting connections with nodemon reloads
 const globalForPrisma = globalThis;
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // Supabase en prod/dev
-});
+const baseUrl = process.env.DATABASE_URL;
+const poolSize = Number(process.env.PG_POOL_SIZE || 5);
 
+// Supabase pooler in session mode is strict: cap clients and enable pgbouncer when requested
+const usePgBouncer = process.env.PGBOUNCER === "true";
+let connectionString = baseUrl;
+
+if (usePgBouncer && baseUrl) {
+  const url = new URL(baseUrl);
+  url.searchParams.set("pgbouncer", "true");
+  url.searchParams.set("connection_limit", poolSize.toString());
+  connectionString = url.toString();
+}
+
+const pool = new Pool({
+  connectionString,
+  max: poolSize,
+  idleTimeoutMillis: 10_000,
+});
 
 const adapter = new PrismaPg(pool);
 
@@ -26,6 +41,5 @@ if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
   globalForPrisma.pgPool = pool;
 }
-
 
 export default prisma;
