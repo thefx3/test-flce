@@ -1,15 +1,15 @@
 import { useEffect, useState, useMemo, createRef } from "react";
-import { fetchVideosWithQuestions, submitResponses } from "../api/publicApi";
+import { fetchVideosWithQuestions } from "../api/publicApi";
 
-export default function TestVideo({ testId, sessionToken, onSubmitted }) {
+export default function TestVideo({ sessionToken, onSubmitted }) {
   const [videos, setVideos] = useState([]);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  // stepByVideo[videoId] = "read" | "video" | "answer"
+  // stepByVideo[videoId] = "init" | "read" | "video" | "answer"
   const [stepByVideo, setStepByVideo] = useState({});
-  
   // playCount[videoId] = nombre de lectures
   const [playCount, setPlayCount] = useState({});
 
@@ -24,20 +24,28 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
 
   useEffect(() => {
     async function load() {
-      const data = await fetchVideosWithQuestions(sessionToken);
-      setVideos(data);
+      setLoading(true);
+      setError("");
+      try {
+        const data = await fetchVideosWithQuestions(sessionToken);
+        setVideos(data);
 
-      const initialSteps = {};
-      const initialPlays = {};
+        const initialSteps = {};
+        const initialPlays = {};
 
-      data.forEach((v) => {
-        initialSteps[v.videoId] = "init"; // default step
-        initialPlays[v.videoId] = 0;       // never watched
-      });
+        data.forEach((v) => {
+          initialSteps[v.videoId] = "init"; // l'utilisateur doit cliquer "Read questions"
+          initialPlays[v.videoId] = 0;
+        });
 
-      setStepByVideo(initialSteps);
-      setPlayCount(initialPlays);
-      setLoading(false);
+        setStepByVideo(initialSteps);
+        setPlayCount(initialPlays);
+      } catch (err) {
+        console.error("Error fetching videos:", err);
+        setError("An error occurred while loading the videos.");
+      } finally {
+        setLoading(false);
+      }
     }
     load();
   }, [sessionToken]);
@@ -47,11 +55,12 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
     setAnswers((prev) => ({ ...prev, [id]: value }));
   }
 
-  // BLOCK PAUSE & LIMIT PLAY TO 1
+  // Limite: 1 visionnage par vidéo
   function handleVideoPlay(videoId, videoEl) {
     const count = playCount[videoId] || 0;
 
     if (count >= 1) {
+      // Déjà regardée une fois → pas de replay
       videoEl.pause();
       alert("You can only watch the video once.");
       return;
@@ -64,26 +73,34 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
   async function handleSubmit() {
     setSubmitting(true);
 
-    const payload = Object.entries(answers).map(([id, value]) => ({
-      questionId: Number(id),
-      answerText: value,
-    }));
+    // // Vérifier que toutes les questions (toutes vidéos confondues) ont une réponse
+    // const allQuestions = videos.flatMap((v) => v.questions);
+    // const allAnswered = allQuestions.every(
+    //   (q) => answers[q.questionId] && answers[q.questionId].trim() !== ""
+    // );
 
-    await submitResponses(testId, payload, sessionToken);
-    onSubmitted();
+    // if (!allAnswered) {
+    //   alert("Please answer all the questions before continuing.");
+    //   setSubmitting(false);
+    //   return;
+    // }
+
+    onSubmitted(answers);
+    setSubmitting(false);
   }
 
   if (loading) return <p>Loading videos…</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="test-wrapper">
-
       <h2 className="test-title">LA CLEF French Test — Part 2</h2>
 
       <div className="form-section first-section">
         <p className="instructions">
-          You will now watch one or more videos and answer questions.<br/>
-          <b>Warning:</b> once the video starts, you cannot pause or replay it.
+          You will now watch one or more videos and answer questions.
+          <br />
+          <b>Warning:</b> you can only watch each video once. Watch carefully!
         </p>
       </div>
 
@@ -93,42 +110,54 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
 
         return (
           <div key={video.videoId} className="test-card">
-
             <p className="video-x">Video n°{index + 1}</p>
 
             {/* STEP BUTTONS */}
             <div className="instructions-wrapper">
-
               <button
-                className={`button-instruction ${currentStep === "read" ? "active-step" : ""}`}
+                className={`button-instruction ${
+                  currentStep === "read" ? "active-step" : ""
+                }`}
                 disabled={currentStep !== "init"}
                 onClick={() =>
-                  setStepByVideo((prev) => ({ ...prev, [video.videoId]: "read" }))
+                  setStepByVideo((prev) => ({
+                    ...prev,
+                    [video.videoId]: "read",
+                  }))
                 }
               >
                 Read questions
               </button>
 
               <button
-                className={`button-instruction ${currentStep === "video" ? "active-step" : ""}`}
+                className={`button-instruction ${
+                  currentStep === "video" ? "active-step" : ""
+                }`}
                 disabled={currentStep !== "read"}
                 onClick={() =>
-                  setStepByVideo((prev) => ({ ...prev, [video.videoId]: "video" }))
+                  setStepByVideo((prev) => ({
+                    ...prev,
+                    [video.videoId]: "video",
+                  }))
                 }
               >
                 See video
               </button>
 
               <button
-                className={`button-instruction ${currentStep === "answer" ? "active-step" : ""}`}
+                className={`button-instruction ${
+                  currentStep === "answer" ? "active-step" : ""
+                }`}
                 disabled={currentStep !== "video"}
                 onClick={() =>
-                  setStepByVideo((prev) => ({ ...prev, [video.videoId]: "answer" }))
+                  setStepByVideo((prev) => ({
+                    ...prev,
+                    [video.videoId]: "answer",
+                  }))
                 }
               >
                 Answer questions
               </button>
-
             </div>
 
             {/* ========== READ QUESTIONS ========== */}
@@ -153,11 +182,14 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
             {/* ========== VIDEO STEP ========== */}
             {currentStep === "video" && (
               <div className="video-container">
-
                 {/* custom play btn */}
                 <button
                   className="button-instruction"
-                  onClick={() => videoEl.current.play()}
+                  onClick={() => {
+                    if (videoEl.current) {
+                      videoEl.current.play();
+                    }
+                  }}
                 >
                   ▶ Play video
                 </button>
@@ -167,16 +199,18 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
                   src={video.url}
                   controls={false}
                   onPlay={(e) => handleVideoPlay(video.videoId, e.target)}
-                  onPause={(e) => e.target.play()} // anti-pause
                   onEnded={() =>
                     setStepByVideo((prev) => ({
                       ...prev,
                       [video.videoId]: "answer",
                     }))
                   }
-                  style={{ width: "100%", borderRadius: "12px", marginTop: "15px" }}
+                  style={{
+                    width: "100%",
+                    borderRadius: "12px",
+                    marginTop: "15px",
+                  }}
                 />
-
               </div>
             )}
 
@@ -184,32 +218,38 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
             {currentStep === "answer" && (
               <div className="questions-block">
                 {video.questions.map((q) => {
-                  
                   if (q.type === "OPEN") {
                     return (
                       <div key={q.questionId} className="question-open">
-                        <p className="question-text">{q.order}. {q.text}</p>
+                        <p className="question-text">
+                          {q.order}. {q.text}
+                        </p>
 
                         <textarea
                           className="open-textarea"
                           maxLength={400}
                           value={answers[q.questionId] || ""}
-                          onChange={(e) => handleAnswer(q.questionId, e.target.value)}
+                          onChange={(e) =>
+                            handleAnswer(q.questionId, e.target.value)
+                          }
                         />
                       </div>
                     );
                   }
 
-                  const [before, after] = q.text.split("{{BLANK}}");
+                  const parts = q.text.split("{{BLANK}}");
+                  const before = parts[0] || "";
+                  const after = parts[1] || "";
 
                   return (
                     <div key={q.questionId} className="question-text">
                       {q.order}. {before}
-
                       <select
                         className="dropdown"
                         value={answers[q.questionId] || ""}
-                        onChange={(e) => handleAnswer(q.questionId, e.target.value)}
+                        onChange={(e) =>
+                          handleAnswer(q.questionId, e.target.value)
+                        }
                       >
                         <option value="">---</option>
                         {q.choices.map((choice) => (
@@ -218,7 +258,6 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
                           </option>
                         ))}
                       </select>
-
                       {after}
                     </div>
                   );
@@ -232,7 +271,6 @@ export default function TestVideo({ testId, sessionToken, onSubmitted }) {
       <button className="submit-btn" onClick={handleSubmit}>
         {submitting ? "Loading…" : "Next"}
       </button>
-
     </div>
   );
 }

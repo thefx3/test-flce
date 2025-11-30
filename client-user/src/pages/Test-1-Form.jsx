@@ -1,9 +1,8 @@
-// src/pages/StartTestForm.jsx
 import { useState } from "react";
 import PersonnalInfos from "../components/PersonnalInfos";
 import HostingFamily from "../components/HostingFamily";
 import { startTest } from "../api/publicApi";
-import "../components/TestForm.css"
+import "../components/TestForm.css";
 
 export default function StartTestForm({ onSuccess }) {
   const [auPair, setAuPair] = useState(false);
@@ -54,30 +53,32 @@ export default function StartTestForm({ onSuccess }) {
     try {
       const payload = {
         ...form,
-      
-        // ⏳ Convert numeric fields
-        phone: form.phone ? Number(form.phone) : null,
-        address_number: form.address_number ? Number(form.address_number) : null,
-        address_zipcode: form.address_zipcode ? Number(form.address_zipcode) : null,
-      
-        // ⏳ Convert dates
-        birthdate: form.birthdate ? new Date(form.birthdate) : null,
-        arrivaldate: form.arrival_date ? new Date(form.arrival_date) : null, // ⚠ harmoniser le nom
-      
-        // Other
+
+        // numeric fields
+        phone: form.phone.trim() ? Number(form.phone.trim()) : null,
+        address_number: form.address_number.trim()
+          ? Number(form.address_number.trim())
+          : null,
+        address_zipcode: form.address_zipcode.trim()
+          ? Number(form.address_zipcode.trim())
+          : null,
+
+        // date fields
+        birthdate: form.birthdate || null,
+        arrival_date: form.arrival_date || null,
+
+        // options
         aupair: auPair,
         firstregister: firstRegister,
-      
-        // Family block
+
         family: auPair
           ? {
               ...family,
-              phone: family.phone ? Number(family.phone) : null,
+              phone: family.phone.trim() ? Number(family.phone.trim()) : null,
             }
           : null,
       };
-      
-      //PUBLIC API FETCH
+
       const res = await startTest(payload);
 
       onSuccess({
@@ -95,81 +96,68 @@ export default function StartTestForm({ onSuccess }) {
   return (
     <div className="test-wrapper">
       <h1 className="start-title">Informations Details</h1>
-      <p className="start-subtitle">
-        
-      </p>
 
       <div className="form-section first-section">
         <p className="instructions">
-        Please fill in your personal information to begin the placement test.
+          Please fill in your personal information to begin the placement test.
         </p>
       </div>
 
       <form className="start-form" onSubmit={handleSubmit}>
-
-        {/* ▶ PERSONAL INFOS */}
         <PersonnalInfos form={form} onChange={updateForm} />
 
         <div className="form-boolean">
-        {/* ▶ FIRST REGISTRATION */}
-        <div className="form-section">
-          <label className="section-label">Is it your first registration at La CLEF?</label>
-
-          <div className="radio-group">
-            <label className="radio-line">
-              <input
-                type="radio"
-                name="firstregister"
-                value="yes"
-                checked={firstRegister === true}
-                onChange={() => setFirstRegister(true)}
-              />
-              Yes
+          <div className="form-section">
+            <label className="section-label">
+              Is it your first registration at La CLEF?
             </label>
 
-            <label className="radio-line">
-              <input
-                type="radio"
-                name="firstregister"
-                value="no"
-                checked={firstRegister === false}
-                onChange={() => setFirstRegister(false)}
-              />
-              No
-            </label>
+            <div className="radio-group">
+              <label className="radio-line">
+                <input
+                  type="radio"
+                  checked={firstRegister === true}
+                  onChange={() => setFirstRegister(true)}
+                />
+                Yes
+              </label>
+
+              <label className="radio-line">
+                <input
+                  type="radio"
+                  checked={firstRegister === false}
+                  onChange={() => setFirstRegister(false)}
+                />
+                No
+              </label>
+            </div>
+          </div>
+
+          <div className="form-section">
+            <label className="section-label">Are you an Au Pair?</label>
+
+            <div className="radio-group">
+              <label className="radio-line">
+                <input
+                  type="radio"
+                  checked={auPair === true}
+                  onChange={() => setAuPair(true)}
+                />
+                Yes
+              </label>
+
+              <label className="radio-line">
+                <input
+                  type="radio"
+                  checked={auPair === false}
+                  onChange={() => setAuPair(false)}
+                />
+                No
+              </label>
+            </div>
           </div>
         </div>
 
-        {/* ▶ AU PAIR */}
-        <div className="form-section">
-          <label className="section-label">Are you an Au Pair?</label>
-
-          <div className="radio-group">
-            <label className="radio-line">
-              <input
-                type="radio"
-                name="aupair"
-                value="true"
-                checked={auPair === true}
-                onChange={() => setAuPair(true)}
-              />
-              Yes
-            </label>
-
-            <label className="radio-line">
-              <input
-                type="radio"
-                name="aupair"
-                value="false"
-                checked={auPair === false}
-                onChange={() => setAuPair(false)}
-              />
-              No
-            </label>
-          </div>
-        </div>
-
-        </div>
         {auPair && (
           <HostingFamily family={family} onChange={updateFamily} />
         )}
