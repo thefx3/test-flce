@@ -3,6 +3,7 @@ import { Router } from "express";
 import publicController from "../controllers/publicController.js";
 import testSessionRequired from "../auth/testSessionRequired.js";
 import questionController from "../controllers/questionController.js";
+import testController from "../controllers/testController.js";
 
 const router = Router();
 
@@ -18,5 +19,7 @@ router.get("/questions", publicController.getQuestions);
 
 router.post("/tests/:testId/responses", testSessionRequired, publicController.submitResponses);
 router.post("/tests/:testId/comment", testSessionRequired, publicController.submitComment);
+
+router.put("/tests/:testId/grade-auto", testController.gradeAuto)
 
 export default router;

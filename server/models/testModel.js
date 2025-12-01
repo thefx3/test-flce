@@ -221,19 +221,34 @@ async submitAnswers(answers) {
     return { message: "Responses updated" };
 }
 
-//Admin
 async gradeAuto(testId) {
     const responses = await prisma.testResponse.findMany({
       where: { testId },
       include: { question: true },
     });
 
+    const normalize = (s) =>
+      s === null || s === undefined
+        ? ""
+        : s.toString().trim().toLowerCase();
+
     const updates = responses
+      // Auto-grade tout sauf les questions ouvertes
       .filter(r => r.question.type !== "OPEN")
       .map(r => {
-        const correct = r.question.correctBool;
-        const score =
-          r.answerBool === correct ? r.question.points : 0;
+        const q = r.question;
+        let isCorrect = false;
+
+        // Si correctBool est défini (questions booléennes)
+        if (q.correctBool !== null && q.correctBool !== undefined) {
+          isCorrect = r.answerBool === q.correctBool;
+        }
+        // Sinon comparer le texte (QCM/VIDEO)
+        else if (q.correctText) {
+          isCorrect = normalize(r.answerText) === normalize(q.correctText);
+        }
+
+        const score = isCorrect ? q.points : 0;
 
         return prisma.testResponse.update({
           where: { responseId: r.responseId },
@@ -241,9 +256,20 @@ async gradeAuto(testId) {
         });
       });
 
-      if (updates.length > 0) {
-        await prisma.$transaction(updates);
-      }
+    if (updates.length > 0) {
+      await prisma.$transaction(updates);
+    }
+
+    const aggregated = await prisma.testResponse.aggregate({
+      where: { testId },
+      _sum: { score: true },
+    });
+    const totalScore = aggregated._sum.score ?? 0;
+
+    await prisma.test.update({
+      where: { testId },
+      data: { status: "AUTO_GRADED", testscore: totalScore },
+    });
 
     return this.getSingleTestAdmin(testId);
 }

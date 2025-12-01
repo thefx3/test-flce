@@ -10,17 +10,7 @@ const globalForPrisma = globalThis;
 
 const baseUrl = process.env.DATABASE_URL;
 const poolSize = Number(process.env.PG_POOL_SIZE || 5);
-
-// Supabase pooler in session mode is strict: cap clients and enable pgbouncer when requested
-const usePgBouncer = process.env.PGBOUNCER === "true";
-let connectionString = baseUrl;
-
-if (usePgBouncer && baseUrl) {
-  const url = new URL(baseUrl);
-  url.searchParams.set("pgbouncer", "true");
-  url.searchParams.set("connection_limit", poolSize.toString());
-  connectionString = url.toString();
-}
+const connectionString = baseUrl;
 
 const pool = new Pool({
   connectionString,
