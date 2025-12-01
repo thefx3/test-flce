@@ -57,6 +57,8 @@ export default function TestInterface() {
       const { submitResponses } = await import("../api/publicApi");
       await submitResponses(testId, payload, sessionToken);
     } finally {
+      const { autoCorrect } = await import("../api/publicApi");
+      await autoCorrect(testId, sessionToken);
       setSubmitting(false);
       setStep("submitted");
     }
