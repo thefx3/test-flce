@@ -1,0 +1,32 @@
+[
+    {
+        "order": 28,
+        "type": "OPEN",
+        "text": "Est-ce que vous préférez les vacances calmes, culturelles ou pleines d'aventures ? Pourquoi ?",
+        "choices": []
+      },
+      {
+        "order": 29,
+        "type": "OPEN",
+        "text": "Qu'avez-vous fait le week-end dernier ? Racontez ! (400 caractères max)",
+        "choices": []
+      },
+      {
+        "order": 30,
+        "type": "OPEN",
+        "text": "Qu'est-ce que vous adoriez faire quand vous étiez petit ? (400 caractères max)",
+        "choices": []
+      },
+      {
+        "order": 31,
+        "type": "OPEN",
+        "text": "Si vous pouviez voler comme un oiseau, où iriez-vous et que feriez-vous ? (400 caractères max)",
+        "choices": []
+      },
+      {
+        "order": 32,
+        "type": "OPEN",
+        "text": "À votre avis, qu'est-ce que les gens devraient faire pour bien vivre dans votre pays ?",
+        "choices": []
+      }
+]

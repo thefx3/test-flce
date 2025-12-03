@@ -1,0 +1,142 @@
+[
+      {
+        "order": 1,
+        "text": "Il a invité Jean-Pierre. {{BLANK}} un ami de sa soeur.",
+        "choices": ["Il est", "Elle est", "C'est", "Lequel"],
+
+        "point": 1
+      },
+      {
+        "order": 2,
+        "text": "Sur la Côte d'Azur, il {{BLANK}} toujours beau.",
+        "choices": ["y a", "est", "fait", "faire"],
+
+        "point": 1
+      },
+      {
+        "order": 3,
+        "text": "Achète-moi un paquet {{BLANK}} cigarettes, s'il te plaît.",
+        "choices": ["des", "de", "pour", "de les"],
+
+        "point": 1
+      },
+      {
+        "order": 4,
+        "text": "Elle se promène {{BLANK}} la rue.",
+        "choices": ["par", "dans", "sur", "pour"],
+
+        "point": 1
+      },
+      {
+        "order": 5,
+        "text": "À midi, elle et moi {{BLANK}} dans un petit café.",
+        "choices": ["déjeunent", "déjeunons", "déjeune", "dînons"],
+
+        "point": 1
+      },
+      {
+        "order": 6,
+        "text": "Elle m'a beaucoup parlé de {{BLANK}} projets d'avenir.",
+        "choices": ["son", "leur", "ses", "sa"],
+
+        "point": 1
+      },
+      {
+        "order": 7,
+        "text": "J'{{BLANK}} une douche avant de me coucher.",
+        "choices": ["ai fait", "ai eu", "avais", "ai pris"],
+
+        "point": 1
+      },
+      {
+        "order": 8,
+        "text": "Jean-Pierre, je {{BLANK}} connais depuis 15 ans.",
+        "choices": ["le", "lui", "nous", "se"],
+
+        "point": 1
+      },
+      {
+        "order": 9,
+        "text": "Ils {{BLANK}} à l'aéroport en voiture.",
+        "choices": ["ont venu", "sont roulé", "sont allés", "ont conduit"],
+
+        "point": 1
+      },
+      {
+        "order": 10,
+        "text": "Comme il n'était pas chez lui, elle {{BLANK}} un message.",
+        "choices": ["laissait", "a laissé", "laisse", "laisserait"],
+
+        "point": 1
+      },
+      {
+        "order": 11,
+        "text": "Elle s'est trompée… elle a fait {{BLANK}} de ses parents.",
+        "choices": ["celui", "celui-là", "lequel", "ceux"],
+ 
+        "point": 1
+      },
+      {
+        "order": 12,
+        "text": "Il a mangé tout le gâteau {{BLANK}} était sur la table !",
+        "choices": ["qui", "que", "lequel", "qu'il"],
+
+        "point": 1
+      },
+      {
+        "order": 13,
+        "text": "Je ne savais pas que Pascal s'intéressait {{BLANK}} ces questions.",
+        "choices": ["à", "de", "pour", "concernant"],
+
+        "point": 1
+      },
+      {
+        "order": 14,
+        "text": "Il est minuit, et je suis {{BLANK}} d'appeler si tard.",
+        "choices": ["ennuyeuse", "dérangeante", "impossible", "ennuyée"],
+
+        "point": 1
+      },
+      {
+        "order": 15,
+        "text": "Il n'a pas reconnu mon frère sur la photo que je lui ai {{BLANK}}.",
+        "choices": ["montrais", "montrer", "montré", "montrée"],
+
+        "point": 1
+      },
+      {
+        "order": 16,
+        "text": "Il m'a montré un article de journal qui {{BLANK}} l'agriculture au Mali.",
+        "choices": ["parle de", "écrit sur", "s'agit de", "raconte sur"],
+
+        "point": 1
+      },
+      {
+        "order": 17,
+        "text": "Il m'a dit qu'il ne {{BLANK}} pas partir en vacances au bord de la mer.",
+        "choices": ["voudra", "veuille", "voudrait", "voulait"],
+
+        "point": 1
+        },
+       {
+        "order": 18,
+        "text": "Il ne veut pas que ses enfants {{BLANK}} du théâtre.",
+        "choices": ["feront", "fassent", "font", "feraient"],
+
+        "point": 1
+        },
+      {
+        "order": 19,
+        "text": "Il y a longtemps que je ne t'ai pas téléphoné mais j'ai {{BLANK}} beaucoup pensé à toi.",
+        "choices": ["au fait", "quand même", "alors", "comme même"],
+
+        "point": 1
+       },
+      {
+        "order": 20,
+        "text": "Quand l'homme au manteau blanc eut terminé son café, il {{BLANK}} brusquement.",
+        "choices": ["se leva", "se lève", "s'est levé", "se fut levé"],
+
+        "point": 1
+      }
+]

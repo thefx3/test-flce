@@ -2,13 +2,20 @@
 import questionModel from "../models/questionModel.js";
 import testModel from "../models/testModel.js";
 
+import {
+  loadQcmQuestions,
+  loadOpenQuestions,
+  loadVideoQuestions
+} from "../utils/loadTestData.js";
+
+
 class QuestionController {
 //Public
 
 async getQuestionsQCMPublic(req, res, next) {
   try {
-    const questions = await questionModel.getQuestionsQCMPublic();
-    res.json(questions);
+    const data = await loadQcmQuestions();
+    res.json(data);
   } catch (err) {
     next(err);
   }
@@ -16,8 +23,9 @@ async getQuestionsQCMPublic(req, res, next) {
 
 async getQuestionsVIDEOPublic(req, res, next) {
   try {
-    const questions = await questionModel.getQuestionsVIDEOPublic();
-    res.json(questions);
+    const data = await loadVideoQuestions();
+
+    res.json(data);
   } catch (err) {
     next(err);
   }
@@ -25,8 +33,8 @@ async getQuestionsVIDEOPublic(req, res, next) {
 
 async getQuestionsOPENPublic(req, res, next) {
   try {
-    const questions = await questionModel.getQuestionsOPENPublic();
-    res.json(questions);
+    const data = await loadOpenQuestions();
+    res.json(data);
   } catch (err) {
     next(err);
   }
@@ -56,6 +64,8 @@ async getSingleQuestionPublic(req, res, next) {
     next(err);
   }
 }
+
+
 
 //Admin
 async getQuestionsQCMAdmin(req, res, next) {
@@ -114,7 +124,7 @@ async createQuestion(req, res, next) {
   try {
     const data = req.body;
 
-    const validTypes = ["QCM", "VIDEO", "OPEN"];
+    const validTypes = ["QCM", "OPEN"];
     if (!validTypes.includes(data.type)) {
       return res.status(400).json({ message: "Invalid question type" });
     }
@@ -123,9 +133,6 @@ async createQuestion(req, res, next) {
     }
     if (data.order === undefined || data.order === null) {
       return res.status(400).json({ message: "Question order is required" });
-    }
-    if (data.type === "VIDEO" && !data.videoId) {
-      return res.status(400).json({ message: "videoId is required for VIDEO questions" });
     }
 
     const created = await questionModel.createQuestion(data);

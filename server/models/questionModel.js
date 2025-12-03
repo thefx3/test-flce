@@ -49,7 +49,7 @@ async getQuestionsQCMPublic(){
 
 async getQuestionsVIDEOPublic(){
   return prisma.question.findMany({
-    where: { type: "VIDEO" },
+    where: { videoId: { not: null } },
     orderBy: { order: "asc" },
     select: publicQuestionSelect,
   });
@@ -93,7 +93,7 @@ async getQuestionsQCMAdmin(){
 
 async getQuestionsVIDEOAdmin(){
   return prisma.question.findMany({
-    where: { type: "VIDEO" },
+    where: { videoId: { not: null } },
     orderBy: { order: "asc" },
     select: adminQuestionSelect,
   });

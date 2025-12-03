@@ -197,7 +197,7 @@ export async function initDb() {
     // -----------------------------
     {
       order: 21,
-      type: "VIDEO",
+      type: "QCM",
       text: "Les étudiantes sont {{BLANK}}.",
       choices: ["Allemandes", "Anglaises", "Mexicaines"],
       correctText: "Mexicaines",
@@ -205,7 +205,7 @@ export async function initDb() {
     },
     {
       order: 22,
-      type: "VIDEO",
+      type: "QCM",
       text: "Il y a cours {{BLANK}}.",
       choices: ["5h par semaine", "6h par semaine", "8h par semaine"],
       correctText: "6h par semaine",
@@ -213,7 +213,7 @@ export async function initDb() {
     },
     {
       order: 23,
-      type: "VIDEO",
+      type: "QCM",
       text: "Les cours {{BLANK}}.",
       choices: ["ont commencé", "commencent bientôt", "on ne sait pas"],
       correctText: "commencent bientôt",
@@ -221,7 +221,7 @@ export async function initDb() {
     },
     {
       order: 24,
-      type: "VIDEO",
+      type: "QCM",
       text: "Le prix est de {{BLANK}}.",
       choices: ["2000 euros", "1700 euros", "1600 euros"],
       correctText: "1600 euros",
@@ -229,7 +229,7 @@ export async function initDb() {
     },
     {
       order: 25,
-      type: "VIDEO",
+      type: "QCM",
       text: "La personne au téléphone cherche {{BLANK}}.",
       choices: ["des cours de musique", "des cours de français", "des cours de danse"],
       correctText: "des cours de français",
@@ -237,7 +237,7 @@ export async function initDb() {
     },
     {
       order: 26,
-      type: "VIDEO",
+      type: "QCM",
       text: "L'étudiante fait {{BLANK}}.",
       choices: ["de la guitare", "de la danse", "du sport"],
       correctText: "de la danse",

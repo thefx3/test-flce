@@ -7,6 +7,12 @@ import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import prisma from "./prisma/prisma.js";
 import { initDb } from "./db/initdb.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Resolve __dirname in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 //PUBLIC
 import authRoutes from "./routes/authRoutes.js";
@@ -33,6 +39,7 @@ export { app }; // exported for testing
 app.use(helmet());           // Secure HTTP headers
 app.use(cookieParser());     // Parse cookies
 app.use(express.json({ limit: "1mb" }));     // JSON body
+app.use("/videos", express.static(path.join(__dirname, "data/videos")));
 
 app.use(
   cors({

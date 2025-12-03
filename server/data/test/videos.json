@@ -1,0 +1,64 @@
+[
+    {
+      "videoId": "video1",
+      "url": "/videos/video1.mp4",
+      "questions": [
+        {
+            "order": 21,
+            "type": "QCM",
+            "text": "Les étudiantes sont {{BLANK}}.",
+            "choices": ["Allemandes", "Anglaises", "Mexicaines"]
+
+          },
+          {
+            "order": 22,
+            "type": "QCM",
+            "text": "Il y a cours {{BLANK}}.",
+            "choices": ["5h par semaine", "6h par semaine", "8h par semaine"]
+
+          },
+          {
+            "order": 23,
+            "type": "QCM",
+            "text": "Les cours {{BLANK}}.",
+            "choices": ["ont commencé", "commencent bientôt", "on ne sait pas"]
+
+          }
+      ]
+    },
+    {
+        "videoId": "video2",
+        "url": "/videos/video2.mp4",
+        "questions": [
+            {
+                "order": 24,
+                "type": "QCM",
+                "text": "Le prix est de {{BLANK}}.",
+                "choices": ["2000 euros", "1700 euros", "1600 euros"]
+
+              },
+              {
+                "order": 25,
+                "type": "QCM",
+                "text": "La personne au téléphone cherche {{BLANK}}.",
+                "choices": ["des cours de musique", "des cours de français", "des cours de danse"]
+
+              },
+              {
+                "order": 26,
+                "type": "QCM",
+                "text": "L'étudiante fait {{BLANK}}.",
+                "choices": ["de la guitare", "de la danse", "du sport"]
+
+              },
+              {
+                "order": 27,
+                "type": "OPEN",
+                "text": "Expliquez en une phrase le problème de la dame à la fin de la vidéo.",
+                "choices": []
+
+              }
+        ]
+      }
+  ]
+  

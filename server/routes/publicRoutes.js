@@ -20,6 +20,6 @@ router.get("/questions", publicController.getQuestions);
 router.post("/tests/:testId/responses", testSessionRequired, publicController.submitResponses);
 router.post("/tests/:testId/comment", testSessionRequired, publicController.submitComment);
 
-router.put("/tests/:testId/grade-auto", testController.gradeAuto)
+router.put("/tests/:testId/grade-auto", testController.gradeAuto);
 
 export default router;

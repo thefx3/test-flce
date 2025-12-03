@@ -11,6 +11,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  // Connection URL moved to prisma.config.ts
 }
 
 model User {
@@ -117,7 +118,7 @@ model TestResponse {
 
 model Video {
   videoId   Int      @id @default(autoincrement())
-  url       String
+  url       String?
   title     String?
   questions Question[]
 }
@@ -125,7 +126,6 @@ model Video {
 
 enum QuestionType {
   QCM
-  VIDEO
   OPEN
 }
 
