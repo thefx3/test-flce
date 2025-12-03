@@ -18,28 +18,73 @@ class QuestionController {
 async getQuestionsQCMPublic(req, res, next) {
   try {
     const questions = await questionModel.getQuestionsQCMPublic();
-    res.json(questions);
+    return res.json(questions);
+  } catch (err) {
+    console.error("❌ QCM DB error, fallback JSON:", err.message);
+    try {
+      const fallback = readJson("server/data/tests/qcm.json");
+      return res.json(fallback);
+    } catch (jsonErr) {
+      return next(jsonErr);
+    }
   }
-  catch {}
-  return readJson("server/data/tests/qcm.json");
 }
 
 async getQuestionsVIDEOPublic(req, res, next) {
   try {
-    const questions = await questionModel.getQuestionsVIDEOPublic();
-    res.json(questions);
+    let questions = await questionModel.getQuestionsVIDEOPublic();
+
+    questions = questions.map((q) => {
+      if (!q.video || !q.video.videoId) return q;
+
+      const localUrl = `/videos/video${q.video.videoId}.mp4`;
+
+      return {
+        ...q,
+        video: {
+          ...q.video,
+          url: localUrl,
+        },
+      };
+    });
+
+    return res.json(questions);
+  } catch (err) {
+    console.error("❌ VIDEO DB error, fallback JSON:", err.message);
+    try {
+      const fallback = readJson("server/data/tests/videos.json");
+
+      const withLocalUrls = fallback.map((q) => {
+        if (!q.video || !q.video.videoId) return q;
+        return {
+          ...q,
+          video: {
+            ...q.video,
+            url: `/videos/video${q.video.videoId}.mp4`,
+          },
+        };
+      });
+
+      return res.json(withLocalUrls);
+    } catch (jsonErr) {
+      return next(jsonErr);
+    }
   }
-  catch {}
-  return readJson("server/data/tests/videos.json");
 }
 
 async getQuestionsOPENPublic(req, res, next) {
   try {
     const questions = await questionModel.getQuestionsOPENPublic();
-    res.json(questions);
+    return res.json(questions);
+  } catch (err) {
+    console.error("❌ OPEN DB error, fallback JSON:", err.message);
+    try {
+      const fallback = readJson("server/data/tests/open.json");
+      return res.json(fallback);
+    } catch (jsonErr) {
+      return next(jsonErr);
+    }
   }
-  catch {}
-  return readJson("server/data/tests/open.json");
 }
 
 

@@ -9,7 +9,6 @@ router.get("/OPEN", questionController.getQuestionsOPENPublic);
 router.get("/VIDEO", questionController.getQuestionsVIDEOPublic);
 router.get("/QCM", questionController.getQuestionsQCMPublic);
 
-router.get("/", questionController.getAllQuestionsPublic);
 router.get("/:questionId", questionController.getSingleQuestionPublic);
 
 export default router;
