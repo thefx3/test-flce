@@ -64,52 +64,6 @@ async function startTest(req, res) {
   }
 }
 
-// Public: get questions (NO corrections)
-async function getQuestions(req, res) {
-  try {
-    const q = await questionModel.getAllQuestionsPublic();
-    res.json(q);
-  } catch (err) {
-    console.error("Error fetching questions:", err);
-    res.status(500).json({ message: "Internal error" });
-  }
-}
-
-// Public: get single question (NO corrections)
-async function getQuestion(req, res) {
-  try {
-    const questionId = Number(req.params.questionId);
-    if (Number.isNaN(questionId)) {
-      return res.status(400).json({ message: "Invalid id" });
-    }
-
-    const q = await questionModel.getQuestionByIdPublic(questionId);
-    if (!q) return res.status(404).json({ message: "Not found" });
-    res.json(q);
-  } catch (err) {
-    console.error("Error fetching question:", err);
-    res.status(500).json({ message: "Internal error" });
-  }
-}
-
-async function getVideosWithQuestions(req, res) {
-  try {
-    const videos = await prisma.video.findMany({
-      include: {
-        questions: {
-          orderBy: { order: "asc" },
-        }
-      }
-    });
-
-    res.json(videos);
-
-  } catch (err) {
-    console.error("Error fetching videos:", err);
-    res.status(500).json({ message: "Internal error" });
-  }
-}
-
 async function submitResponses(req, res) {
   try {
     const testId = Number(req.params.testId);
@@ -203,9 +157,6 @@ async function submitComment(req, res) {
 
 export default {
   startTest,
-  getQuestions,
-  getQuestion,
   submitResponses,
-  getVideosWithQuestions,
   submitComment,
 };

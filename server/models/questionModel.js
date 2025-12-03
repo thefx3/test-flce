@@ -41,7 +41,7 @@ class QuestionModel {
 //Public
 async getQuestionsQCMPublic(){
   return prisma.question.findMany({
-    where: { type: "QCM" },
+    where: { type: "QCM", videoId: null },
     orderBy: { order: "asc" },
     select: publicQuestionSelect,
   });
@@ -57,7 +57,7 @@ async getQuestionsVIDEOPublic(){
 
 async getQuestionsOPENPublic(){
   return prisma.question.findMany({
-    where: { type: "OPEN" },
+    where: { type: "OPEN", videoId: null },
     orderBy: { order: "asc" },
     select: publicQuestionSelect,
   });

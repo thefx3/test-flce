@@ -1,8 +1,6 @@
 import { Router } from "express";
 import userController from "../controllers/userController.js";
-import authController from "../controllers/authController.js";
 import authRequired from "../auth/authRequired.js";
-import adminRequired from "../auth/adminRequired.js"
 import ownerRequired from "../auth/ownerRequired.js"
 
 const router = Router();

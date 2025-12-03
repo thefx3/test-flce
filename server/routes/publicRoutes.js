@@ -11,11 +11,9 @@ const router = Router();
 router.post("/start-test", publicController.startTest);
 
 // Public questions list
-router.get("/questions/videos", publicController.getVideosWithQuestions);
-router.get("/questions/OPEN", questionController.getQuestionsOPENPublic); //To do
-router.get("/questions/VIDEO", questionController.getQuestionsVIDEOPublic); //To do
-router.get("/questions/QCM", questionController.getQuestionsQCMPublic); //To do
-router.get("/questions", publicController.getQuestions);
+router.get("/questions/OPEN", questionController.getQuestionsOPENPublic);
+router.get("/questions/VIDEO", questionController.getQuestionsVIDEOPublic);
+router.get("/questions/QCM", questionController.getQuestionsQCMPublic);
 
 router.post("/tests/:testId/responses", testSessionRequired, publicController.submitResponses);
 router.post("/tests/:testId/comment", testSessionRequired, publicController.submitComment);

@@ -2,11 +2,14 @@
 import questionModel from "../models/questionModel.js";
 import testModel from "../models/testModel.js";
 
-import {
-  loadQcmQuestions,
-  loadOpenQuestions,
-  loadVideoQuestions
-} from "../utils/loadTestData.js";
+import fs from "fs";
+import path from "path";
+import prisma from "../prisma/prisma.js";
+
+function readJson(relativePath) {
+  const absolutePath = path.join(process.cwd(), relativePath);
+  return JSON.parse(fs.readFileSync(absolutePath, "utf8"));
+}
 
 
 class QuestionController {
@@ -14,40 +17,32 @@ class QuestionController {
 
 async getQuestionsQCMPublic(req, res, next) {
   try {
-    const data = await loadQcmQuestions();
-    res.json(data);
-  } catch (err) {
-    next(err);
+    const questions = await questionModel.getQuestionsQCMPublic();
+    res.json(questions);
   }
+  catch {}
+  return readJson("server/data/tests/qcm.json");
 }
 
 async getQuestionsVIDEOPublic(req, res, next) {
   try {
-    const data = await loadVideoQuestions();
-
-    res.json(data);
-  } catch (err) {
-    next(err);
+    const questions = await questionModel.getQuestionsVIDEOPublic();
+    res.json(questions);
   }
+  catch {}
+  return readJson("server/data/tests/videos.json");
 }
 
 async getQuestionsOPENPublic(req, res, next) {
   try {
-    const data = await loadOpenQuestions();
-    res.json(data);
-  } catch (err) {
-    next(err);
+    const questions = await questionModel.getQuestionsOPENPublic();
+    res.json(questions);
   }
+  catch {}
+  return readJson("server/data/tests/open.json");
 }
 
-async getAllQuestionsPublic(req, res, next) {
-  try {
-    const questions = await questionModel.getAllQuestionsPublic();
-    res.json(questions);
-  } catch (err) {
-    next(err);
-  }
-}
+
 
 async getSingleQuestionPublic(req, res, next) {
   try {
@@ -64,8 +59,6 @@ async getSingleQuestionPublic(req, res, next) {
     next(err);
   }
 }
-
-
 
 //Admin
 async getQuestionsQCMAdmin(req, res, next) {
