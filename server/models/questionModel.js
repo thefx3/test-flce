@@ -48,10 +48,28 @@ async getQuestionsQCMPublic(){
 }
 
 async getVideoList() {
+  return prisma.video.findMany({
+    select: {
+      videoId: true,
+      title: true
+    }
+  });
 }
 
 async getQuestionsByVideo(videoId) {
+  return prisma.question.findMany({
+    where: { videoId: Number(videoId) },
+    orderBy: { order: "asc" },
+    select: {
+      questionId: true,
+      order: true,
+      type: true,
+      text: true,
+      choices: true
+    }
+  });
 }
+
 
 
 async getQuestionsOPENPublic(){

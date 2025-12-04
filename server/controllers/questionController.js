@@ -32,12 +32,71 @@ async getQuestionsQCMPublic(req, res, next) {
 }
 
 async getVideoListPublic(req, res, next) {
+  try {
+    const dbVideos = await questionModel.getVideoList();
 
+    // fallback JSON
+    const jsonVideos = readJson("data/test/videos.json");
+
+    const merged = [];
+
+    // Pour chaque entrée JSON → vérifier si DB a la vidéo
+    for (const local of jsonVideos) {
+      const db = dbVideos.find(v => Number(v.videoId) === Number(local.videoId));
+
+      merged.push({
+        videoId: local.videoId,
+        title: db?.title || local.title,
+        url: `/videos/video${local.videoId}.mp4`   // 🔥 100% local
+      });
+    }
+
+    return res.json(merged);
+
+  } catch (err) {
+    console.error("Video list error:", err);
+    return res.status(500).json({ message: "Cannot load videos" });
+  }
 }
 
 async getVideoQuestionsPublic(req, res, next) {
-  
-}
+  const { videoId } = req.params;
+
+    try {
+      const dbQuestions = await questionModel.getQuestionsByVideo(videoId);
+
+      if (dbQuestions.length > 0) {
+        return res.json(dbQuestions);
+      }
+
+      // fallback JSON
+      const localVideos = readJson("data/test/videos.json");
+      const local = localVideos.find(v => Number(v.videoId) === Number(videoId));
+
+      if (!local) {
+        return res.status(404).json({ message: "Video not found" });
+      }
+
+      return res.json(local.questions);
+
+    } catch (err) {
+      console.error("Video questions error:", err);
+
+      // fallback en cas d'erreur DB
+      try {
+        const localVideos = readJson("data/test/videos.json");
+        const fallback = localVideos.find(v => Number(v.videoId) === Number(videoId));
+
+        if (!fallback) return res.status(404).json({ message: "Video not found" });
+
+        return res.json(fallback.questions);
+
+      } catch (jsonErr) {
+        next(jsonErr);
+      }
+    }
+  }
+
 
 
 

@@ -14,8 +14,8 @@ router.post("/start-test", publicController.startTest);
 router.get("/questions/OPEN", questionController.getQuestionsOPENPublic);
 router.get("/questions/QCM", questionController.getQuestionsQCMPublic);
 
-
-
+router.get("/videos", questionController.getVideoListPublic);
+router.get("/videos/:videoId/questions", questionController.getVideoQuestionsPublic);
 
 router.post("/tests/:testId/responses", testSessionRequired, publicController.submitResponses);
 router.post("/tests/:testId/comment", testSessionRequired, publicController.submitComment);
