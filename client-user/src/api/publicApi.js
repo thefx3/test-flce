@@ -34,15 +34,11 @@ export async function fetchQuestionsOPEN() {
 }
 
 export async function fetchVideoList() {
-  const res = await fetch(`${API_BASE}/videos`);
-  if (!res.ok) throw new Error("Cannot fetch video list");
-  return res.json();
+
 }
 
-export async function fetchVideoQuestions(videoId) {
-  const res = await fetch(`${API_BASE}/videos/${videoId}/questions`);
-  if (!res.ok) throw new Error("Cannot fetch questions for video");
-  return res.json();
+export async function fetchVideoQuestions {
+
 }
 
 
