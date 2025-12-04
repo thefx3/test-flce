@@ -12,8 +12,10 @@ router.post("/start-test", publicController.startTest);
 
 // Public questions list
 router.get("/questions/OPEN", questionController.getQuestionsOPENPublic);
-router.get("/questions/videos", questionController.getQuestionsVIDEOPublic);
 router.get("/questions/QCM", questionController.getQuestionsQCMPublic);
+
+
+
 
 router.post("/tests/:testId/responses", testSessionRequired, publicController.submitResponses);
 router.post("/tests/:testId/comment", testSessionRequired, publicController.submitComment);

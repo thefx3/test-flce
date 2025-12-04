@@ -6,7 +6,6 @@ const router = Router();
 
 //Public
 router.get("/OPEN", questionController.getQuestionsOPENPublic);
-router.get("/VIDEO", questionController.getQuestionsVIDEOPublic);
 router.get("/QCM", questionController.getQuestionsQCMPublic);
 
 router.get("/:questionId", questionController.getSingleQuestionPublic);

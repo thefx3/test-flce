@@ -6,11 +6,12 @@ import fs from "fs";
 import path from "path";
 import prisma from "../prisma/prisma.js";
 
+const serverOrigin = process.env.SERVER_URL || "http://localhost:3000";
+
 function readJson(relativePath) {
   const absolutePath = path.join(process.cwd(), relativePath);
   return JSON.parse(fs.readFileSync(absolutePath, "utf8"));
 }
-
 
 class QuestionController {
 //Public
@@ -22,7 +23,7 @@ async getQuestionsQCMPublic(req, res, next) {
   } catch (err) {
     console.error("❌ QCM DB error, fallback JSON:", err.message);
     try {
-      const fallback = readJson("server/data/tests/qcm.json");
+      const fallback = readJson("server/data/test/qcm.json");
       return res.json(fallback);
     } catch (jsonErr) {
       return next(jsonErr);
@@ -30,47 +31,15 @@ async getQuestionsQCMPublic(req, res, next) {
   }
 }
 
-async getQuestionsVIDEOPublic(req, res, next) {
-  try {
-    let questions = await questionModel.getQuestionsVIDEOPublic();
+async getVideoListPublic(req, res, next) {
 
-    questions = questions.map((q) => {
-      if (!q.video || !q.video.videoId) return q;
-
-      const localUrl = `/videos/video${q.video.videoId}.mp4`;
-
-      return {
-        ...q,
-        video: {
-          ...q.video,
-          url: localUrl,
-        },
-      };
-    });
-
-    return res.json(questions);
-  } catch (err) {
-    console.error("❌ VIDEO DB error, fallback JSON:", err.message);
-    try {
-      const fallback = readJson("server/data/tests/videos.json");
-
-      const withLocalUrls = fallback.map((q) => {
-        if (!q.video || !q.video.videoId) return q;
-        return {
-          ...q,
-          video: {
-            ...q.video,
-            url: `/videos/video${q.video.videoId}.mp4`,
-          },
-        };
-      });
-
-      return res.json(withLocalUrls);
-    } catch (jsonErr) {
-      return next(jsonErr);
-    }
-  }
 }
+
+async getVideoQuestionsPublic(req, res, next) {
+  
+}
+
+
 
 async getQuestionsOPENPublic(req, res, next) {
   try {
@@ -79,7 +48,7 @@ async getQuestionsOPENPublic(req, res, next) {
   } catch (err) {
     console.error("❌ OPEN DB error, fallback JSON:", err.message);
     try {
-      const fallback = readJson("server/data/tests/open.json");
+      const fallback = readJson("server/data/test/open.json");
       return res.json(fallback);
     } catch (jsonErr) {
       return next(jsonErr);

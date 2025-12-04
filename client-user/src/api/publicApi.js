@@ -25,35 +25,26 @@ export async function fetchQuestionsQCM() {
   return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
 }
 
-export async function fetchQuestionsVIDEO() {
-  const res = await fetch(`${API_BASE}/questions/VIDEO`);
-
-  if (!res.ok) {
-    throw new Error("Erreur while fetching video questions");
-  }
-
-  return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
-}
-
 export async function fetchQuestionsOPEN() {
   const res = await fetch(`${API_BASE}/questions/OPEN`);
-
   if (!res.ok) {
     throw new Error("Erreur while fetching open questions");
   }
-
   return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
 }
 
-export async function fetchVideosWithQuestions() {
-  const res = await fetch(`${API_BASE}/questions/videos`);
-
-  if (!res.ok) {
-    throw new Error("Erreur while fetching questions & videos");
-  }
-
-  return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
+export async function fetchVideoList() {
+  const res = await fetch(`${API_BASE}/videos`);
+  if (!res.ok) throw new Error("Cannot fetch video list");
+  return res.json();
 }
+
+export async function fetchVideoQuestions(videoId) {
+  const res = await fetch(`${API_BASE}/videos/${videoId}/questions`);
+  if (!res.ok) throw new Error("Cannot fetch questions for video");
+  return res.json();
+}
+
 
 export async function submitResponses(testId, responses, sessionToken) {
   const res = await fetch(`${API_BASE}/tests/${testId}/responses`, {

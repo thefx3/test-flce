@@ -47,13 +47,12 @@ async getQuestionsQCMPublic(){
   });
 }
 
-async getQuestionsVIDEOPublic(){
-  return prisma.question.findMany({
-    where: { videoId: { not: null } },
-    orderBy: { order: "asc" },
-    select: publicQuestionSelect,
-  });
+async getVideoList() {
 }
+
+async getQuestionsByVideo(videoId) {
+}
+
 
 async getQuestionsOPENPublic(){
   return prisma.question.findMany({
