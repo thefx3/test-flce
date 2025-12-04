@@ -160,21 +160,23 @@ export default function TestVideo({ sessionToken, onSubmitted }) {
             {currentStep === "video" && (
               <div className="video-container">
                 <video
-                  ref={videoEl}
-                  src={video.url}      
-                  controls              
-                  style={{
-                    width: "100%",
-                    borderRadius: "12px",
-                    marginTop: "15px",
-                  }}
-                  onEnded={() =>
-                    setStepByVideo((prev) => ({
-                      ...prev,
-                      [video.videoId]: "answer",
-                    }))
-                  }
-                />
+                ref={videoEl}
+                controls
+                style={{
+                  width: "100%",
+                  borderRadius: "12px",
+                  marginTop: "15px",
+                }}
+                onEnded={() =>
+                  setStepByVideo((prev) => ({
+                    ...prev,
+                    [video.videoId]: "answer",
+                  }))
+                }
+              >
+                <source src={video.url}  />
+              </video>
+
               </div>
             )}
 

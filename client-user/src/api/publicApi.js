@@ -33,12 +33,18 @@ export async function fetchQuestionsOPEN() {
   return res.json(); // [{ id, type, text, mediaUrl, order }, ...]
 }
 
+// 1. Liste des vidéos
 export async function fetchVideoList() {
-
+  const res = await fetch(`${API_BASE}/videos`);
+  if (!res.ok) throw new Error("Cannot fetch video list");
+  return res.json();
 }
 
-export async function fetchVideoQuestions {
-
+// 2. Questions d'une vidéo
+export async function fetchVideoQuestions(videoId) {
+  const res = await fetch(`${API_BASE}/videos/${videoId}/questions`);
+  if (!res.ok) throw new Error("Cannot fetch video questions");
+  return res.json();
 }
 
 
