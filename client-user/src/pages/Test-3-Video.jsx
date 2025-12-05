@@ -144,17 +144,25 @@ export default function TestVideo({ sessionToken, onSubmitted }) {
 
             {/* READ QUESTIONS */}
             {currentStep === "read" && (
-              <div className="questions-preview">
-                {video.questions.map((q) => (
-                  <p key={q.questionId} className="question-preview">
-                    {q.order}.{" "}
-                    {q.text.includes("{{BLANK}}")
-                      ? q.text.replace("{{BLANK}}", "_____")
-                      : q.text}
-                  </p>
-                ))}
-              </div>
+            <div className="questions-preview">
+              {video.questions.map((q) => (
+                <p key={q.questionId} className="question-preview">
+                  {q.order}.{" "}
+                  {q.text.includes("{{BLANK}}")
+                    ? q.text.replace("{{BLANK}}", "_____")
+                    : q.text}
+
+                  {/* Afficher les choix pour les QCM */}
+                  {q.type !== "OPEN" && q.choices?.length > 0 && (
+                    <span style={{ opacity: 0.6, marginLeft: 6 }}>
+                      ({q.choices.join(" / ")})
+                    </span>
+                  )}
+                </p>
+              ))}
+            </div>
             )}
+
 
             {/* VIDEO STEP */}
             {currentStep === "video" && (
@@ -198,21 +206,23 @@ export default function TestVideo({ sessionToken, onSubmitted }) {
                       </>
                     ) : (
                       <>
-                        <p>{q.order}. {q.text}</p>
-                        <select
-                          value={answers[q.questionId] || ""}
-                          onChange={(e) =>
-                            handleAnswer(q.questionId, e.target.value)
-                          }
-                          className="dropdown"
-                        >
-                          <option value="">---</option>
-                          {q.choices.map((c) => (
-                            <option key={c} value={c}>
-                              {c}
-                            </option>
-                          ))}
-                        </select>
+                        <p className="question-text">
+                          {q.order}.{" "}
+                          {q.text.split("{{BLANK}}")[0] || ""}
+                          <select
+                            className="dropdown"
+                            value={answers[q.questionId] || ""}
+                            onChange={(e) => handleAnswer(q.questionId, e.target.value)}
+                          >
+                            <option value="">---</option>
+                            {q.choices.map((c, idx) => (
+                              <option key={`${q.questionId}-${idx}`} value={c}>
+                                {c}
+                              </option>
+                            ))}
+                          </select>
+                          {q.text.split("{{BLANK}}")[1] || ""}
+                        </p>
                       </>
                     )}
                   </div>
