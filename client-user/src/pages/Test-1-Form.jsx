@@ -95,7 +95,7 @@ export default function StartTestForm({ onSuccess }) {
 
   return (
     <div className="test-wrapper">
-      <h1 className="start-title">Informations Details</h1>
+      <h1 className="test-title">Informations Details</h1>
 
       <div className="form-section first-section">
         <p className="instructions">

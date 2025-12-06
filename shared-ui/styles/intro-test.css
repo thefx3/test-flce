@@ -1,23 +1,4 @@
-  /* =========================
-   GLOBAL WRAPPER
-========================= */
-
-.intro {
-    flex: 1;
-    justify-self: center;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    padding: var(--space-32) var(--space-20);
-    font-family: var(--font-family);
-    color: var(--color-black);
-    width: 130%;
-  }
-
-  /* ----------------------------------------------------
-     HERO SECTION
-  ----------------------------------------------------- */
-  
+ 
   .hero {
     text-align: center;
     padding: 30px 0;
@@ -35,10 +16,6 @@
     margin: var(--space-12) auto 0;
     line-height: 1.6;
   }
-  
-  /* ----------------------------------------------------
-     OUR CLASSES
-  ----------------------------------------------------- */
   
   .classes {
     text-align: center;
@@ -78,9 +55,9 @@
     color: var(--color-text-soft);
     line-height: 2;
   }
-  
 
-.schedule-table {
+  .schedule-table {
+    margin-top: var(--space-12);
     overflow-x: auto;
     border-radius: var(--radius);
     box-shadow: var(--shadow-soft);
@@ -145,11 +122,6 @@
     display: none;
   }
   
-
-/* ============================
-   ABOUT THE TEST – DESKTOP
-============================= */
-
 .about-test {
     background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
     padding: var(--space-32) var(--space-20);
@@ -254,7 +226,7 @@
 }
 
 
-@media (max-width: 950px) {
+@media (max-width: 900px) {
 
 
     .schedule-cards {

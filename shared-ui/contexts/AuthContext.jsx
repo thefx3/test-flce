@@ -10,15 +10,25 @@ export function AuthProvider({ children }) {
     let cancelled = false;
 
     async function fetchUser() {
-      if (!token) {
+      const isPublicTest = window.location.pathname.startsWith('/test');
+
+      // Skip auth fetch on public test flow or when no token is stored
+      if (!token || isPublicTest) {
         setUser(null);
         return;
       }
 
       try {
-        const res = await fetch('http://localhost:3000/api/auth/me', {
+
+        const res = await fetch('http://localhost:3000/auth/me', {
           headers: { Authorization: `Bearer ${token}` },
         });
+
+        // Invalid or expired token → clear it so we stop spamming 403s
+        if (res.status === 401 || res.status === 403) {
+          logout();
+          return;
+        }
 
         if (!res.ok) {
           setUser(null);

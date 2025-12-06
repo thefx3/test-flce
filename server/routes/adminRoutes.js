@@ -1,6 +1,5 @@
 //adminRoutes.js
 import { Router } from "express";
-import authController from "../controllers/authController.js";
 import authRequired from "../auth/authRequired.js";
 import adminRequired from "../auth/adminRequired.js"
 import userController from "../controllers/userController.js";

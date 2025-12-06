@@ -114,6 +114,7 @@ model TestResponse {
   answerBool Boolean?
   answerText String?
   score      Int?     // auto or manual
+  comment    String?
 }
 
 model Video {

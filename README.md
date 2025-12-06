@@ -1,65 +1,22 @@
+Need to write all the sub functions in back end 
+When I need one. 
 
-================ START TEST ==============
-(create an empty test)
-
-POST /public/start-test 
-Body :
-{
-  "email": "testuser@example.com",
-  "name": "John",
-  "lastname": "Doe",
-  "aupair": true
-}
+============== CLIENT-USER ================
+Functions to implement : 
+#PROGRESS BAR FOR THE TEST
 
 
-============= GET QUESTIONS ================
-(Public - no corrections)
-GET /public/questions
+============== CLIENT-ADMIN ===============
 
-(Admin - with corrections)
-GET /questions/
-
-
-============= SUBMIT RESPONSES =============
-(Public)
-POST /public/tests/:testId/responses
-x-test-session-id: <sessionToken>
-
-Body: 
-[
-  { "questionId": 1, "answerBool": true },
-  { "questionId": 2, "answerBool": false }
-]
+Pages : 
+- Dashboard : overview of the last tests + statistics
+- Users : his personnal data, his test, his level + to grade him
+- Tests : see all tests - filter by graded / ungraded
++ possibility to grade
+- Manual Grading : Grade all the tests ungraded 
+- Statistics : in details
 
 
-========== CHECK TESTS ANSWERS =============
-(Admin)
-GET /tests/:testId 
-Authorization : Bearer <admin_taken>
 
 
-================ GET TESTS =================
-(Adminn - All tests)
-GET /tests/ 
 
-(Admin - From user)
-GET /admin/users/:userId/test/:testId
-
-(Public - From user)
-GET /tests/users/:userId
-
-
-=============== ADD A QUESTION ==============
-(Admin)
-POST /questions 
-Authorization: Bearer <admin_token>
-
-Body: 
-
-{
-  "type": "QCM",
-  "text": "Are you happy ?",
-  "correctBool": true,
-  "points": 4,
-  "order": 3
-}

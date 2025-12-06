@@ -100,3 +100,19 @@ html {
   align-content: center;
   justify-items: center;
 }
+
+
+.test-wrapper {
+  width: clamp(300px, 90vw, 1100px);  /* 🔥 responsive + limite max */
+  margin: 0 auto;
+  padding: var(--space-32) var(--space-20);
+  font-family: var(--font-family);
+
+  min-height: 75vh;  /* stabilité verticale */
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
