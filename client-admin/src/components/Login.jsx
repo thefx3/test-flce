@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AdminContext } from '../context/AdminContext.jsx';
-import 'shared-ui/components/Login.css'
+import './Login.css'
 
 export default function Login() {
     const navigate = useNavigate();
@@ -60,10 +60,6 @@ export default function Login() {
                         {isSubmitting ? 'Logging in…' : 'Login'}
                     </button>
 
-                    <div className="register-link">
-                        <p>Don’t have an account?</p>
-                        <Link to="/register">Create one</Link>
-                    </div>
                 </form>
             </div>
         </div>

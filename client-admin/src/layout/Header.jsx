@@ -3,7 +3,9 @@ import { AdminContext } from "../context/AdminContext";
 
 export default function Header() {
 
-    const { admin, loading, login, logout } = useContext(AdminContext);
+    const { loading, logout } = useContext(AdminContext);
+
+    if (loading) return <p>Loading</p>
 
     return (
         <header className="admin-header">
