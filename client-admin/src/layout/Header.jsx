@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { AdminContext } from "../context/AdminContext";
+import "./Header.css";
 
 export default function Header() {
 

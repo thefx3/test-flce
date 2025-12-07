@@ -1,13 +1,17 @@
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import { Outlet } from "react-router-dom";
+import "./AdminLayout.css";
 
-export default function AdminLayout({ children }) {
+export default function AdminLayout() {
   return (
-    <div className="admin-wrapper">
+    <div className="admin-shell">
       <Sidebar />
-      <div className="admin-content">
+      <div className="admin-main">
         <Header />
-        <main>{children}</main>
+        <main className="admin-body">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

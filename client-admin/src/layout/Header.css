@@ -1,0 +1,43 @@
+/* Header styling aligned with shared-ui variables */
+:root {
+  --header-bg: var(--color-surface, #ffffff);
+  --header-border: var(--color-border, #e5e7eb);
+  --header-text: var(--color-text-main, #1a1a1a);
+  --header-sub: var(--color-text-soft, #555);
+  --header-accent: var(--color-primary, #1a3459);
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--header-accent);
+  letter-spacing: 0.2px;
+}
+
+.admin-header button {
+  background: linear-gradient(135deg, var(--header-accent), var(--color-primary-light, #3f5f8b));
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 160ms ease;
+}
+
+.admin-header button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}

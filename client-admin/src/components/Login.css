@@ -65,6 +65,7 @@ html, body {
 .login-form input, .register-form input {
   width: 100%;
   padding: 0.85rem 0.9rem;
+  font-size: var(--font-size-20, 1rem);
   border: 1px solid var(--color-border, #e5e7eb);
   border-radius: 10px;
   background: #fdfdfd;
