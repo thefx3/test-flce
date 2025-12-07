@@ -4,7 +4,6 @@ import { AdminContext } from '../context/AdminContext.jsx';
 import 'shared-ui/components/Login.css'
 
 export default function Login() {
-
     const navigate = useNavigate();
     const { login } = useContext(AdminContext);
 
@@ -20,23 +19,7 @@ export default function Login() {
         setIsSubmitting(true);
     
         try {
-            const res = await fetch("http://localhost:3000/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-    
-            const data = await res.json();
-
-            console.log(data);
-    
-            if (!res.ok) {
-                setError(data.message || "Login failed");
-                setIsSubmitting(false);
-                return;
-            }
-    
-            login(data.token);
+            await login(email, password);
             navigate("/");
         } catch (err) {
             setError("Network error", err);

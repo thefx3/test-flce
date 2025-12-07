@@ -25,6 +25,7 @@ export function AdminProvider({ children }) {
         console.error("Admin session invalid:", err);
         localStorage.removeItem("adminToken");
         setToken("");
+        setAdmin(null);
       } finally {
         setLoading(false);
       }
@@ -35,16 +36,18 @@ export function AdminProvider({ children }) {
   // Connexion admin
   async function login(email, password) {
     const data = await adminLogin(email, password);
+
     localStorage.setItem("adminToken", data.token);
     setToken(data.token);
     setAdmin(data.admin);
+
     return data.admin;
   }
 
   function logout() {
     localStorage.removeItem("adminToken");
-    setAdmin(null);
     setToken("");
+    setAdmin(null);
   }
 
   return (
