@@ -80,7 +80,11 @@ async function loginSuccess(req, res) {
     }
 
     const { userId, email, role, name, lastname } = user;
-    return res.json({ userId, email, role, name, lastname });
+
+    return res.json({
+      user: { userId, email, role, name, lastname }
+    });
+    
   } catch (error) {
     console.error("Error fetching user profile:", error);
     return res.status(500).json({ message: "Internal server error." });

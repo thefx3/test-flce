@@ -35,13 +35,13 @@ export function AdminProvider({ children }) {
 
   // Connexion admin
   async function login(email, password) {
-    const data = await adminLogin(email, password);
+    const { token, admin } = await adminLogin(email, password);
 
-    localStorage.setItem("adminToken", data.token);
-    setToken(data.token);
-    setAdmin(data.admin);
+    localStorage.setItem("adminToken", token);
+    setToken(token);
+    setAdmin(admin);
 
-    return data.admin;
+    return { token, admin };
   }
 
   function logout() {

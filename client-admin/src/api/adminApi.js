@@ -17,16 +17,15 @@ export async function adminLogin(email, password) {
     throw new Error(err.message || "Admin login failed.");
   }
 
-  const data = await res.json();
+  const { token } = await res.json();
 
-  if (!data.user || (data.user.role !== "ADMIN" && data.user.role !== "SUPERADMIN")) {
-    throw new Error("Access denied: this account is not an admin.");
-  }
+  const meRes = await fetch(`${API_BASE}/auth/me`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!meRes.ok) throw new Error("Admin session invalid");
+  const me = await meRes.json();
 
-  return {
-    token: data.token,
-    admin: data.user,
-  };
+  return { token, admin: me };
 }
 
 // ------------------------------

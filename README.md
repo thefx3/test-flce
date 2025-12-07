@@ -11,6 +11,8 @@ Functions to implement :
 Pages : 
 - Dashboard : overview of the last tests + statistics
 - Users : his personnal data, his test, his level + to grade him
+    - Au Pairs : 
+    - Non Au Pair :
 - Tests : see all tests - filter by graded / ungraded
 + possibility to grade
 - Manual Grading : Grade all the tests ungraded 
