@@ -5,6 +5,7 @@ html, body {
   font-family: var(--font-family);
   background-color: var(--color-bg);
   color: var(--color-text-main);
+  font-size: 16px;
 }
 
 .login-container, .register-container {
@@ -31,13 +32,13 @@ html, body {
   margin: 0 0 0.5rem;
   color: var(--color-primary);
   letter-spacing: 0.2px;
-  font-size: var(--font-size-48, 1.4rem);
+  font-size: 1.5rem;
 }
 
 .subtitle {
   margin-bottom: 1.8rem;
   color: var(--color-text-soft, #555);
-  font-size: var(--font-size-20, 1rem);
+  font-size: 1rem;
 }
 
 .login-error {
@@ -57,7 +58,7 @@ html, body {
 
 .login-form label, .register-form label {
   text-align: left;
-  font-size: var(--font-size-24, 0.9rem);
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--color-text-main);
 }
@@ -65,7 +66,7 @@ html, body {
 .login-form input, .register-form input {
   width: 100%;
   padding: 0.85rem 0.9rem;
-  font-size: var(--font-size-20, 1rem);
+  font-size: 1rem;
   border: 1px solid var(--color-border, #e5e7eb);
   border-radius: 10px;
   background: #fdfdfd;
@@ -82,7 +83,7 @@ html, body {
 .login-form button, .register-form button {
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: #ffffff;
-  font-size: var(--font-size-24, 1rem);
+  font-size: 1rem;
   font-weight: 700;
   border: none;
   border-radius: 10px;
@@ -97,22 +98,6 @@ html, body {
   box-shadow: 0 12px 28px rgba(26, 52, 89, 0.25);
 }
 
-.register-link {
-  margin-top: 1rem;
-  font-size: var(--font-size-20, 0.9rem);
-  color: var(--color-text-soft, #555);
-}
-
-.register-link a {
-  color: var(--color-primary);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.register-link a:hover {
-  text-decoration: underline;
-}
-
 .not-logged-in {
   text-align: center;
   padding: 18px 24px;
@@ -123,7 +108,7 @@ html, body {
   box-shadow: var(--shadow-soft, 0 10px 25px rgba(0, 0, 0, 0.08));
   max-width: 600px;
   margin: 30px auto;
-  font-size: var(--font-size-20, 1rem);
+  font-size: 1rem;
 }
 
 @keyframes floatIn {

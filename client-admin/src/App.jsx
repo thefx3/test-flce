@@ -5,6 +5,9 @@ import { AdminContext } from "./context/AdminContext.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import UsersPage from "./pages/Users.jsx";
 import AdminLayout from "./layout/AdminLayout.jsx";
+import TestsPage from "./pages/Tests.jsx";
+import GradesPage from "./pages/Grades.jsx";
+import StatisticsPage from "./pages/Statistics.jsx";
 
 export default function AdminRouter() {
   const { admin, loading } = useContext(AdminContext);
@@ -21,6 +24,9 @@ export default function AdminRouter() {
         <Route element={<AdminLayout />}>
           <Route index element={<DashboardPage />} />
           <Route path="/users" element={<UsersPage />} />
+          <Route path="/tests" element={<TestsPage />} />
+          <Route path="/grades" element={<GradesPage />} />
+          <Route path="/stats" element={<StatisticsPage />} />
         </Route>
       ) : (
         <Route path="*" element={<Navigate to="/login" />} />

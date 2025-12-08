@@ -6,13 +6,16 @@ export default function Sidebar() {
     { to: "/", label: "Dashboard" },
     { to: "/users", label: "Utilisateurs" },
     { to: "/tests", label: "Tests" },
-    { to: "/grade", label: "Correction" },
+    { to: "/grades", label: "Correction" },
     { to: "/stats", label: "Statistiques" },
   ];
 
   return (
     <aside className="sidebar">
-      <div className="sidebar__logo">LA CLEF</div>
+      <div className="sidebar__logo">LA CLEF
+        <p className="username">User1</p>
+      </div>
+      
 
       <nav className="sidebar__nav">
         {links.map(link => (

@@ -10,7 +10,7 @@ export default function Header() {
 
     return (
         <header className="admin-header">
-        <h1>Admin Panel</h1>
+        <h1>Saison 2025-2026</h1>
 
         <button onClick={logout}>Logout</button>
         </header>
