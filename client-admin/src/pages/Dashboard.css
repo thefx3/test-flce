@@ -1,0 +1,73 @@
+/* Admin dashboard styling aligned with shared-ui variables */
+:root {
+  --card-bg: var(--color-surface, #ffffff);
+  --card-border: var(--color-border, #e5e7eb);
+  --card-shadow: var(--shadow-soft, 0 10px 25px rgba(0, 0, 0, 0.08));
+  --text-main: var(--color-text-main, #1a1a1a);
+  --text-soft: var(--color-text-soft, #555);
+  --accent: var(--color-primary, #1a3459);
+}
+
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  color: var(--text-main);
+}
+
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: var(--accent);
+}
+
+.dashboard-header p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+}
+
+.statistics-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.statistic-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.statistic-card h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-soft);
+  font-weight: 700;
+}
+
+.statistic-card p {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .statistics-overview {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}

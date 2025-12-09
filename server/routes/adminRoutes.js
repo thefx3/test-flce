@@ -46,6 +46,7 @@ router.delete("/users/:userId/family", authRequired, adminRequired, familyContro
 // --- TESTS --- 
 router.get("/tests/count", authRequired, adminRequired, testController.countAllTestsAdmin);
 router.get("/tests/to-grade/count", authRequired, adminRequired, testController.countAllTestsToGradeAdmin);
+
 router.get("/tests", authRequired, adminRequired, testController.getAllTestsAdmin);
 router.post("/users/:userId/tests", authRequired, adminRequired, testController.createTest);
 router.get("/users/:userId/tests", authRequired, adminRequired, testController.getAllTests);
