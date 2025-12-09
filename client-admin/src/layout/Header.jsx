@@ -4,7 +4,7 @@ import "./Header.css";
 
 export default function Header() {
 
-    const { loading, logout } = useContext(AdminContext);
+    const { admin, loading, logout } = useContext(AdminContext);
 
     if (loading) return <p>Loading</p>
 
@@ -12,6 +12,7 @@ export default function Header() {
         <header className="admin-header">
         <h1>Saison 2025-2026</h1>
 
+        <p>USER : {admin.userId}</p>
         <button onClick={logout}>Logout</button>
         </header>
     );
