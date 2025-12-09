@@ -52,3 +52,38 @@ export async function adminCheckSession(token) {
 
   return { admin: data.user };
 }
+
+
+export async function countAllTestsAdmin(){
+  const res = await fetch(`${API_BASE}/admin/tests/count`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to count tests.");
+  }
+
+  return res.json(); // { count }
+}
+
+export async function countTestsToGradeAdmin(){
+  const res = await fetch(`${API_BASE}/admin/tests/to-grade/count`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to count tests to grade.");
+  }
+
+  return res.json(); // { count }
+}

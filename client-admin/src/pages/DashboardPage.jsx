@@ -1,5 +1,36 @@
+import { useState, useEffect, useContext } from "react";
+import { countAllTestsAdmin, countTestsToGradeAdmin } from "../api/adminApi";
+import { AdminContext } from "../context/AdminContext";
 
 export default function DashboardPage() {
+  const { token } = useContext(AdminContext);
+  const [countTest, setCountTests]= useState(0);
+  const [toGrade, setToGrade] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await countAllTestsAdmin(token);
+        const res1 = await countTestsToGradeAdmin(token);
+
+        // API returns { count: number }
+        setCountTests(res.totalTests ?? 0);
+        setToGrade(res1 ?? 0);
+      } catch (err) {
+        console.error("Error fetching test count:", err);
+        setError("Impossible de récupérer le nombre de tests");
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (token) load();
+  }, [token]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
     <div className="admin-wrapper">
       <h1>Admin Dashboard</h1>
@@ -9,11 +40,11 @@ export default function DashboardPage() {
         <div className="statistics-group">
           <div className="statistic-card">
             <h2>Total tests</h2>
-            <p>1,2234</p>
+            <p>{countTest}</p>
           </div>
           <div className="statistic-card">
-            <h2>Tests to corrects</h2>
-            <p>50</p>
+            <h2>Tests à corriger</h2>
+            <p>{toGrade}</p>
           </div>
           <div className="statistic-card">
             <h2>Taux de réussite</h2>

@@ -193,6 +193,17 @@ async countAllTestsAdmin(){
   return prisma.test.count()
 }
 
+async countAllTestsToGradeAdmin(){
+  return prisma.test.count({ 
+    where:  {
+      NOT: {
+        status: "CORRECTED",
+      },
+    },
+  })
+}
+
+
 async deleteSingleTest(testId){
   return prisma.test.delete({ where: { testId } });
 }

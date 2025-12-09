@@ -187,6 +187,15 @@ async countAllTestsAdmin(req, res, next) {
   }
 }
 
+async countAllTestsToGradeAdmin(req, res, next) {
+  try {
+    const teststograde = await testModel.countAllTestsToGradeAdmin();
+    res.json(teststograde);
+  } catch (err) {
+    next(err);
+  }
+}
+
 
 async getTestAdmin(req, res, next) {
   try {
