@@ -17,6 +17,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  height: 70px;
 }
 
 .admin-header h1 {
@@ -30,7 +31,7 @@
   background: linear-gradient(135deg, var(--header-accent), var(--color-primary-light, #3f5f8b));
   color: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 0.6rem 1.1rem;
   font-weight: 600;
   cursor: pointer;
@@ -38,6 +39,6 @@
 }
 
 .admin-header button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  transform: scale(0.98);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
 }

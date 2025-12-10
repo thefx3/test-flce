@@ -57,6 +57,9 @@ router.get("/users/:userId/tests/:testId/score", authRequired, adminRequired, te
 
 
 // --- GRADES ---
+router.put("/tests/:testId/corrected", authRequired, adminRequired, testController.finalizeGrading);
+router.put("/tests/:testId/auto-grade", authRequired, adminRequired, testController.gradeAuto);
+router.put("/tests/:testId/manual-grade", authRequired, adminRequired, testController.gradeManual);
 router.put("/users/:userId/tests/:testId/auto-grade", authRequired, adminRequired, testController.gradeAuto);
 router.put("/users/:userId/tests/:testId/manual-grade", authRequired, adminRequired, testController.gradeManual);
 

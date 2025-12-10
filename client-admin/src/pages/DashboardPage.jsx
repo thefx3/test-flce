@@ -32,10 +32,9 @@ export default function DashboardPage() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="dashboard-wrapper">
+    <div className="admin-wrapper">
       <div className="dashboard-header">
         <h1>Admin Dashboard</h1>
-        <p>Welcome to the admin dashboard. Here you can manage users, tests, and view statistics.</p>
       </div>
 
       <div className="statistics-overview">
@@ -50,30 +49,6 @@ export default function DashboardPage() {
         <div className="statistic-card">
           <h2>Taux de réussite</h2>
           <p>50%</p>
-        </div>
-        <div className="statistic-card">
-          <h2>Niveau A0</h2>
-          <p>80</p>
-        </div>
-        <div className="statistic-card">
-          <h2>Niveau A1</h2>
-          <p>50</p>
-        </div>
-        <div className="statistic-card">
-          <h2>Niveau A2</h2>
-          <p>40</p>
-        </div>
-        <div className="statistic-card">
-          <h2>Niveau B1</h2>
-          <p>50</p>
-        </div>
-        <div className="statistic-card">
-          <h2>Niveau B2</h2>
-          <p>33</p>
-        </div>
-        <div className="statistic-card">
-          <h2>Niveau C1</h2>
-          <p>50</p>
         </div>
       </div>
     </div>

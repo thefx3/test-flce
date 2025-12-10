@@ -255,6 +255,20 @@ async gradeManual(req, res, next) {
   }
 }
 
+async finalizeGrading(req, res, next) {
+  try {
+    const testId = parseId(req.params.testId, "test id", res);
+    if (!testId) return;
+
+    const finalized = await testModel.finalizeGrading(testId);
+
+    res.json(finalized);
+  } catch (err) {
+    next(err);
+  }
+}
+
+
 async getScoreOfTest(req, res, next) {
   try {
     const testId = parseId(req.params.testId, "test id", res);

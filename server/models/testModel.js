@@ -303,6 +303,21 @@ async gradeManual(grades) {
     return { message: "Manual grading updated" };
 }
  
+async finalizeGrading(testId) {
+    const aggregated = await prisma.testResponse.aggregate({
+      where: { testId },
+      _sum: { score: true },
+    });
+    const totalScore = aggregated._sum.score ?? 0;
+
+    await prisma.test.update({
+      where: { testId },
+      data: { status: "CORRECTED", testscore: totalScore },
+    });
+
+    return this.getSingleTestAdmin(testId);
+}
+
 //Admin
 async getScoreOfTest(testId) {
   const responses = await prisma.testResponse.findMany({
