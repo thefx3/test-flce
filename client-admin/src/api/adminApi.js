@@ -54,6 +54,14 @@ export async function adminCheckSession(token) {
 }
 
 
+//GESTION DES COMPTES ADMINS
+
+
+
+
+
+
+// SECTION DES UTILISATEURS
 export async function countAllTestsAdmin(){
   const res = await fetch(`${API_BASE}/admin/tests/count`, {
     method: "GET",

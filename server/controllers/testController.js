@@ -189,8 +189,8 @@ async countAllTestsAdmin(req, res, next) {
 
 async countAllTestsToGradeAdmin(req, res, next) {
   try {
-    const teststograde = await testModel.countAllTestsToGradeAdmin();
-    res.json(teststograde);
+    const testsToGrade = await testModel.countAllTestsToGradeAdmin();
+    res.json({ count: testsToGrade });
   } catch (err) {
     next(err);
   }

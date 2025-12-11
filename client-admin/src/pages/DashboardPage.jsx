@@ -1,56 +1,48 @@
-import { useState, useEffect, useContext } from "react";
-import { countAllTestsAdmin, countTestsToGradeAdmin } from "../api/adminApi";
+import { useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { AdminContext } from "../context/AdminContext";
 import "./Dashboard.css";
 
+import { countAllTestsAdmin, countTestsToGradeAdmin } from "../api/adminApi";
+
 export default function DashboardPage() {
   const { token } = useContext(AdminContext);
-  const [countTest, setCountTests] = useState(0);
-  const [toGrade, setToGrade] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const res = await countAllTestsAdmin(token);
-        const res1 = await countTestsToGradeAdmin(token);
+  const testsCountQuery = useQuery({
+    queryKey: ["tests", "count"],
+    queryFn: () => countAllTestsAdmin(token),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 
-        setCountTests(res.totalTests ?? res.count ?? 0);
-        setToGrade(res1?.count ?? res1 ?? 0);
-      } catch (err) {
-        console.error("Error fetching test count:", err);
-        setError("Impossible de récupérer le nombre de tests");
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (token) load();
-  }, [token]);
+  const toGradeQuery = useQuery({
+    queryKey: ["tests", "to-grade"],
+    queryFn: () => countTestsToGradeAdmin(token),
+    staleTime: 1000 * 60 * 5,
+  });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (testsCountQuery.isLoading || toGradeQuery.isLoading) return <p>Loading...</p>;
 
   return (
     <div className="admin-wrapper">
-      <div className="dashboard-header">
-        <h1>Admin Dashboard</h1>
-      </div>
+      <h1>Dashboard</h1>
 
       <div className="statistics-overview">
         <div className="statistic-card">
           <h2>Total tests</h2>
-          <p>{countTest}</p>
+          <p>{testsCountQuery.data.totalTests}</p>
         </div>
+
         <div className="statistic-card">
           <h2>Tests à corriger</h2>
-          <p>{toGrade}</p>
+          <p>{toGradeQuery.data.count}</p>
         </div>
+
         <div className="statistic-card">
           <h2>Taux de réussite</h2>
-          <p>50%</p>
+          <p>64 %</p>
         </div>
       </div>
     </div>
   );
 }
+

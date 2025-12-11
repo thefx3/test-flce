@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Home, Users, ListChecks, CheckCheck, BarChart2, UserRound } from "lucide-react";
+import { Home, Users, ListChecks, CheckCheck, BarChart2, UserRound, UserStar } from "lucide-react";
 import "./Sidebar.css";
 import { useContext } from "react";
 import { AdminContext } from "../context/AdminContext";
@@ -8,9 +8,10 @@ export default function Sidebar() {
   const { admin } = useContext(AdminContext);
   const links = [
     { to: "/", label: "Dashboard", Icon: Home },
+    { to: "/admin", label: "Admins", Icon: UserStar },
     { to: "/users", label: "Utilisateurs", Icon: Users },
     { to: "/tests", label: "Tests", Icon: ListChecks },
-    { to: "/grades", label: "Correction", Icon: CheckCheck },
+    { to: "/grades", label: "Corrections", Icon: CheckCheck },
     { to: "/stats", label: "Statistiques", Icon: BarChart2 },
   ];
 
