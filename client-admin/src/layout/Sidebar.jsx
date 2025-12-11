@@ -20,7 +20,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     <aside className={`sidebar ${isOpen ? "sidebar--open" : ""}`}>
       <div className="sidebar__logo">
         <UserRound size={22} className="sidebar__avatar-icon" />
-        <span>User {admin.userId}</span>
+        <span>{admin.email}</span>
       </div>
 
       <nav className="sidebar__nav">

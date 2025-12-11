@@ -1,4 +1,4 @@
-export default function AdminCard({ admin, isExpanded, onToggle, onEdit, onDelete }) {
+export default function AdminCard({ admin, isExpanded, onToggle, canDelete, onEdit, onDelete }) {
   return (
     <div
       className={`admin-card ${isExpanded ? "admin-card--expanded" : ""}`}
@@ -31,7 +31,12 @@ export default function AdminCard({ admin, isExpanded, onToggle, onEdit, onDelet
           Modifier
         </button>
 
-        <button className="btn btn-danger" onClick={() => onDelete(admin)}>
+        <button
+          className="btn btn-danger"
+          onClick={() => onDelete(admin)}
+          disabled={!canDelete}
+          title={!canDelete ? "Action réservée aux SUPERADMIN" : undefined}
+        >
           Supprimer
         </button>
       </div>

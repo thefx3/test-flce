@@ -1,6 +1,6 @@
 import AdminCard from "./AdminCard";
 
-export default function AdminList({ admins, expandedId, onToggle, onEdit, onDelete }) {
+export default function AdminList({ admins, expandedId, onToggle, canDelete, onEdit, onDelete }) {
   if (admins.length === 0) {
     return (
       <div className="state-card">
@@ -18,6 +18,7 @@ export default function AdminList({ admins, expandedId, onToggle, onEdit, onDele
           admin={admin}
           isExpanded={expandedId === admin.userId}
           onToggle={() => onToggle(admin.userId)}
+          canDelete={canDelete}
           onEdit={onEdit}
           onDelete={onDelete}
         />

@@ -4,10 +4,21 @@ import { useCreateAdmin } from "../hooks/admin-hooks/useCreateAdmin"
 export default function AdminCreateModal({ onClose }) {
   const [form, setForm] = useState({ email: "", password: "", role: "ADMIN" });
   const mutation = useCreateAdmin();
+  const [localError, setLocalError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    mutation.mutate(form, { onSuccess: onClose });
+    if (!form.password.trim()) {
+      setLocalError("Le mot de passe ne peut pas être vide.");
+      return;
+    }
+    setLocalError("");
+    mutation.mutate(form, {
+      onSuccess: onClose,
+      onError: (err) => {
+        setLocalError(err.message || "Impossible de créer l’admin.");
+      },
+    });
   };
 
   return (
@@ -43,6 +54,12 @@ export default function AdminCreateModal({ onClose }) {
               <option value="SUPERADMIN">SUPERADMIN</option>
             </select>
           </label>
+
+          {(localError || mutation.isError) && (
+            <p className="form-error">
+              {localError || mutation.error?.message}
+            </p>
+          )}
 
           <div className="modal-actions">
             <button type="button" className="btn btn-outline" onClick={onClose}>

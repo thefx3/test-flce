@@ -9,7 +9,9 @@ export default function AdminDeleteModal({ admin, onClose }) {
 
   const handleDelete = (e) => {
     e.preventDefault();
-    deleteMutation.mutate(admin.userId, { onSuccess: onClose });
+    deleteMutation.mutate(admin.userId, {
+      onSuccess: onClose,
+    });
   };
 
   return (
@@ -28,6 +30,10 @@ export default function AdminDeleteModal({ admin, onClose }) {
             onChange={(e) => setText(e.target.value)}
           />
 
+          {deleteMutation.isError && (
+            <p className="form-error">{deleteMutation.error?.message || "Suppression impossible."}</p>
+          )}
+
           <div className="modal-actions">
             <button type="button" className="btn btn-outline" onClick={onClose}>
               Annuler
@@ -36,9 +42,9 @@ export default function AdminDeleteModal({ admin, onClose }) {
             <button
               type="submit"
               className="btn btn-danger"
-              disabled={!match}
+              disabled={!match || deleteMutation.isPending}
             >
-              Supprimer
+              {deleteMutation.isPending ? "Suppression..." : "Supprimer"}
             </button>
           </div>
         </form>

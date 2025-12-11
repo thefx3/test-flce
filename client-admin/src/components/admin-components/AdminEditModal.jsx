@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useUpdateAdmin } from "../hooks/admin-hooks/useUpdateAdmin";
+import { AdminContext } from "../../context/AdminContext";
 
 export default function AdminEditModal({ admin, onClose }) {
   const updateMutation = useUpdateAdmin();
+  const { admin: currentAdmin, refreshAdmin } = useContext(AdminContext);
 
   const [form, setForm] = useState({
     email: admin.email || "",
@@ -27,7 +29,14 @@ export default function AdminEditModal({ admin, onClose }) {
     e.preventDefault();
     updateMutation.mutate(
       { adminId: admin.userId, data: form },
-      { onSuccess: onClose }
+      {
+        onSuccess: () => {
+          if (admin.userId === currentAdmin?.userId) {
+            refreshAdmin?.();
+          }
+          onClose();
+        },
+      }
     );
   };
 

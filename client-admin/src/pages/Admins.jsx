@@ -18,6 +18,7 @@ export default function AdminPage() {
   const [modal, setModal] = useState(null);
   const [selected, setSelected] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
+  const canDelete = currentAdmin?.role === "SUPERADMIN";
 
   if (isLoading) return <p>Chargement...</p>;
   if (isError) return <p>Erreur de chargement</p>;
@@ -37,12 +38,16 @@ export default function AdminPage() {
         admins={admins}
         expandedId={expandedId}
         onToggle={(id) => setExpandedId((prev) => (prev === id ? null : id))}
+        canDelete={canDelete}
         onEdit={(admin) => {
           setSelected(admin);
           setModal("edit");
         }}
         onDelete={(admin) => {
-          if (currentAdmin?.role !== "SUPERADMIN") return;
+          if (!canDelete) {
+            alert("Action réservée aux SUPERADMIN.");
+            return;
+          }
           setSelected(admin);
           setModal("delete");
         }}
