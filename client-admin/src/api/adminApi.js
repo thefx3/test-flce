@@ -91,6 +91,38 @@ export async function registerAdmin({ email, password, role="ADMIN"}) {
   return admin.json();
 }
 
+export async function updateAdmin({ adminId, data }) {
+  const admin = await fetch(`${API_BASE}/admin/admins/${adminId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!admin.ok) {
+    const err = await admin.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to update the admin.");
+  }
+  return admin.json();
+}
+
+export async function deleteAdmin(adminId) {
+  const res = await fetch(`${API_BASE}/admin/admins/${adminId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to delete the admin.");
+  }
+  return res.json();
+}
 
 
 // SECTION DES UTILISATEURS

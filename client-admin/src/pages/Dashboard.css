@@ -264,6 +264,14 @@
   background: #fecdd3;
 }
 
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.25);
+  box-shadow: none;
+}
+
 .state-card {
   margin-top: 1.5rem;
   padding: 1.1rem 1.25rem;

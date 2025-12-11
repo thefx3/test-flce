@@ -15,20 +15,20 @@ datasource db {
 }
 
 model User {
-    userId            Int      @id @default(autoincrement())
-    email         String   @unique
-    name          String?
-    lastname      String?
-    password      String?  //null for test users
-    role          Role     @default(USER)
-    createdAt     DateTime @default(now())
+  userId            Int      @id @default(autoincrement())
+  email         String   @unique
+  name          String?
+  lastname      String?
+  password      String?  //null for test users
+  role          Role     @default(USER)
+  createdAt     DateTime @default(now())
 
-    aupair        Boolean
+  aupair        Boolean
 
-    profile       Profile?
-    aupairfamily  AuPairFamily[]
-    frenchtest    Test[]
-    comment       String?
+  profile       Profile?
+  aupairfamily  AuPairFamily[]
+  frenchtest    Test[]
+  comment       String?
 }
 
 // -------------------- PROFILE -----------------------

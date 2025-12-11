@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminContext } from "../context/AdminContext";
-import { getAllAdmins, registerAdmin } from "../api/adminApi";
+import { getAllAdmins, registerAdmin, updateAdmin, deleteAdmin } from "../api/adminApi";
 import "./Dashboard.css";
 
 export default function Admin() {
-  const { token } = useContext(AdminContext);
+  const { token, admin: currentAdmin, refreshAdmin } = useContext(AdminContext);
   const queryClient = useQueryClient();
   const [expandedAdminId, setExpandedAdminId] = useState(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -14,6 +14,17 @@ export default function Admin() {
     password: "",
     role: "ADMIN",
   })
+
+  const [editingAdmin, setEditingAdmin] = useState(null);
+  const [editForm, setEditForm] = useState({
+    email: "",
+    name: "",
+    lastname: "",
+    role: "ADMIN",
+    password: "",
+  });
+  const [pendingDelete, setPendingDelete] = useState(null);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
 
   const getAdminsQuery = useQuery({
     queryKey: ["admins"],
@@ -32,19 +43,63 @@ export default function Admin() {
     },
   });
 
+  const updateAdminMutation = useMutation({
+    mutationFn: (payload) => updateAdmin(payload), // payload = { adminId, data }
+    onSuccess: () => {
+      setEditingAdmin(null);
+      queryClient.invalidateQueries(["admins"]);
+      if (editingAdmin?.userId && editingAdmin.userId === currentAdmin?.userId) {
+        refreshAdmin?.();
+      }
+    },
+  });
+  
+  const deleteAdminMutation = useMutation({
+    mutationFn: (adminId) => deleteAdmin(adminId),
+    onSuccess: () => {
+      setPendingDelete(null);
+      setDeleteConfirmText("");
+      queryClient.invalidateQueries(["admins"]);
+    },
+  });
 
   const admins = getAdminsQuery.data || [];
-
-  const handleManage = (admin) => {
-    console.log("Gérer l'administrateur", admin);
-  };
-
+  const isSuperAdmin = currentAdmin?.role === "SUPERADMIN";
+  const canConfirmDelete =
+    pendingDelete &&
+    deleteConfirmText.trim().toLowerCase() === (pendingDelete.email || "").toLowerCase();
+  
   const handleEdit = (admin) => {
-    console.log("Modifier l'administrateur", admin);
+    setEditingAdmin({
+        ...admin,
+        userId: admin.userId
+      });
+  
+    setEditForm({
+      email: admin.email || "",
+      name: admin.name || "",
+      lastname: admin.lastname || "",
+      role: admin.role || "ADMIN",
+      password: "", // volontairement vide
+    });
   };
+  
 
   const handleDelete = (admin) => {
-    console.log("Supprimer l'administrateur", admin);
+    if (!isSuperAdmin) {
+      alert("Seul un SUPERADMIN peut supprimer un compte.");
+      return;
+    }
+    setPendingDelete(admin);
+    setDeleteConfirmText("");
+  };
+
+  const confirmDelete = (e) => {
+    e.preventDefault();
+    if (!pendingDelete) return;
+    const adminId = pendingDelete.userId || pendingDelete.id;
+    if (!adminId) return;
+    deleteAdminMutation.mutate(adminId);
   };
 
   const toggleActions = (adminId) => {
@@ -91,20 +146,22 @@ export default function Admin() {
       </div>
 
         {isCreateOpen && (
-            <div className="modal-backdrop" onClick={() => setIsCreateOpen(false)}>
+            <div className="modal-backdrop">
             <div
             className="modal"
             onClick={(e) => e.stopPropagation()} // pour ne pas fermer quand on clique dans la modal
             >
             <h2>Nouvel administrateur</h2>
 
-            <form onSubmit={(e) => {
+            <form autoComplete="off"
+                onSubmit={(e) => {
                 e.preventDefault();
                 createAdminMutation.mutate(newAdmin);
             }}>
             <label> Email
                 <input
                 type="email"
+                autoComplete="off"
                 value={newAdmin.email}
                 onChange={(e) =>
                     setNewAdmin((prev) => ({ ...prev, email: e.target.value }))
@@ -116,6 +173,7 @@ export default function Admin() {
                 Mot de passe
                 <input
                 type="password"
+                autoComplete="new-password"
                 value={newAdmin.password}
                 onChange={(e) =>
                     setNewAdmin((prev) => ({ ...prev, password: e.target.value }))
@@ -164,6 +222,137 @@ export default function Admin() {
             </div>
         )}
 
+        {editingAdmin && (
+        <div className="modal-backdrop" onClick={() => setEditingAdmin(null)}>
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Modifier l’administrateur</h2>
+
+            <form
+                onSubmit={(e) => {
+                e.preventDefault();
+
+                updateAdminMutation.mutate({
+                    adminId: editingAdmin.userId,
+                    data: {
+                    email: editForm.email,
+                    name: editForm.name,
+                    lastname: editForm.lastname,
+                    role: editForm.role,
+                    ...(editForm.password ? { password: editForm.password } : {}),
+                    },
+                });
+                }}
+            >
+                <label>Email
+                <input
+                    type="email"
+                    value={editForm.email}
+                    onChange={(e) =>
+                    setEditForm((prev) => ({ ...prev, email: e.target.value }))
+                    }
+                />
+                </label>
+
+                <label>Prénom
+                <input
+                    type="text"
+                    value={editForm.name}
+                    onChange={(e) =>
+                    setEditForm((prev) => ({ ...prev, name: e.target.value }))
+                    }
+                />
+                </label>
+
+                <label>Nom
+                <input
+                    type="text"
+                    value={editForm.lastname}
+                    onChange={(e) =>
+                    setEditForm((prev) => ({ ...prev, lastname: e.target.value }))
+                    }
+                />
+                </label>
+
+                <label>Rôle
+                <select
+                    value={editForm.role}
+                    onChange={(e) =>
+                    setEditForm((prev) => ({ ...prev, role: e.target.value }))
+                    }
+                >
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="SUPERADMIN">SUPERADMIN</option>
+                </select>
+                </label>
+
+                <label>Nouveau mot de passe (optionnel)
+                <input
+                    type="password"
+                    value={editForm.password}
+                    onChange={(e) =>
+                    setEditForm((prev) => ({ ...prev, password: e.target.value }))
+                    }
+                />
+                </label>
+
+                {updateAdminMutation.isError && (
+                <p className="form-error">{updateAdminMutation.error.message}</p>
+                )}
+
+                <div className="modal-actions">
+                <button type="button" className="btn btn-outline" onClick={() => setEditingAdmin(null)}>
+                    Annuler
+                </button>
+                <button type="submit" className="btn btn-primary">
+                    Modifier
+                </button>
+                </div>
+            </form>
+            </div>
+        </div>
+        )}
+
+        {pendingDelete && (
+          <div className="modal-backdrop" onClick={() => setPendingDelete(null)}>
+            <div className="modal" onClick={(e) => e.stopPropagation()}>
+              <h2>Supprimer l’administrateur</h2>
+              <p>
+                Vous êtes sur le point de supprimer <strong>{pendingDelete.email}</strong>.
+                Tapez son email pour confirmer.
+              </p>
+              <form onSubmit={confirmDelete}>
+                <label>
+                  Email de confirmation
+                  <input
+                    type="email"
+                    value={deleteConfirmText}
+                    onChange={(e) => setDeleteConfirmText(e.target.value)}
+                    placeholder={pendingDelete.email}
+                    autoFocus
+                  />
+                </label>
+
+                {deleteAdminMutation.isError && (
+                  <p className="form-error">{deleteAdminMutation.error.message}</p>
+                )}
+
+                <div className="modal-actions">
+                  <button type="button" className="btn btn-outline" onClick={() => setPendingDelete(null)}>
+                    Annuler
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-danger"
+                    disabled={!canConfirmDelete || deleteAdminMutation.isPending}
+                  >
+                    {deleteAdminMutation.isPending ? "Suppression..." : "Supprimer"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
 
       {admins.length === 0 ? (
         <div className="state-card">
@@ -206,13 +395,16 @@ export default function Admin() {
                   className={`admin-actions ${isExpanded ? "admin-actions--visible" : ""}`}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <button className="btn btn-ghost" onClick={() => handleManage(admin)}>
-                    Gérer
-                  </button>
-                  <button className="btn btn-outline" onClick={() => handleEdit(admin)}>
+                  <button className="btn btn-ghost" onClick={() => handleEdit(admin)}>
                     Modifier
                   </button>
-                  <button className="btn btn-danger" onClick={() => handleDelete(admin)}>
+
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(admin)}
+                    disabled={!isSuperAdmin || deleteAdminMutation.isPending}
+                    title={!isSuperAdmin ? "Action réservée aux SUPERADMIN" : undefined}
+                  >
                     Supprimer
                   </button>
                 </div>

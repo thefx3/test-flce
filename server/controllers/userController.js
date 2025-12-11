@@ -16,7 +16,10 @@ async function getAllAdmins(req, res) {
 
 async function getSingleAdmin(req, res) {
   try {
-    const adminId = Number(req.params.id);
+    const adminId = Number(req.params.userId);
+    if (Number.isNaN(adminId)) {
+      return res.status(400).json({ message: "Admin id is required" });
+    }
     const admin = Number.isNaN(adminId)
       ? null
       : await userModel.getSingleAdminById(adminId);
@@ -32,7 +35,10 @@ async function getSingleAdmin(req, res) {
 
 async function updateAdmin(req, res) {
   try {
-    const id = Number(req.params.id);
+    const id = Number(req.params.userId);
+    if (Number.isNaN(id)) {
+      return res.status(400).json({ message: "Admin id is required" });
+    }
     const data = req.body;
 
     const admin = await userModel.getSingleAdminById(id);
@@ -48,7 +54,10 @@ async function updateAdmin(req, res) {
 
 async function deleteAdmin(req, res) {
   try {
-    const id = Number(req.params.id);
+    const id = Number(req.params.userId);
+    if (Number.isNaN(id)) {
+      return res.status(400).json({ message: "Admin id is required" });
+    }
 
     await userModel.deleteUserById(id);
     res.json({ message: "Admin deleted" });

@@ -35,6 +35,10 @@ async getAllAdmins() {
     where: {
       OR: [{ role: "ADMIN" }, { role: "SUPERADMIN" }]
     },
+    orderBy: [
+      { role: "desc" },       // SUPERADMIN avant ADMIN
+      { createdAt: "asc" }   // plus récent en premier
+    ],
     select: baseUserSelect
   });
 }
@@ -68,14 +72,14 @@ async createAdmin(data) {
 }
 
 async updateAdmin(userId, data) {
-  const allowedAdminFields = ["email", "name", "lastname", "password", "aupair", "role"];
+  const allowedAdminFields = ["email", "name", "lastname", "password", "role"];
 
   const safeData = pickAllowedFields(data, allowedAdminFields);
 
   return prisma.user.update({
-    where: { userId },
+    where: { userId: Number(userId) },
     data: safeData,
-    select: baseUserSelect
+    select: authUserSelect
   });
 }
 

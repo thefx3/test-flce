@@ -50,8 +50,20 @@ export function AdminProvider({ children }) {
     setAdmin(null);
   }
 
+  async function refreshAdmin() {
+    if (!token) return null;
+    try {
+      const data = await adminCheckSession(token);
+      setAdmin(data.admin);
+      return data.admin;
+    } catch (err) {
+      console.error("Unable to refresh admin session:", err);
+      return null;
+    }
+  }
+
   return (
-    <AdminContext.Provider value={{ admin, token, login, logout, loading }}>
+    <AdminContext.Provider value={{ admin, token, login, logout, loading, refreshAdmin }}>
       {children}
     </AdminContext.Provider>
   );
