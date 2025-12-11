@@ -2,9 +2,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage.jsx";
 import { useContext } from "react";
 import { AdminContext } from "./context/AdminContext.jsx";
-import DashboardPage from "./pages/DashboardPage.jsx";
-import UsersPage from "./pages/Users.jsx";
 import AdminLayout from "./layout/AdminLayout.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
+import AdminsPage from "./pages/Admins.jsx";
+import UsersPage from "./pages/Users.jsx";
 import TestsPage from "./pages/Tests.jsx";
 import GradesPage from "./pages/Grades.jsx";
 import StatisticsPage from "./pages/Statistics.jsx";
@@ -23,6 +24,7 @@ export default function AdminRouter() {
       {admin ? (
         <Route element={<AdminLayout />}>
           <Route index element={<DashboardPage />} />
+          <Route path="/admins" element={<AdminsPage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/tests" element={<TestsPage />} />
           <Route path="/grades" element={<GradesPage />} />

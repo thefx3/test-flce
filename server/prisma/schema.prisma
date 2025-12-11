@@ -134,7 +134,6 @@ enum Role {
   SUPERADMIN //Author with full permissions
   ADMIN
   USER  //Test taker
-  TEACHER //Teacher with grading permissions
 }
 
 enum TestStatus {

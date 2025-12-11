@@ -3,8 +3,7 @@ import "./Dashboard.css";
 export default function UsersPage() {
   return (
     <div className="admin-wrapper">
-      <h1>Users</h1>
-      <p>Welcome to the Users Page. Here you can see and manage all the users.</p>
+      <h1>Utilisateurs</h1>
 
       <div className="statistics-overview">
         <div className="statistic-card">

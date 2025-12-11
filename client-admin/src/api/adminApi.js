@@ -56,8 +56,22 @@ export async function adminCheckSession(token) {
 
 //GESTION DES COMPTES ADMINS
 
+export async function getAllAdmins() {
+  const admins = await fetch(`${API_BASE}/admin/admins`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+  });
 
+  if (!admins.ok) {
+    const err = await admins.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to fetch admins.");
+  }
 
+  return admins.json();
+}
 
 
 

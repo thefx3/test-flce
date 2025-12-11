@@ -8,10 +8,12 @@
   --accent: var(--color-primary, #1a3459);
 }
 
+/* DASHBOARD */
 
 .admin-wrapper h1 {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.5rem;
+  padding: 6px 0;
   color: var(--accent);
 }
 
@@ -47,8 +49,243 @@
   color: var(--accent);
 }
 
+
+/* ADMINS */
+
+.admins-header {
+  margin-top: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #162b4e, #233b70);
+  color: #ffffff;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-flow:column wrap;
+}
+
+.admins-header h1 {
+  margin: 0.1rem 0 0;
+  color: #ffffff;
+  font-size: 1.6rem;
+}
+
+.admins-header .subtitle {
+  margin: 0.4rem 0 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.admins-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.admin-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.admin-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow: hidden;
+}
+
+.admin-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(35, 59, 112, 0.08), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.admin-card:hover::before {
+  opacity: 1;
+}
+
+.admin-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(35, 59, 112, 0.1);
+  color: var(--accent);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.admin-card__identity {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.admin-email {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(35, 59, 112, 0.12);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  width: fit-content;
+}
+
+.admin-dot {
+  margin-left: auto;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #4ade80;
+  box-shadow: 0 0 0 6px rgba(74, 222, 128, 0.12);
+}
+
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(35, 59, 112, 0.08);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.pill-muted {
+  background: #f4f5f7;
+  color: var(--text-soft);
+}
+
+.admin-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 0.55rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background-color: var(--color-primary-light);
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(35, 59, 112, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 15px 30px rgba(35, 59, 112, 0.3);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(35, 59, 112, 0.25);
+}
+
+.btn-outline:hover {
+  background: rgba(35, 59, 112, 0.08);
+}
+
+.btn-ghost {
+  background: rgba(35, 59, 112, 0.06);
+  color: var(--accent);
+}
+
+.btn-ghost:hover {
+  background: rgba(35, 59, 112, 0.12);
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.btn-danger:hover {
+  background: #fecdd3;
+}
+
+.state-card {
+  margin-top: 1.5rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 14px;
+  border: 1px dashed var(--card-border);
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: var(--text-main);
+  max-width: 540px;
+}
+
+.state-card__error {
+  border-color: #fca5a5;
+  background: #fff1f2;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  color: var(--color-secondary);
+  margin: 0;
+}
+
+.state-card button {
+  align-self: flex-start;
+}
+
 @media (max-width: 768px) {
   .statistics-overview {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
+
+  .admins-header {
+    padding: 1rem;
+  }
+
+  .admin-card {
+    padding: 0.9rem;
+  }
 }
+

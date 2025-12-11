@@ -8,7 +8,7 @@ export default function Sidebar() {
   const { admin } = useContext(AdminContext);
   const links = [
     { to: "/", label: "Dashboard", Icon: Home },
-    { to: "/admin", label: "Admins", Icon: UserStar },
+    { to: "/admins", label: "Admins", Icon: UserStar },
     { to: "/users", label: "Utilisateurs", Icon: Users },
     { to: "/tests", label: "Tests", Icon: ListChecks },
     { to: "/grades", label: "Corrections", Icon: CheckCheck },
