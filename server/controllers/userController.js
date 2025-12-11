@@ -1,5 +1,6 @@
 // controllers/adminController.js
 import userModel from "../models/userModel.js";
+import bcrypt from "bcrypt";
 
 // =========== ADMIN ACCOUNTS ============
 
@@ -39,7 +40,11 @@ async function updateAdmin(req, res) {
     if (Number.isNaN(id)) {
       return res.status(400).json({ message: "Admin id is required" });
     }
-    const data = req.body;
+    const data = { ...req.body };
+
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
 
     const admin = await userModel.getSingleAdminById(id);
     if (!admin) return res.status(404).json({ message: "Admin not found" });
