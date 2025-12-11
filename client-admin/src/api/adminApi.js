@@ -73,6 +73,24 @@ export async function getAllAdmins() {
   return admins.json();
 }
 
+export async function registerAdmin({ email, password, role="ADMIN"}) {
+  const admin = await fetch(`${API_BASE}/admin/admins/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+    body: JSON.stringify({ email, password, role}),
+  });
+
+  if (!admin.ok) {
+    const err = await admin.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to create an admin.");
+  }
+
+  return admin.json();
+}
+
 
 
 // SECTION DES UTILISATEURS

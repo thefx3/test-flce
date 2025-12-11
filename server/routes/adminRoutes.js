@@ -7,12 +7,14 @@ import profileController from "../controllers/profileController.js";
 import familyController from "../controllers/familyController.js";
 import testController from "../controllers/testController.js";
 import questionController from "../controllers/questionController.js";
+import authController from "../controllers/authController.js";
 
 const router = Router();
 
 // --- ADMINS --- (Admin Users)
 // Registration is handled publicly in /auth/register so the first admin can be created
 router.get("/admins", userController.getAllAdmins);
+router.post("/admins/register", authController.register);
 router.get("/admins/:userId", userController.getSingleAdmin);
 router.put("/admins/:userId", userController.updateAdmin);
 router.delete("/admins/:userId", userController.deleteAdmin);

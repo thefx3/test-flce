@@ -1,5 +1,4 @@
 :root {
-  /* fallback if variables aren't loaded */
   --sidebar-bg: var(--color-primary, #ffffff);
   --sidebar-border: var(--color-border, #e5e7eb);
   --sidebar-text: var(--color-border, #1a1a1a);
@@ -7,6 +6,7 @@
   --sidebar-active: var(--color-secondary, #1a3459);
 }
 
+/* DESKTOP SIDEBAR ------------------------------------------------ */
 .sidebar {
   width: 240px;
   min-height: 100vh;
@@ -17,81 +17,60 @@
   gap: 1.5rem;
   position: sticky;
   top: 0;
+  transition: transform 0.3s ease;
+}
+
+/* MOBILE — sidebar cachée par défaut */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-height: 100vh;
+    transform: translateX(-100%); /* cachée */
+    z-index: 1000;
+    box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+  }
+
+  /* LORSQU’OUVERTE */
+  .sidebar.sidebar--open {
+    transform: translateX(0);
+  }
 }
 
 .sidebar__logo {
-  display: flex;
-  width: 100%;
   padding: 1.75rem 1.5rem;
+  display: flex;
   align-items: center;
   gap: 0.6rem;
   font-weight: 800;
-  font-size: 1.05rem;
-  padding-left: 25px;
   color: var(--sidebar-active);
-  letter-spacing: 0.3px;
-  border-bottom: var(--color-primary-light) 1px solid;
+  border-bottom: 1px solid var(--color-primary-light);
   height: 70px;
-}
-
-.sidebar__avatar-icon {
-  color: var(--sidebar-active);
 }
 
 .sidebar__nav {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 0;
 }
 
 .sidebar__link {
   display: flex;
-  width: 100%;
+  justify-items: center;
+  gap: 5px;
   padding: 0.75rem 1.5rem;
-  border-radius: 0;
   color: var(--sidebar-text);
-  text-decoration: none;
   font-weight: 600;
-  transition: background-color 120ms ease, color 120ms ease;
-  align-items: center;
-  gap: 0.5rem;
+  text-decoration: none;
+  transition: background 150ms ease, color 150ms ease;
 }
 
 .sidebar__link:hover {
   background: var(--color-primary-light);
-  color: var(--color-secondary-light);
+  color: var(--sidebar-active);
 }
 
 .sidebar__link--active {
   background: var(--color-primary-light);
   color: var(--sidebar-active);
-}
-
-.sidebar__icon {
-  flex-shrink: 0;
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    width: 100%;
-    min-height: auto;
-    position: relative;
-    border-right: none;
-    border-bottom: 1px solid var(--sidebar-border);
-    flex-direction: row;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-
-  .sidebar__nav {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .sidebar__link {
-    padding: 0.45rem 0.75rem;
-  }
 }

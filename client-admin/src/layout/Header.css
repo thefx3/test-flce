@@ -20,6 +20,14 @@
   height: 70px;
 }
 
+.header-burger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--header-text);
+}
+
 .admin-header h1 {
   margin: 0;
   font-size: 1.25rem;
@@ -28,8 +36,7 @@
 }
 
 .admin-header button {
-  background: linear-gradient(135deg, var(--header-accent), var(--color-primary-light, #3f5f8b));
-  color: #ffffff;
+  color: var(--color-primary);
   border: none;
   border-radius: 8px;
   padding: 0.6rem 1.1rem;
@@ -40,5 +47,11 @@
 
 .admin-header button:hover {
   transform: scale(0.98);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 900px) {
+  .header-burger {
+    display: block;
+  }
 }
