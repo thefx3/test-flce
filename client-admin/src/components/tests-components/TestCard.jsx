@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 function formatDate(value) {
   if (!value) return "—";
@@ -16,10 +15,9 @@ function computeAge(birthdate) {
   return Math.abs(ageDt.getUTCFullYear() - 1970);
 }
 
-export default function TestCard({ test, onView, onDelete, onCorrect }) {
+export default function TestCard({ test, isExpanded, onToggle, onView, onDelete, onCorrect }) {
   const user = test.user || {};
   const profile = user.profile || {};
-  const [expanded, setExpanded] = useState(false);
 
   const date = formatDate(test.created);
   const lastname = user.lastname || "—";
@@ -35,14 +33,14 @@ export default function TestCard({ test, onView, onDelete, onCorrect }) {
 
   return (
     <div
-      className={`test-table__row ${expanded ? "test-row--expanded" : ""}`}
-      onClick={() => setExpanded((prev) => !prev)}
+      className={`test-table__row ${isExpanded ? "test-row--expanded" : ""}`}
+      onClick={onToggle}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          setExpanded((prev) => !prev);
+          onToggle();
         }
       }}
     >
@@ -59,7 +57,7 @@ export default function TestCard({ test, onView, onDelete, onCorrect }) {
         </span>
       </div>
       <div
-        className={`test-actions ${expanded ? "admin-actions--visible" : ""}`}
+        className={`test-actions ${isExpanded ? "admin-actions--visible" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         <button className="btn btn-ghost" onClick={() => onView(test)}>

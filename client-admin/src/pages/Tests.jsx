@@ -17,6 +17,7 @@ export default function TestsPage() {
 
   const [modal, setModal] = useState(null); // detail | delete | correct
   const [selected, setSelected] = useState(null);
+  const [expandedId, setExpandedId] = useState(null);
 
   const deleteMutation = useMutation({
     mutationFn: (testId) => deleteTest(testId),
@@ -54,6 +55,8 @@ export default function TestsPage() {
 
       <TestsList
         tests={tests}
+        expandedId={expandedId}
+        onToggle={(id) => setExpandedId((prev) => (prev === id ? null : id))}
         onView={(test) => {
           setSelected(test);
           setModal("detail");

@@ -1,6 +1,6 @@
 import TestCard from "./TestCard";
 
-export default function TestsList({ tests, onView, onDelete, onCorrect }) {
+export default function TestsList({ tests, expandedId, onToggle, onView, onDelete, onCorrect }) {
   if (!tests || tests.length === 0) {
     return (
       <div className="state-card">
@@ -27,6 +27,8 @@ export default function TestsList({ tests, onView, onDelete, onCorrect }) {
           <TestCard
             key={test.testId || test.id}
             test={test}
+            isExpanded={(test.testId || test.id) === expandedId}
+            onToggle={() => onToggle(test.testId || test.id)}
             onView={onView}
             onDelete={onDelete}
             onCorrect={onCorrect}

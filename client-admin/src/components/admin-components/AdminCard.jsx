@@ -12,7 +12,7 @@ export default function AdminCard({ admin, isExpanded, onToggle, canDelete, onEd
         }
       }}
     >
-      <div className="admin-card_header">
+      <div className="admin-card__header">
         <div className="admin-avatar">{admin.email[0].toUpperCase()}</div>
 
         <div className="admin-card__identity">
