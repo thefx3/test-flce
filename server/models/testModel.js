@@ -12,6 +12,9 @@ const responseSelect = {
 const baseTestSelect = {
   testId: true,
   userId: true,
+  status: true,
+  testscore: true,
+  created: true,
   testresponse: {
     select: responseSelect,
   },
@@ -74,7 +77,7 @@ async createTest(userId) {
   const test = await prisma.test.create({
     data: {
       userId,
-      status: "IN_PROGRESS",
+      status: "DEFAULT",
     },
   });
 
@@ -130,7 +133,22 @@ async getAllTests() {
       testId: true,
       userId: true,
       status: true,
-    testresponse: {
+      testscore: true,
+      created: true,
+      user: {
+        select: {
+          email: true,
+          name: true,
+          lastname: true,
+          profile: {
+            select: {
+              nationality: true,
+              birthdate: true,
+            },
+          },
+        },
+      },
+      testresponse: {
         select: {
           responseId: true,
           questionId: true,
@@ -153,7 +171,13 @@ async getAllTests() {
       }
     }
   });
-  return tests.map(mapTest);
+  return tests.map(t => {
+    const totalPoints = (t.testresponse || []).reduce(
+      (acc, r) => acc + (r.question?.points || 0),
+      0
+    );
+    return { ...mapTest(t), totalPoints };
+  });
 }
 
 async getSingleTestAdmin(testId) {
@@ -162,6 +186,8 @@ async getSingleTestAdmin(testId) {
     select: {
       testId: true,
       userId: true,
+      status: true,
+      testscore: true,
       testresponse: {
         select: {
           responseId: true,
@@ -186,7 +212,11 @@ async getSingleTestAdmin(testId) {
       }
     }
   });
-  return mapTest(test);
+  const totalPoints = (test?.testresponse || []).reduce(
+    (acc, r) => acc + (r.question?.points || 0),
+    0
+  );
+  return test ? { ...mapTest(test), totalPoints } : null;
 }
 
 async countAllTestsAdmin(){
@@ -271,15 +301,18 @@ async gradeAuto(testId) {
       await prisma.$transaction(updates);
     }
 
-    const aggregated = await prisma.testResponse.aggregate({
-      where: { testId },
-      _sum: { score: true },
-    });
-    const totalScore = aggregated._sum.score ?? 0;
+    const totals = responses.reduce(
+      (acc, r) => {
+        acc.score += r.score || 0;
+        acc.max += r.question?.points || 0;
+        return acc;
+      },
+      { score: 0, max: 0 }
+    );
 
     await prisma.test.update({
       where: { testId },
-      data: { status: "AUTO_GRADED", testscore: totalScore },
+      data: { status: "AUTO_GRADED", testscore: totals.score },
     });
 
     return this.getSingleTestAdmin(testId);
@@ -304,15 +337,22 @@ async gradeManual(grades) {
 }
  
 async finalizeGrading(testId) {
-    const aggregated = await prisma.testResponse.aggregate({
+    const responses = await prisma.testResponse.findMany({
       where: { testId },
-      _sum: { score: true },
+      select: { score: true, question: { select: { points: true } } },
     });
-    const totalScore = aggregated._sum.score ?? 0;
+    const totals = responses.reduce(
+      (acc, r) => {
+        acc.score += r.score || 0;
+        acc.max += r.question?.points || 0;
+        return acc;
+      },
+      { score: 0, max: 0 }
+    );
 
     await prisma.test.update({
       where: { testId },
-      data: { status: "CORRECTED", testscore: totalScore },
+      data: { status: "CORRECTED", testscore: totals.score },
     });
 
     return this.getSingleTestAdmin(testId);
@@ -322,10 +362,28 @@ async finalizeGrading(testId) {
 async getScoreOfTest(testId) {
   const responses = await prisma.testResponse.findMany({
     where: { testId },
-    select: { score: true }
+    select: {
+      score: true,
+      question: { select: { points: true } },
+    },
   });
 
-  return responses.reduce((sum, r) => sum + (r.score || 0), 0);
+  const totals = responses.reduce(
+    (acc, r) => {
+      acc.score += r.score || 0;
+      acc.max += r.question?.points || 0;
+      return acc;
+    },
+    { score: 0, max: 0 }
+  );
+
+  // Met à jour la table Test pour éviter de recalculer côté front
+  await prisma.test.update({
+    where: { testId },
+    data: { testscore: totals.score },
+  });
+
+  return { score: totals.score, totalPoints: totals.max };
 }
 
 }

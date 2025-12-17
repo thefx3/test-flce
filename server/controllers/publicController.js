@@ -26,7 +26,6 @@ async function startTest(req, res) {
       // Create profile only on first time
       await profileModel.createProfile(user.userId, data);
 
-      
     } else {
       // Check if profile exists
       const existingProfile = await profileModel.getProfileByUserId(user.userId);
@@ -114,6 +113,9 @@ async function submitResponses(req, res) {
       where: { testId },
       data: { status: "SUBMITTED" }
     });
+
+    await testModel.gradeAuto(testId);
+    
 
     return res.json({
       message: "Responses saved (via questionId)",

@@ -6,6 +6,9 @@ import authRequired from "../auth/authRequired.js";
 const router = Router();
 
 //Admin Login
+
+router.post('/register', authController.register); 
+
 router.post('/login', authController.login);
 
 //User Login

@@ -159,3 +159,53 @@ export async function countTestsToGradeAdmin(){
 
   return res.json(); // { count }
 }
+
+// SECTION DES TESTS 
+export async function getAllTests() {
+  const tests = await fetch(`${API_BASE}/admin/tests`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+  });
+
+  if (!tests.ok) {
+    const err = await tests.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to fetch tests.");
+  }
+
+  return tests.json();
+}
+
+export async function deleteTest(testId) {
+  const res = await fetch(`${API_BASE}/admin/tests/${testId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to delete test.");
+  }
+  return res.json();
+}
+
+export async function finalizeTest(testId) {
+  const res = await fetch(`${API_BASE}/admin/tests/${testId}/corrected`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to finalize test.");
+  }
+  return res.json();
+}

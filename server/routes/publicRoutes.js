@@ -10,6 +10,7 @@ const router = Router();
 // Start a new test (PUBLIC - creates user + test + returns a session token)
 router.post("/start-test", publicController.startTest);
 
+
 // Public questions list
 router.get("/questions/OPEN", questionController.getQuestionsOPENPublic);
 router.get("/questions/QCM", questionController.getQuestionsQCMPublic);

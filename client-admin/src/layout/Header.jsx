@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import "./Header.css";
 
 export default function Header({ setIsSidebarOpen }) {
-  const { loading, logout } = useContext(AdminContext);
+  const { admin, loading, logout } = useContext(AdminContext);
 
   if (loading) return <p>Loading</p>;
 
@@ -21,6 +21,7 @@ export default function Header({ setIsSidebarOpen }) {
 
       <h1>Saison 2025-2026</h1>
 
+      <span>{admin.email}</span>
       <button onClick={logout}>Logout</button>
     </header>
   );

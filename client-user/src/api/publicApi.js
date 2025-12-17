@@ -66,22 +66,6 @@ export async function submitResponses(testId, responses, sessionToken) {
   return res.json();
 }
 
-export async function autoCorrect(testId, sessionToken) {
-  const res = await fetch(`${API_BASE}/tests/${testId}/grade-auto`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "x-test-session-id": sessionToken,
-    }
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || "Erreur while auto-correcting");
-  }
-  return res.json();
-}
-
 export async function submitComment(testId, comment, sessionToken) {
   const res = await fetch(`${API_BASE}/tests/${testId}/comment`, {
     method: "POST",

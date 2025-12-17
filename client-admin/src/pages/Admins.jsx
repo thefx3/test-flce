@@ -23,7 +23,6 @@ export default function AdminPage() {
   if (isLoading) return <p>Chargement...</p>;
   if (isError) return <p>Erreur de chargement</p>;
 
-
   return (
     <div className="admin-wrapper">
         <div className="admins-header">
@@ -53,32 +52,19 @@ export default function AdminPage() {
         }}
       />
 
-      {modal === "create" && (
-        <AdminCreateModal
-          onClose={() => {
-            setModal(null);
-            setSelected(null);
-          }}
-        />
+      {modal === "create" && ( 
+        <AdminCreateModal onClose={() => { setModal(null); setSelected(null); }} />
       )}
+
+
       {modal === "edit" && selected && (
-        <AdminEditModal
-          admin={selected}
-          onClose={() => {
-            setModal(null);
-            setSelected(null);
-          }}
-        />
+        <AdminEditModal admin={selected} onClose={() => { setModal(null); setSelected(null); }} />
       )}
+
       {modal === "delete" && selected && (
-        <AdminDeleteModal
-          admin={selected}
-          onClose={() => {
-            setModal(null);
-            setSelected(null);
-          }}
-        />
+        <AdminDeleteModal admin={selected} onClose={() => { setModal(null); setSelected(null); }} />
       )}
+
     </div>
   );
 }

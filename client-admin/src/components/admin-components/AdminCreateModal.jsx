@@ -26,9 +26,11 @@ export default function AdminCreateModal({ onClose }) {
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h2>Nouvel administrateur</h2>
 
-        <form onSubmit={handleSubmit}>
+        <form autoComplete="off" onSubmit={handleSubmit}>
           <label>Email
             <input
+              name="admin-email"
+              autoComplete="off"
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -38,6 +40,8 @@ export default function AdminCreateModal({ onClose }) {
 
           <label>Mot de passe
             <input
+              name="admin-password"
+              autoComplete="new-password"
               type="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -47,6 +51,8 @@ export default function AdminCreateModal({ onClose }) {
 
           <label>Rôle
             <select
+              name="admin-role"
+              autoComplete="off"
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value })}
             >

@@ -280,9 +280,9 @@ async getScoreOfTest(req, res, next) {
       return res.status(403).json({ message: "Not allowed" });
     }
 
-    const totalScore = await testModel.getScoreOfTest(testId);
+    const totals = await testModel.getScoreOfTest(testId);
 
-    res.json({ score: totalScore });
+    res.json({ score: totals.score, totalPoints: totals.totalPoints });
   } catch (err) {
     next(err);
   }
