@@ -461,8 +461,9 @@
 }
 
 .pill-success {
-  background: #dcfce7;
+  background-color: #dcfce7;
   color: #166534;
+  padding: 2px 4px;
 }
 
 @media (max-width: 900px) {
@@ -498,51 +499,54 @@
   .admin-actions {
     grid-template-columns: 1fr;
   }
+}
 
-  .test-actions {
-    grid-template-columns: repeat(1, minmax(200px, 1fr));
+/* =======================================
+   RESPONSIVE TEST TABLE (< 900px)
+======================================= */
+
+@media (max-width: 900px) {
+
+  /* On masque l'entête du tableau */
+  .test-table__head {
+    display: none;
   }
 
-  .test-table__head,
+  /* Chaque ligne devient une card */
   .test-table__row {
-    grid-template-columns: repeat(1, minmax(220px, 1fr));
-    gap: 0.45rem;
-    min-width: 100%;
-    align-items: flex-start;
-  }
-
-  .test-table__head span {
-    display: inline-block;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .test-table__row {
-    grid-template-columns: repeat(1, minmax(220px, 1fr));
-    align-items: flex-start;
-  }
-
-  .test-table__row span {
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1rem;
+  }
+
+  .test-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    width: 100%;
+  }
+
+  /* Chaque champ devient une ligne avec label */
+  .test-card__header span {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
     font-size: 0.95rem;
-    white-space: normal;
+    padding: 4px 0;
   }
 
-  .test-table__row span::before {
-    flex: 0 0 110px;
+  /* labels générés dynamiquement */
+  .test-card__header span[data-label]::before {
+    content: attr(data-label);
+    font-weight: 600;
     color: var(--text-soft);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    margin-right: 10px;
   }
 
-  .test-table__row span:nth-child(1)::before { content: "Date"; }
-  .test-table__row span:nth-child(2)::before { content: "Nom / Prénom"; }
-  .test-table__row span:nth-child(3)::before { content: "Nationalité"; }
-  .test-table__row span:nth-child(4)::before { content: "Âge"; }
-  .test-table__row span:nth-child(5)::before { content: "Email"; }
-  .test-table__row span:nth-child(6)::before { content: "Score"; }
-  .test-table__row span:nth-child(7)::before { content: "Statut"; }
+  /* actions passent en colonne */
+  .test-actions {
+    grid-template-columns: 1fr !important;
+    width: 100%;
+  }
 }
