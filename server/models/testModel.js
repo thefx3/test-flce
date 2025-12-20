@@ -226,11 +226,9 @@ async countAllTestsAdmin(){
 async countAllTestsToGradeAdmin(){
   return prisma.test.count({ 
     where:  {
-      NOT: {
-        status: "CORRECTED",
-      },
+      status: { notIn: ["CORRECTED"] },
     },
-  })
+  });
 }
 
 
