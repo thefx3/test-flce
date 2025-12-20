@@ -4,15 +4,18 @@ export default function TestDetailModal({ test, onClose }) {
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2>Détails du test #{test.testId || test.id}</h2>
-        <p><strong>Statut :</strong> {test.status}</p>
-        <p><strong>Email :</strong> {user.email || "—"}</p>
-        <p><strong>Nom :</strong> {user.lastname || "—"} {user.name || ""}</p>
-        <p><strong>Nationalité :</strong> {profile.nationality || "—"}</p>
-        <p><strong>Score :</strong> {test.testscore ?? 0} / {test.totalPoints ?? 0}</p>
-        <div className="modal-actions">
-          <button className="btn btn-outline" onClick={onClose}>Fermer</button>
+
+        <div className="details-infos">
+          <h2>Test #{test.testId || test.id}: {test.testscore} / {test.totalPoints} | {test.status}</h2>
+          <p><strong>Email :</strong> {user.email || "—"}</p>
+          <p><strong>User :</strong> {user.lastname || "—"} {user.name || ""}</p>
+          <p><strong>Nationalité :</strong> {profile.nationality || "—"}</p>
+          <div className="modal-actions">
+            <button className="btn btn-outline" onClick={onClose}>Fermer</button>
+          </div>
         </div>
+
+
       </div>
     </div>
   );
